@@ -1,0 +1,1 @@
+Error:Customer CM00248- Invalid: GSTIN number 23BPLN04492F1DP 

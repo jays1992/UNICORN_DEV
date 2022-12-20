@@ -1,0 +1,1 @@
+Error:Customer CM00660- Invalid: Location- Location NameShrimant Rajmata Vijaraje Scindia Medical College Shivpuri can have max 50 character. 

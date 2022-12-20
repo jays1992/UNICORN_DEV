@@ -1,0 +1,1 @@
+Error:Customer CM00059- Invalid Location Details: Please select Bill To or Ship To for every row. 

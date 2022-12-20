@@ -1,0 +1,1 @@
+Error:Customer CM00138- Invalid: Statutory PAN number: AOPPG3463G1 can have max 10 character. 

@@ -1,0 +1,1 @@
+Error:Customer CM00791- Invalid: Statutory PAN number: ABHISWEET1330 can have max 10 character. 

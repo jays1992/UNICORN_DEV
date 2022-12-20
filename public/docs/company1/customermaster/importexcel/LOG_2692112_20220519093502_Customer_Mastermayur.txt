@@ -1,0 +1,1 @@
+Error:Customer CM00107- Invalid: Registered Address Line 1: AMRITAM CLINIC, HOUSE NO :M.I.G 17 PANDI DEENDAYAL, UPADHYAY NAGAR SECTOR-4, RAIPUR CHHATTISGARH-492001 can have max 100 character. 

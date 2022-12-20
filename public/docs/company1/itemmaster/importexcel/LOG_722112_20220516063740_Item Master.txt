@@ -1,0 +1,1 @@
+Error:Item IM01507- Invalid: Material Type . Allow values are FIFO/Weighted Average  

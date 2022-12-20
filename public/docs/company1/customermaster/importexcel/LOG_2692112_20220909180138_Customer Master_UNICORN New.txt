@@ -1,0 +1,1 @@
+Error:Customer C00285- Invalid: GSTIN number 02PTLA18254F1DX 

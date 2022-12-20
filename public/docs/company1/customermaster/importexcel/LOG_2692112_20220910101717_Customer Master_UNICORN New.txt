@@ -1,0 +1,1 @@
+Error:Customer CM00296- Invalid: Location- Location NameSAVEETHA INSTITUTE OF MEDICAL AND TECHNICAL SCIENCES can have max 50 character. 

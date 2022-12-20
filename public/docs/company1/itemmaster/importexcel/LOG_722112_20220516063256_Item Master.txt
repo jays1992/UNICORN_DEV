@@ -1,0 +1,1 @@
+Error:Item IM00497- Invalid: Item Specification =Wide backrest for superior patient comfort * It has Traditional delivery unit with wide instrument tray * Sensor Based LED Dental Light with variable intensity * Double Articulated Headrest with Rotatable Arm Rest can have max 200 character. 

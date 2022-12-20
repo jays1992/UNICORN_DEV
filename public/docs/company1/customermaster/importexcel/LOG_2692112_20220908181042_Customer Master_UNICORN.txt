@@ -1,0 +1,1 @@
+Error:Customer CM00110: Statutory GST Type Name Registered not found. 

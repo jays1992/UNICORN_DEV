@@ -1,0 +1,1 @@
+Error:Customer CM00225- Invalid: GSTIN number 19CALA25755C1D3 

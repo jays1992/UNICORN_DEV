@@ -1,0 +1,1 @@
+Error:Invalid Vendor VM00058: Blank Statutory Default Currency Code 

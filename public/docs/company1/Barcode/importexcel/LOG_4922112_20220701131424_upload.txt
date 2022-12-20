@@ -1,0 +1,10 @@
+Error:Invalid: Blank Doc no. check row no 2 
+Error:Invalid: Blank Reference Doc Type. check row no 2 
+Error:Invalid: Blank Reference Doc no. check row no 2 
+Error:Invalid: Blank Item Code. check row no 2 
+Error:Invalid: Blank Serial No. check row no 2 
+Error:Invalid: Blank Doc no. check row no 3 
+Error:Invalid: Blank Reference Doc Type. check row no 3 
+Error:Invalid: Blank Reference Doc no. check row no 3 
+Error:Invalid: Blank Item Code. check row no 3 
+Error:Invalid: Blank Serial No. check row no 3 
