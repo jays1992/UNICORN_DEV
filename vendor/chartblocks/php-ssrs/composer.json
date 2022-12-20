@@ -1,0 +1,36 @@
+{
+    "name": "chartblocks/php-ssrs",
+    "description": "PHP library for connecting to SSRS SOAP",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Arron Woods",
+            "email": "aw@chartblocks.com"
+        }
+    ],
+    "require": {
+      "php": ">=5.3",
+      "ext-curl": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~3.7.",
+        "mikey179/vfsStream": "*"
+    },
+    "autoload": {
+        "psr-0": {
+            "SSRS\\": "library/"
+        }
+    },
+    "suggest": {
+        "zendframework/zend-escaper": "Required for rendering forms with ZendFramework2",
+        "zendframework/zend-form": "Required for rendering forms with ZendFramework2",
+        "zendframework/zend-i18n": "Required for rendering forms with ZendFramework2",
+        "zendframework/zend-servicemanager": "Required for rendering forms with ZendFramework2",
+        "zendframework/zend-view": "Required for rendering forms with ZendFramework2"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
+    }
+}

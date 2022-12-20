@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <project name="php-ssrs" basedir="." default="app">
+    <!-- Unit Tests & coverage analysis -->
+    <target name="phpunit">
+        <echo msg="PHP Unit..." />
+        <exec command="phpunit --configuration '${ws}/tests/phpunit.xml' --log-junit '${ws}/logs/phpunit.xml' --coverage-clover '${ws}/logs/coverage/clover.xml' '${ws}/tests'" />
+    </target>
+</project>
