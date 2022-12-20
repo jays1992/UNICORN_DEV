@@ -10,6 +10,7 @@
 namespace PHPUnit\Framework;
 
 use function func_get_args;
+use function function_exists;
 use ArrayAccess;
 use Countable;
 use DOMDocument;
@@ -46,6 +47,7 @@ use PHPUnit\Framework\Constraint\LogicalAnd;
 use PHPUnit\Framework\Constraint\LogicalNot;
 use PHPUnit\Framework\Constraint\LogicalOr;
 use PHPUnit\Framework\Constraint\LogicalXor;
+use PHPUnit\Framework\Constraint\ObjectEquals;
 use PHPUnit\Framework\Constraint\ObjectHasAttribute;
 use PHPUnit\Framework\Constraint\RegularExpression;
 use PHPUnit\Framework\Constraint\StringContains;
@@ -81,6 +83,8 @@ if (!function_exists('PHPUnit\Framework\assertArrayHasKey')) {
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertArrayHasKey
      */
     function assertArrayHasKey($key, $array, string $message = ''): void
@@ -100,6 +104,8 @@ if (!function_exists('PHPUnit\Framework\assertArrayNotHasKey')) {
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertArrayNotHasKey
      */
     function assertArrayNotHasKey($key, $array, string $message = ''): void
@@ -115,6 +121,8 @@ if (!function_exists('PHPUnit\Framework\assertContains')) {
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertContains
      */
@@ -139,6 +147,8 @@ if (!function_exists('PHPUnit\Framework\assertNotContains')) {
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertNotContains
      */
     function assertNotContains($needle, iterable $haystack, string $message = ''): void
@@ -161,6 +171,8 @@ if (!function_exists('PHPUnit\Framework\assertContainsOnly')) {
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertContainsOnly
      */
     function assertContainsOnly(string $type, iterable $haystack, ?bool $isNativeType = null, string $message = ''): void
@@ -176,6 +188,8 @@ if (!function_exists('PHPUnit\Framework\assertContainsOnlyInstancesOf')) {
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertContainsOnlyInstancesOf
      */
     function assertContainsOnlyInstancesOf(string $className, iterable $haystack, string $message = ''): void
@@ -190,6 +204,8 @@ if (!function_exists('PHPUnit\Framework\assertNotContainsOnly')) {
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertNotContainsOnly
      */
@@ -209,6 +225,8 @@ if (!function_exists('PHPUnit\Framework\assertCount')) {
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertCount
      */
     function assertCount(int $expectedCount, $haystack, string $message = ''): void
@@ -227,6 +245,8 @@ if (!function_exists('PHPUnit\Framework\assertNotCount')) {
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertNotCount
      */
     function assertNotCount(int $expectedCount, $haystack, string $message = ''): void
@@ -241,6 +261,8 @@ if (!function_exists('PHPUnit\Framework\assertEquals')) {
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertEquals
      */
@@ -257,6 +279,8 @@ if (!function_exists('PHPUnit\Framework\assertEqualsCanonicalizing')) {
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertEqualsCanonicalizing
      */
     function assertEqualsCanonicalizing($expected, $actual, string $message = ''): void
@@ -271,6 +295,8 @@ if (!function_exists('PHPUnit\Framework\assertEqualsIgnoringCase')) {
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertEqualsIgnoringCase
      */
@@ -287,6 +313,8 @@ if (!function_exists('PHPUnit\Framework\assertEqualsWithDelta')) {
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertEqualsWithDelta
      */
     function assertEqualsWithDelta($expected, $actual, float $delta, string $message = ''): void
@@ -301,6 +329,8 @@ if (!function_exists('PHPUnit\Framework\assertNotEquals')) {
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertNotEquals
      */
@@ -317,6 +347,8 @@ if (!function_exists('PHPUnit\Framework\assertNotEqualsCanonicalizing')) {
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertNotEqualsCanonicalizing
      */
     function assertNotEqualsCanonicalizing($expected, $actual, string $message = ''): void
@@ -331,6 +363,8 @@ if (!function_exists('PHPUnit\Framework\assertNotEqualsIgnoringCase')) {
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertNotEqualsIgnoringCase
      */
@@ -347,11 +381,27 @@ if (!function_exists('PHPUnit\Framework\assertNotEqualsWithDelta')) {
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertNotEqualsWithDelta
      */
     function assertNotEqualsWithDelta($expected, $actual, float $delta, string $message = ''): void
     {
         Assert::assertNotEqualsWithDelta(...func_get_args());
+    }
+}
+
+if (!function_exists('PHPUnit\Framework\assertObjectEquals')) {
+    /**
+     * @throws ExpectationFailedException
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
+     * @see Assert::assertObjectEquals
+     */
+    function assertObjectEquals(object $expected, object $actual, string $method = 'equals', string $message = ''): void
+    {
+        Assert::assertObjectEquals(...func_get_args());
     }
 }
 
@@ -363,6 +413,8 @@ if (!function_exists('PHPUnit\Framework\assertEmpty')) {
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      *
      * @psalm-assert empty $actual
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertEmpty
      */
@@ -381,6 +433,8 @@ if (!function_exists('PHPUnit\Framework\assertNotEmpty')) {
      *
      * @psalm-assert !empty $actual
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertNotEmpty
      */
     function assertNotEmpty($actual, string $message = ''): void
@@ -395,6 +449,8 @@ if (!function_exists('PHPUnit\Framework\assertGreaterThan')) {
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertGreaterThan
      */
@@ -411,6 +467,8 @@ if (!function_exists('PHPUnit\Framework\assertGreaterThanOrEqual')) {
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertGreaterThanOrEqual
      */
     function assertGreaterThanOrEqual($expected, $actual, string $message = ''): void
@@ -426,6 +484,8 @@ if (!function_exists('PHPUnit\Framework\assertLessThan')) {
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertLessThan
      */
     function assertLessThan($expected, $actual, string $message = ''): void
@@ -440,6 +500,8 @@ if (!function_exists('PHPUnit\Framework\assertLessThanOrEqual')) {
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertLessThanOrEqual
      */
@@ -457,6 +519,8 @@ if (!function_exists('PHPUnit\Framework\assertFileEquals')) {
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertFileEquals
      */
     function assertFileEquals(string $expected, string $actual, string $message = ''): void
@@ -472,6 +536,8 @@ if (!function_exists('PHPUnit\Framework\assertFileEqualsCanonicalizing')) {
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertFileEqualsCanonicalizing
      */
@@ -489,6 +555,8 @@ if (!function_exists('PHPUnit\Framework\assertFileEqualsIgnoringCase')) {
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertFileEqualsIgnoringCase
      */
     function assertFileEqualsIgnoringCase(string $expected, string $actual, string $message = ''): void
@@ -504,6 +572,8 @@ if (!function_exists('PHPUnit\Framework\assertFileNotEquals')) {
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertFileNotEquals
      */
@@ -521,6 +591,8 @@ if (!function_exists('PHPUnit\Framework\assertFileNotEqualsCanonicalizing')) {
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertFileNotEqualsCanonicalizing
      */
     function assertFileNotEqualsCanonicalizing(string $expected, string $actual, string $message = ''): void
@@ -536,6 +608,8 @@ if (!function_exists('PHPUnit\Framework\assertFileNotEqualsIgnoringCase')) {
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertFileNotEqualsIgnoringCase
      */
@@ -553,6 +627,8 @@ if (!function_exists('PHPUnit\Framework\assertStringEqualsFile')) {
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertStringEqualsFile
      */
     function assertStringEqualsFile(string $expectedFile, string $actualString, string $message = ''): void
@@ -568,6 +644,8 @@ if (!function_exists('PHPUnit\Framework\assertStringEqualsFileCanonicalizing')) 
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertStringEqualsFileCanonicalizing
      */
@@ -585,6 +663,8 @@ if (!function_exists('PHPUnit\Framework\assertStringEqualsFileIgnoringCase')) {
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertStringEqualsFileIgnoringCase
      */
     function assertStringEqualsFileIgnoringCase(string $expectedFile, string $actualString, string $message = ''): void
@@ -600,6 +680,8 @@ if (!function_exists('PHPUnit\Framework\assertStringNotEqualsFile')) {
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertStringNotEqualsFile
      */
@@ -617,6 +699,8 @@ if (!function_exists('PHPUnit\Framework\assertStringNotEqualsFileCanonicalizing'
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertStringNotEqualsFileCanonicalizing
      */
     function assertStringNotEqualsFileCanonicalizing(string $expectedFile, string $actualString, string $message = ''): void
@@ -633,6 +717,8 @@ if (!function_exists('PHPUnit\Framework\assertStringNotEqualsFileIgnoringCase'))
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertStringNotEqualsFileIgnoringCase
      */
     function assertStringNotEqualsFileIgnoringCase(string $expectedFile, string $actualString, string $message = ''): void
@@ -648,6 +734,8 @@ if (!function_exists('PHPUnit\Framework\assertIsReadable')) {
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertIsReadable
      */
     function assertIsReadable(string $filename, string $message = ''): void
@@ -662,6 +750,8 @@ if (!function_exists('PHPUnit\Framework\assertIsNotReadable')) {
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertIsNotReadable
      */
@@ -681,6 +771,9 @@ if (!function_exists('PHPUnit\Framework\assertNotIsReadable')) {
      * @codeCoverageIgnore
      *
      * @deprecated https://github.com/sebastianbergmann/phpunit/issues/4062
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertNotIsReadable
      */
     function assertNotIsReadable(string $filename, string $message = ''): void
@@ -696,6 +789,8 @@ if (!function_exists('PHPUnit\Framework\assertIsWritable')) {
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertIsWritable
      */
     function assertIsWritable(string $filename, string $message = ''): void
@@ -710,6 +805,8 @@ if (!function_exists('PHPUnit\Framework\assertIsNotWritable')) {
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertIsNotWritable
      */
@@ -729,6 +826,9 @@ if (!function_exists('PHPUnit\Framework\assertNotIsWritable')) {
      * @codeCoverageIgnore
      *
      * @deprecated https://github.com/sebastianbergmann/phpunit/issues/4065
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertNotIsWritable
      */
     function assertNotIsWritable(string $filename, string $message = ''): void
@@ -744,6 +844,8 @@ if (!function_exists('PHPUnit\Framework\assertDirectoryExists')) {
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertDirectoryExists
      */
     function assertDirectoryExists(string $directory, string $message = ''): void
@@ -758,6 +860,8 @@ if (!function_exists('PHPUnit\Framework\assertDirectoryDoesNotExist')) {
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertDirectoryDoesNotExist
      */
@@ -777,6 +881,9 @@ if (!function_exists('PHPUnit\Framework\assertDirectoryNotExists')) {
      * @codeCoverageIgnore
      *
      * @deprecated https://github.com/sebastianbergmann/phpunit/issues/4068
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertDirectoryNotExists
      */
     function assertDirectoryNotExists(string $directory, string $message = ''): void
@@ -792,6 +899,8 @@ if (!function_exists('PHPUnit\Framework\assertDirectoryIsReadable')) {
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertDirectoryIsReadable
      */
     function assertDirectoryIsReadable(string $directory, string $message = ''): void
@@ -806,6 +915,8 @@ if (!function_exists('PHPUnit\Framework\assertDirectoryIsNotReadable')) {
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertDirectoryIsNotReadable
      */
@@ -825,6 +936,9 @@ if (!function_exists('PHPUnit\Framework\assertDirectoryNotIsReadable')) {
      * @codeCoverageIgnore
      *
      * @deprecated https://github.com/sebastianbergmann/phpunit/issues/4071
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertDirectoryNotIsReadable
      */
     function assertDirectoryNotIsReadable(string $directory, string $message = ''): void
@@ -840,6 +954,8 @@ if (!function_exists('PHPUnit\Framework\assertDirectoryIsWritable')) {
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertDirectoryIsWritable
      */
     function assertDirectoryIsWritable(string $directory, string $message = ''): void
@@ -854,6 +970,8 @@ if (!function_exists('PHPUnit\Framework\assertDirectoryIsNotWritable')) {
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertDirectoryIsNotWritable
      */
@@ -873,6 +991,9 @@ if (!function_exists('PHPUnit\Framework\assertDirectoryNotIsWritable')) {
      * @codeCoverageIgnore
      *
      * @deprecated https://github.com/sebastianbergmann/phpunit/issues/4074
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertDirectoryNotIsWritable
      */
     function assertDirectoryNotIsWritable(string $directory, string $message = ''): void
@@ -888,6 +1009,8 @@ if (!function_exists('PHPUnit\Framework\assertFileExists')) {
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertFileExists
      */
     function assertFileExists(string $filename, string $message = ''): void
@@ -902,6 +1025,8 @@ if (!function_exists('PHPUnit\Framework\assertFileDoesNotExist')) {
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertFileDoesNotExist
      */
@@ -921,6 +1046,9 @@ if (!function_exists('PHPUnit\Framework\assertFileNotExists')) {
      * @codeCoverageIgnore
      *
      * @deprecated https://github.com/sebastianbergmann/phpunit/issues/4077
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertFileNotExists
      */
     function assertFileNotExists(string $filename, string $message = ''): void
@@ -936,6 +1064,8 @@ if (!function_exists('PHPUnit\Framework\assertFileIsReadable')) {
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertFileIsReadable
      */
     function assertFileIsReadable(string $file, string $message = ''): void
@@ -950,6 +1080,8 @@ if (!function_exists('PHPUnit\Framework\assertFileIsNotReadable')) {
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertFileIsNotReadable
      */
@@ -969,6 +1101,9 @@ if (!function_exists('PHPUnit\Framework\assertFileNotIsReadable')) {
      * @codeCoverageIgnore
      *
      * @deprecated https://github.com/sebastianbergmann/phpunit/issues/4080
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertFileNotIsReadable
      */
     function assertFileNotIsReadable(string $file, string $message = ''): void
@@ -984,6 +1119,8 @@ if (!function_exists('PHPUnit\Framework\assertFileIsWritable')) {
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertFileIsWritable
      */
     function assertFileIsWritable(string $file, string $message = ''): void
@@ -998,6 +1135,8 @@ if (!function_exists('PHPUnit\Framework\assertFileIsNotWritable')) {
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertFileIsNotWritable
      */
@@ -1017,6 +1156,9 @@ if (!function_exists('PHPUnit\Framework\assertFileNotIsWritable')) {
      * @codeCoverageIgnore
      *
      * @deprecated https://github.com/sebastianbergmann/phpunit/issues/4083
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertFileNotIsWritable
      */
     function assertFileNotIsWritable(string $file, string $message = ''): void
@@ -1033,6 +1175,8 @@ if (!function_exists('PHPUnit\Framework\assertTrue')) {
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      *
      * @psalm-assert true $condition
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertTrue
      */
@@ -1051,6 +1195,8 @@ if (!function_exists('PHPUnit\Framework\assertNotTrue')) {
      *
      * @psalm-assert !true $condition
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertNotTrue
      */
     function assertNotTrue($condition, string $message = ''): void
@@ -1067,6 +1213,8 @@ if (!function_exists('PHPUnit\Framework\assertFalse')) {
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      *
      * @psalm-assert false $condition
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertFalse
      */
@@ -1085,6 +1233,8 @@ if (!function_exists('PHPUnit\Framework\assertNotFalse')) {
      *
      * @psalm-assert !false $condition
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertNotFalse
      */
     function assertNotFalse($condition, string $message = ''): void
@@ -1101,6 +1251,8 @@ if (!function_exists('PHPUnit\Framework\assertNull')) {
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      *
      * @psalm-assert null $actual
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertNull
      */
@@ -1119,6 +1271,8 @@ if (!function_exists('PHPUnit\Framework\assertNotNull')) {
      *
      * @psalm-assert !null $actual
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertNotNull
      */
     function assertNotNull($actual, string $message = ''): void
@@ -1133,6 +1287,8 @@ if (!function_exists('PHPUnit\Framework\assertFinite')) {
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertFinite
      */
@@ -1149,6 +1305,8 @@ if (!function_exists('PHPUnit\Framework\assertInfinite')) {
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertInfinite
      */
     function assertInfinite($actual, string $message = ''): void
@@ -1163,6 +1321,8 @@ if (!function_exists('PHPUnit\Framework\assertNan')) {
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertNan
      */
@@ -1180,6 +1340,8 @@ if (!function_exists('PHPUnit\Framework\assertClassHasAttribute')) {
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertClassHasAttribute
      */
     function assertClassHasAttribute(string $attributeName, string $className, string $message = ''): void
@@ -1195,6 +1357,8 @@ if (!function_exists('PHPUnit\Framework\assertClassNotHasAttribute')) {
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertClassNotHasAttribute
      */
@@ -1212,6 +1376,8 @@ if (!function_exists('PHPUnit\Framework\assertClassHasStaticAttribute')) {
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertClassHasStaticAttribute
      */
     function assertClassHasStaticAttribute(string $attributeName, string $className, string $message = ''): void
@@ -1227,6 +1393,8 @@ if (!function_exists('PHPUnit\Framework\assertClassNotHasStaticAttribute')) {
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertClassNotHasStaticAttribute
      */
@@ -1246,6 +1414,8 @@ if (!function_exists('PHPUnit\Framework\assertObjectHasAttribute')) {
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertObjectHasAttribute
      */
     function assertObjectHasAttribute(string $attributeName, $object, string $message = ''): void
@@ -1263,6 +1433,8 @@ if (!function_exists('PHPUnit\Framework\assertObjectNotHasAttribute')) {
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertObjectNotHasAttribute
      */
@@ -1282,8 +1454,12 @@ if (!function_exists('PHPUnit\Framework\assertSame')) {
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      *
      * @psalm-template ExpectedType
+     *
      * @psalm-param ExpectedType $expected
+     *
      * @psalm-assert =ExpectedType $actual
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertSame
      */
@@ -1302,6 +1478,8 @@ if (!function_exists('PHPUnit\Framework\assertNotSame')) {
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertNotSame
      */
     function assertNotSame($expected, $actual, string $message = ''): void
@@ -1319,8 +1497,12 @@ if (!function_exists('PHPUnit\Framework\assertInstanceOf')) {
      * @throws Exception
      *
      * @psalm-template ExpectedType of object
+     *
      * @psalm-param class-string<ExpectedType> $expected
-     * @psalm-assert ExpectedType $actual
+     *
+     * @psalm-assert =ExpectedType $actual
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertInstanceOf
      */
@@ -1339,8 +1521,12 @@ if (!function_exists('PHPUnit\Framework\assertNotInstanceOf')) {
      * @throws Exception
      *
      * @psalm-template ExpectedType of object
+     *
      * @psalm-param class-string<ExpectedType> $expected
+     *
      * @psalm-assert !ExpectedType $actual
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertNotInstanceOf
      */
@@ -1359,6 +1545,8 @@ if (!function_exists('PHPUnit\Framework\assertIsArray')) {
      *
      * @psalm-assert array $actual
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertIsArray
      */
     function assertIsArray($actual, string $message = ''): void
@@ -1375,6 +1563,8 @@ if (!function_exists('PHPUnit\Framework\assertIsBool')) {
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      *
      * @psalm-assert bool $actual
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertIsBool
      */
@@ -1393,6 +1583,8 @@ if (!function_exists('PHPUnit\Framework\assertIsFloat')) {
      *
      * @psalm-assert float $actual
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertIsFloat
      */
     function assertIsFloat($actual, string $message = ''): void
@@ -1409,6 +1601,8 @@ if (!function_exists('PHPUnit\Framework\assertIsInt')) {
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      *
      * @psalm-assert int $actual
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertIsInt
      */
@@ -1427,6 +1621,8 @@ if (!function_exists('PHPUnit\Framework\assertIsNumeric')) {
      *
      * @psalm-assert numeric $actual
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertIsNumeric
      */
     function assertIsNumeric($actual, string $message = ''): void
@@ -1443,6 +1639,8 @@ if (!function_exists('PHPUnit\Framework\assertIsObject')) {
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      *
      * @psalm-assert object $actual
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertIsObject
      */
@@ -1461,6 +1659,8 @@ if (!function_exists('PHPUnit\Framework\assertIsResource')) {
      *
      * @psalm-assert resource $actual
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertIsResource
      */
     function assertIsResource($actual, string $message = ''): void
@@ -1477,6 +1677,8 @@ if (!function_exists('PHPUnit\Framework\assertIsClosedResource')) {
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      *
      * @psalm-assert resource $actual
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertIsClosedResource
      */
@@ -1495,6 +1697,8 @@ if (!function_exists('PHPUnit\Framework\assertIsString')) {
      *
      * @psalm-assert string $actual
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertIsString
      */
     function assertIsString($actual, string $message = ''): void
@@ -1511,6 +1715,8 @@ if (!function_exists('PHPUnit\Framework\assertIsScalar')) {
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      *
      * @psalm-assert scalar $actual
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertIsScalar
      */
@@ -1529,6 +1735,8 @@ if (!function_exists('PHPUnit\Framework\assertIsCallable')) {
      *
      * @psalm-assert callable $actual
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertIsCallable
      */
     function assertIsCallable($actual, string $message = ''): void
@@ -1545,6 +1753,8 @@ if (!function_exists('PHPUnit\Framework\assertIsIterable')) {
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      *
      * @psalm-assert iterable $actual
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertIsIterable
      */
@@ -1563,6 +1773,8 @@ if (!function_exists('PHPUnit\Framework\assertIsNotArray')) {
      *
      * @psalm-assert !array $actual
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertIsNotArray
      */
     function assertIsNotArray($actual, string $message = ''): void
@@ -1579,6 +1791,8 @@ if (!function_exists('PHPUnit\Framework\assertIsNotBool')) {
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      *
      * @psalm-assert !bool $actual
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertIsNotBool
      */
@@ -1597,6 +1811,8 @@ if (!function_exists('PHPUnit\Framework\assertIsNotFloat')) {
      *
      * @psalm-assert !float $actual
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertIsNotFloat
      */
     function assertIsNotFloat($actual, string $message = ''): void
@@ -1613,6 +1829,8 @@ if (!function_exists('PHPUnit\Framework\assertIsNotInt')) {
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      *
      * @psalm-assert !int $actual
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertIsNotInt
      */
@@ -1631,6 +1849,8 @@ if (!function_exists('PHPUnit\Framework\assertIsNotNumeric')) {
      *
      * @psalm-assert !numeric $actual
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertIsNotNumeric
      */
     function assertIsNotNumeric($actual, string $message = ''): void
@@ -1647,6 +1867,8 @@ if (!function_exists('PHPUnit\Framework\assertIsNotObject')) {
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      *
      * @psalm-assert !object $actual
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertIsNotObject
      */
@@ -1665,6 +1887,8 @@ if (!function_exists('PHPUnit\Framework\assertIsNotResource')) {
      *
      * @psalm-assert !resource $actual
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertIsNotResource
      */
     function assertIsNotResource($actual, string $message = ''): void
@@ -1681,6 +1905,8 @@ if (!function_exists('PHPUnit\Framework\assertIsNotClosedResource')) {
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      *
      * @psalm-assert !resource $actual
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertIsNotClosedResource
      */
@@ -1699,6 +1925,8 @@ if (!function_exists('PHPUnit\Framework\assertIsNotString')) {
      *
      * @psalm-assert !string $actual
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertIsNotString
      */
     function assertIsNotString($actual, string $message = ''): void
@@ -1715,6 +1943,8 @@ if (!function_exists('PHPUnit\Framework\assertIsNotScalar')) {
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      *
      * @psalm-assert !scalar $actual
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertIsNotScalar
      */
@@ -1733,6 +1963,8 @@ if (!function_exists('PHPUnit\Framework\assertIsNotCallable')) {
      *
      * @psalm-assert !callable $actual
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertIsNotCallable
      */
     function assertIsNotCallable($actual, string $message = ''): void
@@ -1750,6 +1982,8 @@ if (!function_exists('PHPUnit\Framework\assertIsNotIterable')) {
      *
      * @psalm-assert !iterable $actual
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertIsNotIterable
      */
     function assertIsNotIterable($actual, string $message = ''): void
@@ -1764,6 +1998,8 @@ if (!function_exists('PHPUnit\Framework\assertMatchesRegularExpression')) {
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertMatchesRegularExpression
      */
@@ -1783,6 +2019,9 @@ if (!function_exists('PHPUnit\Framework\assertRegExp')) {
      * @codeCoverageIgnore
      *
      * @deprecated https://github.com/sebastianbergmann/phpunit/issues/4086
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertRegExp
      */
     function assertRegExp(string $pattern, string $string, string $message = ''): void
@@ -1797,6 +2036,8 @@ if (!function_exists('PHPUnit\Framework\assertDoesNotMatchRegularExpression')) {
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertDoesNotMatchRegularExpression
      */
@@ -1816,6 +2057,9 @@ if (!function_exists('PHPUnit\Framework\assertNotRegExp')) {
      * @codeCoverageIgnore
      *
      * @deprecated https://github.com/sebastianbergmann/phpunit/issues/4089
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertNotRegExp
      */
     function assertNotRegExp(string $pattern, string $string, string $message = ''): void
@@ -1835,6 +2079,8 @@ if (!function_exists('PHPUnit\Framework\assertSameSize')) {
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertSameSize
      */
@@ -1856,6 +2102,8 @@ if (!function_exists('PHPUnit\Framework\assertNotSameSize')) {
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertNotSameSize
      */
     function assertNotSameSize($expected, $actual, string $message = ''): void
@@ -1870,6 +2118,8 @@ if (!function_exists('PHPUnit\Framework\assertStringMatchesFormat')) {
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertStringMatchesFormat
      */
@@ -1886,6 +2136,8 @@ if (!function_exists('PHPUnit\Framework\assertStringNotMatchesFormat')) {
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertStringNotMatchesFormat
      */
     function assertStringNotMatchesFormat(string $format, string $string, string $message = ''): void
@@ -1900,6 +2152,8 @@ if (!function_exists('PHPUnit\Framework\assertStringMatchesFormatFile')) {
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertStringMatchesFormatFile
      */
@@ -1916,6 +2170,8 @@ if (!function_exists('PHPUnit\Framework\assertStringNotMatchesFormatFile')) {
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertStringNotMatchesFormatFile
      */
     function assertStringNotMatchesFormatFile(string $formatFile, string $string, string $message = ''): void
@@ -1930,6 +2186,8 @@ if (!function_exists('PHPUnit\Framework\assertStringStartsWith')) {
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertStringStartsWith
      */
@@ -1949,6 +2207,8 @@ if (!function_exists('PHPUnit\Framework\assertStringStartsNotWith')) {
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertStringStartsNotWith
      */
     function assertStringStartsNotWith($prefix, $string, string $message = ''): void
@@ -1961,6 +2221,8 @@ if (!function_exists('PHPUnit\Framework\assertStringContainsString')) {
     /**
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertStringContainsString
      */
@@ -1975,6 +2237,8 @@ if (!function_exists('PHPUnit\Framework\assertStringContainsStringIgnoringCase')
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertStringContainsStringIgnoringCase
      */
     function assertStringContainsStringIgnoringCase(string $needle, string $haystack, string $message = ''): void
@@ -1988,6 +2252,8 @@ if (!function_exists('PHPUnit\Framework\assertStringNotContainsString')) {
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertStringNotContainsString
      */
     function assertStringNotContainsString(string $needle, string $haystack, string $message = ''): void
@@ -2000,6 +2266,8 @@ if (!function_exists('PHPUnit\Framework\assertStringNotContainsStringIgnoringCas
     /**
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertStringNotContainsStringIgnoringCase
      */
@@ -2016,6 +2284,8 @@ if (!function_exists('PHPUnit\Framework\assertStringEndsWith')) {
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertStringEndsWith
      */
     function assertStringEndsWith(string $suffix, string $string, string $message = ''): void
@@ -2030,6 +2300,8 @@ if (!function_exists('PHPUnit\Framework\assertStringEndsNotWith')) {
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertStringEndsNotWith
      */
@@ -2047,6 +2319,8 @@ if (!function_exists('PHPUnit\Framework\assertXmlFileEqualsXmlFile')) {
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws Exception
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertXmlFileEqualsXmlFile
      */
     function assertXmlFileEqualsXmlFile(string $expectedFile, string $actualFile, string $message = ''): void
@@ -2062,6 +2336,8 @@ if (!function_exists('PHPUnit\Framework\assertXmlFileNotEqualsXmlFile')) {
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws \PHPUnit\Util\Exception
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertXmlFileNotEqualsXmlFile
      */
@@ -2081,6 +2357,8 @@ if (!function_exists('PHPUnit\Framework\assertXmlStringEqualsXmlFile')) {
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws \PHPUnit\Util\Xml\Exception
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertXmlStringEqualsXmlFile
      */
     function assertXmlStringEqualsXmlFile(string $expectedFile, $actualXml, string $message = ''): void
@@ -2098,6 +2376,8 @@ if (!function_exists('PHPUnit\Framework\assertXmlStringNotEqualsXmlFile')) {
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws \PHPUnit\Util\Xml\Exception
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertXmlStringNotEqualsXmlFile
      */
@@ -2118,6 +2398,8 @@ if (!function_exists('PHPUnit\Framework\assertXmlStringEqualsXmlString')) {
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws \PHPUnit\Util\Xml\Exception
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertXmlStringEqualsXmlString
      */
     function assertXmlStringEqualsXmlString($expectedXml, $actualXml, string $message = ''): void
@@ -2136,6 +2418,8 @@ if (!function_exists('PHPUnit\Framework\assertXmlStringNotEqualsXmlString')) {
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws \PHPUnit\Util\Xml\Exception
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertXmlStringNotEqualsXmlString
      */
@@ -2156,6 +2440,9 @@ if (!function_exists('PHPUnit\Framework\assertEqualXMLStructure')) {
      * @codeCoverageIgnore
      *
      * @deprecated https://github.com/sebastianbergmann/phpunit/issues/4091
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertEqualXMLStructure
      */
     function assertEqualXMLStructure(DOMElement $expectedElement, DOMElement $actualElement, bool $checkAttributes = false, string $message = ''): void
@@ -2170,6 +2457,8 @@ if (!function_exists('PHPUnit\Framework\assertThat')) {
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertThat
      */
@@ -2186,6 +2475,8 @@ if (!function_exists('PHPUnit\Framework\assertJson')) {
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertJson
      */
     function assertJson(string $actualJson, string $message = ''): void
@@ -2200,6 +2491,8 @@ if (!function_exists('PHPUnit\Framework\assertJsonStringEqualsJsonString')) {
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertJsonStringEqualsJsonString
      */
@@ -2219,6 +2512,8 @@ if (!function_exists('PHPUnit\Framework\assertJsonStringNotEqualsJsonString')) {
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertJsonStringNotEqualsJsonString
      */
     function assertJsonStringNotEqualsJsonString($expectedJson, $actualJson, string $message = ''): void
@@ -2233,6 +2528,8 @@ if (!function_exists('PHPUnit\Framework\assertJsonStringEqualsJsonFile')) {
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertJsonStringEqualsJsonFile
      */
@@ -2249,6 +2546,8 @@ if (!function_exists('PHPUnit\Framework\assertJsonStringNotEqualsJsonFile')) {
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertJsonStringNotEqualsJsonFile
      */
     function assertJsonStringNotEqualsJsonFile(string $expectedFile, string $actualJson, string $message = ''): void
@@ -2264,6 +2563,8 @@ if (!function_exists('PHPUnit\Framework\assertJsonFileEqualsJsonFile')) {
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+     *
      * @see Assert::assertJsonFileEqualsJsonFile
      */
     function assertJsonFileEqualsJsonFile(string $expectedFile, string $actualFile, string $message = ''): void
@@ -2278,6 +2579,8 @@ if (!function_exists('PHPUnit\Framework\assertJsonFileNotEqualsJsonFile')) {
      *
      * @throws ExpectationFailedException
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
+     *
+     * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
      *
      * @see Assert::assertJsonFileNotEqualsJsonFile
      */
@@ -2585,6 +2888,13 @@ if (!function_exists('PHPUnit\Framework\countOf')) {
     function countOf(int $count): Count
     {
         return Assert::countOf(...func_get_args());
+    }
+}
+
+if (!function_exists('PHPUnit\Framework\objectEquals')) {
+    function objectEquals(object $object, string $method = 'equals'): ObjectEquals
+    {
+        return Assert::objectEquals(...func_get_args());
     }
 }
 

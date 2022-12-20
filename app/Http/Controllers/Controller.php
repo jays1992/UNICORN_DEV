@@ -35,6 +35,7 @@ class Controller extends BaseController{
                         ->first();
 
         return $user_right;
+        //data
     }
 
     public function getManualAutoDocNo($DATE,$REQUEST){
