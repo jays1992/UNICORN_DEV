@@ -4197,6 +4197,7 @@ $('[id*="chkId"]').change(function(){
 //------------------------
 
 $(document).ready(function(e) {
+
     var Material = $("#Material").html(); 
     $('#hdnMaterial').val(Material);
     
@@ -4532,6 +4533,7 @@ $("#Material").on('click', '.add', function() {
 <script>
 
 $(document).ready(function() {
+  
 
   // $("#btnSaveSC").on("submit", function( event ) {
   //   if ($("#frm_trn_sc").valid()) {
@@ -4818,6 +4820,8 @@ $( "#btnSaveSC" ).click(function() {
 });
 
 $( "#btnApprove" ).click(function() {
+
+
   var formSalesChallan = $("#frm_trn_sc");
   if(formSalesChallan.valid()){
   $("#FocusId").val('');
@@ -5060,6 +5064,14 @@ $( "#btnApprove" ).click(function() {
               $("#AlertMessage").text(period_closing_msg);
               $("#alert").modal('show');
               $("#OkBtn1").focus();
+            } else if(Get_Barcode_Status() ==1){
+              $("#alert").modal('show');
+              $("#AlertMessage").text('Sorry, You can not approve this record as Barcode out transaction is not created for this document.');
+              $("#YesBtn").hide(); 
+              $("#NoBtn").hide();  
+              $("#OkBtn1").show();
+              $("#OkBtn1").focus();
+              highlighFocusBtn('activeOk');
             }
             else{
 
@@ -5389,6 +5401,25 @@ $("#DISPATCH_ALT_QTY_total").text(DISPATCH_ALT_QTY);
 
 
 }
+
+
+
+function Get_Barcode_Status(){
+var DOCID_REF = '{{$objSC->SCID}}';
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
+var status = $.ajax({type: 'POST',
+url:'{{route("transaction",[$FormId,"Get_Barcode_Status"])}}',
+async: false,
+dataType: 'json',
+data: {DOCID_REF:DOCID_REF},
+done: function(response) {return response;}}).responseText;
+return status;
+}
+
 </script>
 
 

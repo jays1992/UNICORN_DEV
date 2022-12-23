@@ -104,6 +104,7 @@
                         <option {{isset($TASKALL->TASK_STATUS) && $TASKALL->TASK_STATUS == 'Meeting'?'selected="selected"':''}} value="Meeting">Meeting</option>
                         <option {{isset($TASKALL->TASK_STATUS) && $TASKALL->TASK_STATUS == 'Mail'?'selected="selected"':''}} value="Mail">Mail</option>
                         <option {{isset($TASKALL->TASK_STATUS) && $TASKALL->TASK_STATUS == 'Call'?'selected="selected"':''}}value="Call">Call</option>
+                        <option {{isset($TASKALL->TASK_STATUS) && $TASKALL->TASK_STATUS == 'Demo'?'selected="selected"':''}}value="Demo">Demo</option>
                         </select>                             
                     </div>
             
