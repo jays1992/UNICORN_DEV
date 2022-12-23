@@ -1,211 +1,203 @@
 
-@extends('layouts.app')
-@section('content')
-<!-- <form id="frm_trn_so" onsubmit="return validateForm()"  method="POST" class="needs-validation"  >     -->
+
+<?php $__env->startSection('content'); ?>
 
     <div class="container-fluid topnav">
             <div class="row">
                 <div class="col-lg-2">
-                <a href="{{route('transaction',[38,'index'])}}" class="btn singlebt">Sales Order</a>
+                <a href="<?php echo e(route('transaction',[38,'index'])); ?>" class="btn singlebt">Sales Order</a>
                 </div><!--col-2-->
 
                 <div class="col-lg-10 topnav-pd">
-                        <button class="btn topnavbt" id="btnAdd" disabled="disabled"><i class="fa fa-plus"></i> Add</button>
-                        <button class="btn topnavbt" id="btnEdit" disabled="disabled"><i class="fa fa-pencil-square-o"></i> Edit</button>
-                        <button class="btn topnavbt" id="btnSaveSO"  disabled="disabled" ><i class="fa fa-floppy-o"></i> Save</button>
-                        <button class="btn topnavbt" id="btnView" disabled="disabled"><i class="fa fa-eye"></i> View</button>
-                        <button class="btn topnavbt" id="btnPrint" {{isset($objRights->PRINT) && $objRights->PRINT != 1 ? 'disabled' : ''}} ><i class="fa fa-print"></i> Print</button>
-                        <button class="btn topnavbt" id="btnUndo"  disabled="disabled" ><i class="fa fa-undo"></i> Undo</button>
-                        <button class="btn topnavbt" id="btnCancel" disabled="disabled"><i class="fa fa-times"></i> Cancel</button>
-                        <button class="btn topnavbt" id="btnApprove"  disabled="disabled"><i class="fa fa-thumbs-o-up"></i> Approved</button>
-                        <button class="btn topnavbt"  id="btnAttach" disabled="disabled"><i class="fa fa-link"></i> Attachment</button>
-                        <button class="btn topnavbt" id="btnExit" ><i class="fa fa-power-off"></i> Exit</button>
+                      <button class="btn topnavbt" id="btnAdd" disabled="disabled"><i class="fa fa-plus"></i> Add</button>
+                      <button class="btn topnavbt" id="btnEdit" disabled="disabled"><i class="fa fa-pencil-square-o"></i> Edit</button>
+                      <button class="btn topnavbt" id="btnSaveSO" ><i class="fa fa-floppy-o"></i> Save</button>                        
+                      <button style="display:none" class="btn topnavbt buttonload"> <i class="fa fa-refresh fa-spin"></i> <?php echo e(Session::get('save')); ?></button>
+                      <button class="btn topnavbt" id="btnView" disabled="disabled"><i class="fa fa-eye"></i> View</button>
+                      <button class="btn topnavbt" id="btnPrint" disabled="disabled"><i class="fa fa-print"></i> Print</button>
+                      <button class="btn topnavbt" id="btnUndo"  ><i class="fa fa-undo"></i> Undo</button>
+                      <button class="btn topnavbt" id="btnCancel" disabled="disabled"><i class="fa fa-times"></i> Cancel</button>
+                      <button class="btn topnavbt" id="btnApprove" disabled="disabled"><i class="fa fa-thumbs-o-up"></i> Approved</button>
+                      <button class="btn topnavbt"  id="btnAttach" disabled="disabled"><i class="fa fa-link"></i> Attachment</button>
+                      <button class="btn topnavbt" id="btnExit" ><i class="fa fa-power-off"></i> Exit</button>
                 </div>
-            </div>
+            </div>      
     </div><!--topnav-->	
     <!-- multiple table-responsive table-wrapper-scroll-y my-custom-scrollbar -->
-    <!-- multiple table-responsive table-wrapper-scroll-y my-custom-scrollbar -->
+<form id="frm_trn_so" onsubmit="return validateForm()"  method="POST" class="needs-validation"  >
     <div class="container-fluid purchase-order-view">
-        <form id="frm_trn_so"  method="POST">   
-            @csrf
-            {{isset($objSO->SOID[0]) ? method_field('PUT') : '' }}
+        
+            <?php echo csrf_field(); ?>
             <div class="container-fluid filter">
 
                     <div class="inner-form">
-                    
+
                         <div class="row">
-                            <div class="col-lg-2 pl"><p>Sales Order No* </p></div>
+                            <div class="col-lg-2 pl"><p>Sales Order No*</p></div>
                             <div class="col-lg-2 pl">
-                                <input type="text" {{$ActionStatus}} name="SONO" id="SONO" value="{{ isset($objSO->SONO)?$objSO->SONO:'' }}" class="form-control mandatory" maxlength="15" autocomplete="off" style="text-transform:uppercase"  readonly >
-                                <input type="hidden" name="hdnattachment" id="hdnattachment" class="form-control" autocomplete="off" value="{{isset($objCountAttachment)?$objCountAttachment:''}}" /> 
+                            <?php if(isset($objSON->SYSTEM_GRSR) && $objSON->SYSTEM_GRSR == "1"): ?>
+                              <input type="text" name="SONO" id="SONO" value="<?php echo e(isset($objSONO)?$objSONO:''); ?>" class="form-control mandatory"  autocomplete="off" readonly style="text-transform:uppercase"  >
+                            <?php elseif(isset($objSON->MANUAL_SR) && $objSON->MANUAL_SR == "1"): ?>
+                              <input type="text" name="SONO" id="SONO" class="form-control mandatory" maxlength="<?php echo e(isset($objSON->MANUAL_MAXLENGTH)?$objSON->MANUAL_MAXLENGTH:''); ?>" autocomplete="off" style="text-transform:uppercase"  >
+                            <?php else: ?>
+                              <input type="text" name="SONO" id="SONO"  class="form-control mandatory"  autocomplete="off" readonly style="text-transform:uppercase"  >
+                            <?php endif; ?>
                             </div>
                             
-                            <div class="col-lg-2 pl"><p>Sales Order Date*</p></div>
+                            <div class="col-lg-2 pl "><p>Sales Order Date*</p></div>
                             <div class="col-lg-2 pl">
-                                <input type="date" {{$ActionStatus}} name="SODT" id="SODT" onchange="checkPeriodClosing(38,this.value,1)" value="{{ isset($objSO->SODT)?$objSO->SODT:'' }}" class="form-control mandatory" autocomplete="off" placeholder="dd/mm/yyyy" >
+                                <input type="date" name="SODT" id="SODT" onchange="checkPeriodClosing(38,this.value,1)" value="<?php echo e(old('SODT')); ?>" class="form-control mandatory" autocomplete="off" placeholder="dd/mm/yyyy" >
                             </div>
-                            
                             <div class="col-lg-2 pl"><p>Customer*</p></div>
                             <div class="col-lg-2 pl">
-                                <input type="text" {{$ActionStatus}} name="SubGl_popup" id="txtsubgl_popup" class="form-control mandatory" value="{{isset($objsubglcode->SGLCODE)?$objsubglcode->SGLCODE:''}} {{isset($objsubglcode->SLNAME)?'-'.$objsubglcode->SLNAME:''}}"  autocomplete="off" readonly/>
-                                <input type="hidden" name="SLID_REF" id="SLID_REF" class="form-control" autocomplete="off"  value="{{ isset($objSO->SLID_REF)?$objSO->SLID_REF:'' }}"/>
-                                <input type="hidden" name="GLID_REF" id="GLID_REF" class="form-control" autocomplete="off" value="{{ isset($objSO->GLID_REF)?$objSO->GLID_REF:'' }}" />
-                                <input type="hidden" name="CUSTOMER_TYPE" id="CUSTOMER_TYPE" value="{{isset($objsubglcode->BELONGS_TO)?strtoupper($objsubglcode->BELONGS_TO):''}}" />
-                                <input type="hidden" name="hdnmaterial" id="hdnmaterial" class="form-control" autocomplete="off" />                                                                                           
+                                <input type="text" name="SubGl_popup" id="txtsubgl_popup" class="form-control mandatory"  autocomplete="off" readonly/>
+                                <input type="hidden" name="SLID_REF" id="SLID_REF" class="form-control" autocomplete="off" />
+                                <input type="hidden" name="GLID_REF" id="GLID_REF" class="form-control" autocomplete="off" />
+                                <input type="hidden" name="CUSTOMER_TYPE" id="CUSTOMER_TYPE" />
+                                <input type="hidden" name="hdnmaterial" id="hdnmaterial" class="form-control" autocomplete="off" />
+                                <input type="hidden" name="hdnmaterial_Scheme" id="hdnmaterial_Scheme" class="form-control" autocomplete="off" />
+                                <input type="hidden" name="hdnTC" id="hdnTC" class="form-control" autocomplete="off" />
+                                <input type="hidden" name="hdnCT" id="hdnCT" class="form-control" autocomplete="off" />
+                                <input type="hidden" name="hdnTDS" id="hdnTDS" class="form-control" autocomplete="off" /> 
+                                <input type="hidden" name="hdnPaymentSlabs" id="hdnPaymentSlabs" class="form-control" autocomplete="off" />                                                                 
                             </div>
-                        </div>
+                        </div> 
                         
                         <div class="row">                               
                             <div class="col-lg-2 pl "><p>Dealer</p></div>
                             <div class="col-lg-2 pl"  >
-                            <input type="text"  {{$ActionStatus}}  name="Dealerpopup" id="txtDealerpopup" class="form-control mandatory"  autocomplete="off" value="{{ isset($objSO->CUSTOMER_NAME)?$objSO->CUSTOMER_NAME:'' }}"  readonly/>
-                            <input type="hidden" name="DEALERID_REF" value="{{ isset($objSO->DEALERID_REF)?$objSO->DEALERID_REF:'' }}" id="DEALERID_REF" class="form-control" autocomplete="off" />                                
-                            <input type="hidden" name="DEALER_COMMISSION" value="{{ isset($objSO->COMMISION)?$objSO->COMMISION:'' }}" id="DEALER_COMMISSION" class="form-control" autocomplete="off" />                                
+                            <input type="text" name="Dealerpopup" id="txtDealerpopup" class="form-control mandatory"  autocomplete="off"  readonly/>
+                            <input type="hidden" name="DEALERID_REF" id="DEALERID_REF" class="form-control" autocomplete="off" />                                
+                            <input type="hidden" name="DEALER_COMMISSION" id="DEALER_COMMISSION" class="form-control" autocomplete="off" />                                
                             </div>                            
                             <div class="col-lg-2 pl"><p>Dealer Commission</p></div>
                             <div class="col-lg-2 pl">
-                                <input type="text" {{$ActionStatus}} value="{{ isset($objSO->DEALER_COMMISSION_AMT) && $objSO->DEALER_COMMISSION_AMT !=''?number_format($objSO->DEALER_COMMISSION_AMT, 2, '.', ''):'' }}"  name="DEALER_COMMISSION_AMT" id="DEALER_COMMISSION_AMT" readonly autocomplete="off" class="form-control" maxlength="100"  />
+                                <input type="text" readonly name="DEALER_COMMISSION_AMT" id="DEALER_COMMISSION_AMT" autocomplete="off" class="form-control" maxlength="100"  />
                             </div>
                             <div class="col-lg-2 pl "><p>Project</p></div>
                             <div class="col-lg-2 pl"  >
-                            <input type="text" {{$ActionStatus}} value="{{ isset($objSO->PROJECT_NAME)?$objSO->PROJECT_NAME:'' }}"  name="Projectpopup" id="txtProjectpopup" class="form-control mandatory"  autocomplete="off"  readonly/>
-                            <input type="hidden" name="PROJECTID_REF" value="{{ isset($objSO->PROJECTID_REF)?$objSO->PROJECTID_REF:'' }}" id="PROJECTID_REF" class="form-control" autocomplete="off" />                                                            
+                            <input type="text" name="Projectpopup" id="txtProjectpopup" class="form-control mandatory"  autocomplete="off"  readonly/>
+                            <input type="hidden" name="PROJECTID_REF" id="PROJECTID_REF" class="form-control" autocomplete="off" />                                                            
                             </div>    
                         </div>   
 
                         <div class="row">
-                            <div class="col-lg-2 pl"><p>FC</p></div>
-                            <div class="col-lg-2 pl">
-                                <input type="checkbox" {{$ActionStatus}} name="SOFC" id="SOFC" class="form-checkbox" {{isset($objSO->SOFC) && $objSO->SOFC == 1 ? 'checked' : ''}} >
-                            </div>
-                            
-                            <div class="col-lg-2 pl"><p>Currency</p></div>
+                            <div class="col-lg-2 pl"><p>Foreign Currency</p></div>
+                            <div class="col-lg-1 pl">
+                                <input type="checkbox" name="SOFC" id="SOFC" class="form-checkbox" >
+                            </div>                            
+                            <div class="col-lg-2 pl col-md-offset-1"><p>Currency</p></div>
                             <div class="col-lg-2 pl" id="divcurrency" >
-
-                            
-                                <input type="text" {{$ActionStatus}} name="CRID_popup" id="txtCRID_popup" disabled class="form-control"   autocomplete="off"   value="{{ isset($objSO->CRDESCRIPTION) && $objSO->CRDESCRIPTION !=''? $objSO->CRCODE.'-'.$objSO->CRDESCRIPTION:'' }}"/>
-                           
-                                <input type="hidden"  name="CRID_REF" id="CRID_REF" class="form-control" autocomplete="off"   value="{{ isset($objSO->CRID_REF)?$objSO->CRID_REF:'' }}" />
-                                
-                            </div>
-                            
+                                <input type="text" name="CRID_popup" id="txtCRID_popup" class="form-control"  autocomplete="off"  disabled/>
+                                <input type="hidden" name="CRID_REF" id="CRID_REF" class="form-control" autocomplete="off" />                                
+                            </div>                            
                             <div class="col-lg-2 pl"><p>Conversion Factor</p></div>
                             <div class="col-lg-2 pl">
-                                <input type="text" {{$ActionStatus}} name="CONVFACT" id="CONVFACT" class="form-control" onkeyup="MultiCurrency_Conversion('TotalValue')" maxlength="100" autocomplete="off" value="{{ isset($objSO->CONVFACT)?$objSO->CONVFACT:'' }}"  />
+                                <input type="text" name="CONVFACT" id="CONVFACT" autocomplete="off" onkeyup="MultiCurrency_Conversion('TotalValue')" class="form-control" readonly  maxlength="100" />
                             </div>
-                        </div>
-                        
+                        </div>                        
                         <div class="row">
                             <div class="col-lg-2 pl"><p>Order Validity From*</p></div>
                             <div class="col-lg-2 pl">
-                                <input type="date" {{$ActionStatus}} name="OVFDT" id="OVFDT" class="form-control mandatory" autocomplete="off" placeholder="dd/mm/yyyy" value="{{ isset($objSO->OVFDT)?$objSO->OVFDT:'' }}" >
-                            </div>
-                            
+                                <input type="date" name="OVFDT" id="OVFDT" class="form-control mandatory" autocomplete="off"  placeholder="dd/mm/yyyy" >
+                            </div>                            
                             <div class="col-lg-2 pl"><p>Order Validity To*</p></div>
                             <div class="col-lg-2 pl">
-                                <input type="date" {{$ActionStatus}} name="OVTDT" id="OVTDT" class="form-control mandatory" autocomplete="off"  placeholder="dd/mm/yyyy" value="{{ isset($objSO->OVTDT)?$objSO->OVTDT:'' }}" >
-                            </div>
-                            
+                                <input type="date" name="OVTDT" id="OVTDT" class="form-control mandatory" autocomplete="off" placeholder="dd/mm/yyyy" >
+                            </div>                            
                             <div class="col-lg-2 pl"><p>Customer PO No*</p></div>
                             <div class="col-lg-2 pl">
-                                <input type="text" {{$ActionStatus}} name="CUSTOMERPONO" id="CUSTOMERPONO" class="form-control" autocomplete="off" style="text-transform:uppercase" value="{{ isset($objSO->CUSTOMERPONO)?$objSO->CUSTOMERPONO:'' }}">
+                                <input type="text" name="CUSTOMERPONO" id="CUSTOMERPONO" class="form-control" autocomplete="off" style="text-transform:uppercase" >
                             </div>
-                        </div>
-                        
+                        </div>                        
                         <div class="row">	
                             <div class="col-lg-2 pl"><p>Customer PO Date*</p></div>
                             <div class="col-lg-2 pl">
-                                <input type="date" {{$ActionStatus}} name="CUSTOMERDT"  id="CUSTOMERDT" class="form-control " value="{{ isset($objSO->CUSTOMERDT)?$objSO->CUSTOMERDT:'' }}" autocomplete="off" placeholder="dd/mm/yyyy"  >
+                                <input type="date" name="CUSTOMERDT" id="CUSTOMERDT" class="form-control " autocomplete="off" placeholder="dd/mm/yyyy" disabled />
                             </div>
                             
-                            <div class="col-lg-2 pl"><p>Sales Person</p></div>
+                            <div class="col-lg-2 pl"><p>Sales Person*</p></div>
                             <div class="col-lg-2 pl">
-                                <input type="text" {{$ActionStatus}} name="SPID_popup" id="txtSPID_popup" class="form-control mandatory"  autocomplete="off" value="{{ isset($objSPID[0])?$objSPID[0]:'' }}"  readonly/>
-                                <input type="hidden" name="SPID_REF" id="SPID_REF" class="form-control" autocomplete="off" value="{{ isset($objSO->SPID_REF)?$objSO->SPID_REF:'' }}" />
+                                <input type="text" name="SPID_popup" id="txtSPID_popup" class="form-control mandatory"  autocomplete="off"  readonly/>
+                                <input type="hidden" name="SPID_REF" id="SPID_REF" class="form-control" autocomplete="off" />
                             </div>
                             
                             <div class="col-lg-2 pl"><p>Ref No*</p></div>
                             <div class="col-lg-2 pl">
-                                <input type="text" {{$ActionStatus}} name="REFNO" id="REFNO" class="form-control" maxlength="100" value="{{ isset($objSO->REFNO)?$objSO->REFNO:'' }}" autocomplete="off" style="text-transform:uppercase">
+                                <input type="text" name="REFNO" id="REFNO" class="form-control" maxlength="100" autocomplete="off" style="text-transform:uppercase">
                             </div>
-                            
-                            
-
                         </div>
                         <div class="row">
                             <div class="col-lg-2 pl"><p>Credit Days</p></div>
                             <div class="col-lg-2 pl">
-                                <input type="text" {{$ActionStatus}} name="CREDITDAYS" id="CREDITDAYS" class="form-control" autocomplete="off" value="{{ isset($objSO->CREDITDAYS)?$objSO->CREDITDAYS:'' }}" readonly>
+                                <input type="text" name="CREDITDAYS" id="CREDITDAYS" class="form-control" autocomplete="off" readonly/>
                             </div>
                             <div class="col-lg-2 pl"><p>Bill To </p></div>
                             <div class="col-lg-2 pl" id="div_billto">
-                                <input type="text" {{$ActionStatus}} name="txtBILLTO" id="txtBILLTO" class="form-control"  autocomplete="off" value="{{ isset($objBillAddress[0])?$objBillAddress[0]:'' }}" readonly  />
-                                <input type="hidden" name="BILLTO" id="BILLTO" class="form-control" autocomplete="off" value="{{ isset($objSO->BILLTO)?$objSO->BILLTO:'' }}" />
+                                <input type="text" name="txtBILLTO1" id="txtBILLTO1" class="form-control"  autocomplete="off" readonly  />
+                                <input type="hidden" name="BILLTO1" id="BILLTO1" class="form-control" autocomplete="off" />
                             </div>
                            
                             <div class="col-lg-2 pl"><p>Ship To</p></div>
                             <div class="col-lg-2 pl" id="div_shipto">
-                                <input type="text" {{$ActionStatus}} name="txtSHIPTO" id="txtSHIPTO" class="form-control"  autocomplete="off" value="{{ isset($objShpAddress[0])?$objShpAddress[0]:'' }}" readonly  />
-                                <input type="hidden" name="SHIPTO" id="SHIPTO" class="form-control" autocomplete="off" value="{{ isset($objSO->SHIPTO)?$objSO->SHIPTO:'' }}" />
-                                <input type="hidden" name="Tax_State" id="Tax_State" class="form-control" autocomplete="off" value=" {{ isset($TAXSTATE[0])?$TAXSTATE[0]:'' }}"   />
-                            </div>
+                                <input type="text" name="txtSHIPTO1" id="txtSHIPTO1" class="form-control"  autocomplete="off" readonly  />
+                                <input type="hidden" name="SHIPTO1" id="SHIPTO1" class="form-control" autocomplete="off" />
+                                <input type="hidden" name="Tax_State1" id="Tax_State1" class="form-control" autocomplete="off" />
+                            </div>   
                         </div>
                         <div class="row">
                             <div class="col-lg-2 pl"><p>Remarks</p></div>
                             <div class="col-lg-2 pl">
-                                <input type="text" {{$ActionStatus}} name="REMARKS" id="REMARKS" class="form-control" autocomplete="off" maxlength="200" value="{{ isset($objSO->REMARKS)?$objSO->REMARKS:'' }}"  >
+                                <input type="text" name="REMARKS" id="REMARKS" autocomplete="off" class="form-control" maxlength="200"  >
                             </div>
-                            <div class="col-lg-2 pl"><p>Direct Sales Order</p></div>
+                            <div class="col-lg-2 pl"><p>Direct Sales Order </p></div>
                             <div class="col-lg-2 pl">
-                                  <input type="checkbox" {{$ActionStatus}} name="DirectSO" id="DirectSO" class="form-checkbox"  disabled />
-                            </div>
-                           
-             
+                                  <input type="checkbox" name="DirectSO" id="DirectSO" class="form-checkbox" checked >
+                            </div>                          
                         </div>
+
                         <div class="row">
                         <div class="col-lg-2 pl"><p>Reverse GST</p></div>
                         <div class="col-lg-2 pl">
-                            <input type="checkbox" {{$ActionStatus}} name="GST_Reverse" id="GST_Reverse" {{isset($objSO->REVERSE_GST) && $objSO->REVERSE_GST == 1 ? 'checked' : ''}}    />                          
+                            <input type="checkbox" name="GST_Reverse" id="GST_Reverse" />                          
                         </div>
                         <div class="col-lg-2 pl"><p>GST Input Not Avail</p></div>
                         <div class="col-lg-2 pl">
-                            <input type="checkbox" {{$ActionStatus}} name="GST_N_Avail" id="GST_N_Avail"  {{isset($objSO->GST_INPUT) && $objSO->GST_INPUT == 1 ? 'checked' : ''}}    />
-                        </div>      
-                        
-             
+                            <input type="checkbox" name="GST_N_Avail" id="GST_N_Avail" />
+                        </div>       
+
                         <div class="col-lg-2 pl ExceptionalGST" style="display:none;" ><p>Exemptional for GST</p></div>
                         <div class="col-lg-2 pl ExceptionalGST" style="display:none;">
-                        <input type="checkbox" {{$ActionStatus}} name="EXE_GST" id="EXE_GST" class="filter-none"  value="1" onchange="getExceptionalGst()" >
+                        <input type="checkbox" name="EXE_GST" id="EXE_GST" class="filter-none"  value="1" onchange="getExceptionalGst()" >
                         </div>
-                        
                         </div>
 
                         <div class="row">
                         <div class="col-lg-2 pl "><p>Scheme</p></div>
                             <div class="col-lg-2 pl"  >
-                            <input type="text" {{$ActionStatus}}  name="Schemepopup" id="txtSchemepopup" class="form-control mandatory"  autocomplete="off"  readonly value="{{ isset($SchemeName)?$SchemeName:'' }}"/>
-                            <input type="hidden" name="SCHEMEID_REF" id="SCHEMEID_REF" class="form-control" value="{{ isset($SchemeId)?$SchemeId:'' }}"  autocomplete="off" />                                                            
-                            </div>  
+                            <input type="text" name="Schemepopup" id="txtSchemepopup" class="form-control mandatory"  autocomplete="off"  readonly/>
+                            <input type="hidden" name="SCHEMEID_REF" id="SCHEMEID_REF" class="form-control"  autocomplete="off" />                                                            
+                            </div>    
 
                             <div class="col-lg-2 pl"><p>Total Value</p></div>
                             <div class="col-lg-2 pl">
-                                <input type="text" {{$ActionStatus}} name="TotalValue" id="TotalValue" class="form-control"  autocomplete="off" readonly  />
+                                <input type="text" name="TotalValue" id="TotalValue" class="form-control"  autocomplete="off" readonly />
                             </div>
 
                             <div id="multi_currency_section" style="display:none">
                             <div class="col-lg-2 pl"  ><p id="currency_section"></p></div>
                             <div class="col-lg-2 pl">
-                                <input type="text" {{$ActionStatus}} name="TotalValue_Conversion" id="TotalValue_Conversion" class="form-control"  autocomplete="off" readonly  />
+                                <input type="text"  name="TotalValue_Conversion" id="TotalValue_Conversion" class="form-control"  autocomplete="off" readonly  />
                             </div>
-                            </div>                          
+                            </div>
                         </div> 
                         
                         <div class="row"> 
                           <div class="col-lg-2 pl"><p>Price Based On</p></div>
                           <div class="col-lg-2 pl">
-                            <select {{$ActionStatus}} name="PRICE_BASED_ON" id="PRICE_BASED_ON" class="form-control mandatory">
-                              <option {{isset($objSO->PRICE_BASED_ON) && $objSO->PRICE_BASED_ON =="MAIN UOM"?'selected="selected"':''}} value="MAIN UOM" >MAIN UOM</option>
-                              <option {{isset($objSO->PRICE_BASED_ON) && $objSO->PRICE_BASED_ON =="ALT UOM"?'selected="selected"':''}} value="ALT UOM" >ALT UOM</option>
+                            <select name="PRICE_BASED_ON" id="PRICE_BASED_ON" class="form-control mandatory">
+                              <option value="MAIN UOM" selected >MAIN UOM</option>
+                              <option value="ALT UOM" >ALT UOM</option>
                           </select>
                           </div>
                         </div>
@@ -213,196 +205,151 @@
                         <div class="row">
                           <div class="col-lg-2 pl"><p>Shipping Instruction</p></div>
                           <div class="col-lg-4 pl">
-                            <textarea {{$ActionStatus}} name="SHIPPING_INSTRUCTION" id="SHIPPING_INSTRUCTION" autocomplete="off" class="form-control" style="height:60px;" >{{ isset($objSO->SHIPPING_INSTRUCTION)?$objSO->SHIPPING_INSTRUCTION:'' }}</textarea>
+                            <textarea name="SHIPPING_INSTRUCTION" id="SHIPPING_INSTRUCTION" autocomplete="off" class="form-control" style="height:60px;" ></textarea>
                           </div> 
                           
                           <div class="col-lg-2 pl"><p>Delivery Address</p></div>
                           <div class="col-lg-4 pl">
-                            <textarea {{$ActionStatus}} name="DELIVERY_ADDRESS" id="DELIVERY_ADDRESS" autocomplete="off" class="form-control" style="height:60px;" >{{ isset($objSO->DELIVERY_ADDRESS)?$objSO->DELIVERY_ADDRESS:'' }}</textarea>
+                            <textarea name="DELIVERY_ADDRESS" id="DELIVERY_ADDRESS" autocomplete="off" class="form-control" style="height:60px;" ></textarea>
                           </div>
                         </div>
-                        
+
                     </div>
-                   
-                    <div class="container-fluid">
 
-                        <div class="row">
-                        <ul class="nav nav-tabs">
-                                <li class="active"><a data-toggle="tab" href="#Material">Material</a></li>
-                                <li><a data-toggle="tab" href="#TC" id="TC_TAB" >T & C</a></li>
-                                <li><a data-toggle="tab" href="#udf" id="UDF_TAB" >UDF</a></li>
-                                <li><a data-toggle="tab" href="#CT" id="CT_TAB">Calculation Template</a></li>
-                                <li><a data-toggle="tab" href="#PaymentSlabs" id="PAYMENT_TAB">Payment Slabs</a></li>	
-                                <li><a data-toggle="tab" href="#TDS">TDS</a></li> 
-                                <li><a data-toggle="tab" href="#ADDITIONAL" id="ADDITIONAL_TAB">Additional Info</a></li>
-                            </ul>
+
+
+                    <div class="container-fluid purchase-order-view">
+
+                      <div class="row">
+                      <ul class="nav nav-tabs">
+                      <li class="active"><a data-toggle="tab" href="#Material" id="MAT_TAB" >Material</a></li>
+                      <li><a data-toggle="tab" href="#TC" id="TC_TAB" >T & C</a></li>
+                      <li><a data-toggle="tab" href="#udf" id="UDF_TAB" >UDF</a></li>
+                      <li><a data-toggle="tab" href="#CT" id="CT_TAB">Calculation Template</a></li>                          
+                      <li><a data-toggle="tab" href="#PaymentSlabs" id="PAYMENT_TAB">Payment Slabs</a></li>	
+                      <li><a data-toggle="tab" href="#TDS">TDS</a></li> 
+                      <li><a data-toggle="tab" href="#ADDITIONAL" id="ADDITIONAL_TAB">Additional Info</a></li>
+            
+                      </ul>
                             
                             
-                            <div class="tab-content">
-
+                            
+                            <div class="tab-content">                          
                                 <div id="Material" class="tab-pane fade in active">
                                   <div class="row"><div class="col-lg-4" style="padding-left: 15px;">Note:- 1 row mandatory in Material Tab </div></div>
-                                    <div id="GetSchemeMaterialItems" class="table-responsive table-wrapper-scroll-y" style="height:280px;margin-top:10px;" >
-                                        <table id="example2" class="display nowrap table table-striped table-bordered itemlist w-200" width="100%" style="height:auto !important;">
+                                    <div class="table-responsive table-wrapper-scroll-y my-custom-scrollbar" style="height:400px;margin-top:10px;" id="GetSchemeMaterialItems" >
+                                        <table id="example2" class="display nowrap table table-striped table-bordered itemlist"  style="width:100%;height:auto !important;">
                                             <thead id="thead1"  style="position: sticky;top: 0">
-                                                    
-                                                  <tr>
-                                                      <th colspan="{{$AlpsStatus['colspan']}}"></th>
-                                                      <th colspan="4">Sales Quotation / SQ Amendment</th>
-                                                      <th colspan="4">Sales Order</th>
-                                                      <th colspan="17"></th>                                                      
-                                                  </tr>
-                                                  <tr>
-                                                      <th rowspan="2">SQ / SQA No<input class="form-control" type="hidden" name="Row_Count1" id ="Row_Count1" ></th>
-                                                      <th rowspan="2">Lead No</th>
-                                                      <th rowspan="2">Lead Date</th>
-                                                      <th rowspan="2">Item Code</th>
-                                                      <th rowspan="2">Technical Specification</th>
-                                                      <th rowspan="2">Item Name</th>
-                                                      <th rowspan="2">Item Specification</th>
-                                                      <th rowspan="2" style=" width:4%;" {{$AlpsStatus['hidden']}} >{{isset($TabSetting->FIELD8) && $TabSetting->FIELD8 !=''?$TabSetting->FIELD8:'Add. Info Part No'}}</th>
-                                                    <th rowspan="2" style=" width:4%;" {{$AlpsStatus['hidden']}} >{{isset($TabSetting->FIELD9) && $TabSetting->FIELD9 !=''?$TabSetting->FIELD9:'Add. Info Customer Part No'}}</th>
-                                                    <th rowspan="2" style=" width:4%;" {{$AlpsStatus['hidden']}} >{{isset($TabSetting->FIELD10) && $TabSetting->FIELD10 !=''?$TabSetting->FIELD10:'Add. Info OEM Part No.'}}</th>
-                                                      <th rowspan="2">Main UOM</th>
-                                                      <th rowspan="2">Qty (Main UOM)</th>
-                                                      <th rowspan="2">ALT UOM</th>
-                                                      <th rowspan="2">Qty (Alt UOM)</th>
-                                                      <th rowspan="2">Main UOM</th>
-                                                      <th rowspan="2">Qty (Main UOM)</th>
-                                                      <th rowspan="2">ALT UOM</th>
-                                                      <th rowspan="2">Qty (Alt UOM)</th>
-                                                      <th rowspan="2">Rate Per UoM</th>
-                                                      <th colspan="2">Discount</th>
-                                                      <th rowspan="2">Amount after discount</th>
-                                                      <th rowspan="2">IGST Rate %</th>
-                                                      <th rowspan="2">IGST Amount</th>
-                                                      <th rowspan="2">CGST Rate %</th>
-                                                      <th rowspan="2">CGST Amount</th>
-                                                      <th rowspan="2">SGST Rate %</th>
-                                                      <th rowspan="2">SGST Amount</th>
-                                                      <th rowspan="2">Total GST Amount</th>
-                                                      <th rowspan="2">Total after GST</th>
-                                                      <th rowspan="2" width="3%">Action</th>
-                                                  </tr>                                                
-                                                  <tr>
-                                                      <th>%</th>
-                                                      <th>Amount</th>
-                                                  </tr>
+                                                <tr>
+                                                    <th colspan="<?php echo e($AlpsStatus['colspan']); ?>"></th>
+                                                    <th colspan="4">Sales Quotation / SQ Amendment</th>
+                                                    <th colspan="4">Sales Order</th>
+                                                    <th colspan="17"></th>
+                                                </tr>
+                                                <tr>
+                                                    <th rowspan="2" style=" width:4%;">SQ / SQA No<input class="form-control" type="hidden" name="Row_Count1" id ="Row_Count1"></th>
+                                                    <th rowspan="2" style=" width:4%;">Lead No</th>
+                                                    <th rowspan="2" style=" width:4%;">Lead Date</th>
+                                                    <th rowspan="2" style=" width:4%;">Item Code</th>
+                                                    <th rowspan="2">Technical Specification</th>
+                                                    <th rowspan="2" style=" width:4%;">Item Name</th>
+                                                    <th rowspan="2" style=" width:7%;">Item Specification</th>
+                                                    <th rowspan="2" style=" width:4%;" <?php echo e($AlpsStatus['hidden']); ?> ><?php echo e(isset($TabSetting->FIELD8) && $TabSetting->FIELD8 !=''?$TabSetting->FIELD8:'Add. Info Part No'); ?></th>
+                                                    <th rowspan="2" style=" width:4%;" <?php echo e($AlpsStatus['hidden']); ?> ><?php echo e(isset($TabSetting->FIELD9) && $TabSetting->FIELD9 !=''?$TabSetting->FIELD9:'Add. Info Customer Part No'); ?></th>
+                                                    <th rowspan="2" style=" width:4%;" <?php echo e($AlpsStatus['hidden']); ?> ><?php echo e(isset($TabSetting->FIELD10) && $TabSetting->FIELD10 !=''?$TabSetting->FIELD10:'Add. Info OEM Part No.'); ?></th>
+                                                    <th rowspan="2" style=" width:4%;">Main UOM</th>
+                                                    <th rowspan="2" style=" width:4%;">Qty(Main UOM)</th>
+                                                    <th rowspan="2" style=" width:4%;">ALT UOM</th>
+                                                    <th rowspan="2" style=" width:4%;">Qty(Alt UOM)</th>
+                                                    <th rowspan="2" style=" width:4%;">Main UOM</th>
+                                                    <th rowspan="2" style=" width:4%;">Qty(Main UOM)</th>
+                                                    <th rowspan="2" style=" width:4%;">ALT UOM</th>
+                                                    <th rowspan="2" style=" width:4%;">Qty(Alt UOM)</th>
+                                                    <th rowspan="2" style=" width:4%;">Rate Per UoM</th>
+                                                    <th colspan="2" style=" width:4%;">Discount</th>
+                                                    <th rowspan="2" style=" width:4%;">Amount after discount</th>
+                                                    <th rowspan="2" style=" width:4%;">IGST Rate %</th>
+                                                    <th rowspan="2" style=" width:3%;">IGST Amount</th>
+                                                    <th rowspan="2" style=" width:4%;">CGST Rate %</th>
+                                                    <th rowspan="2" style=" width:3%;">CGST Amount</th>
+                                                    <th rowspan="2" style=" width:4%;">SGST Rate %</th>
+                                                    <th rowspan="2" style=" width:3%;">SGST Amount</th>
+                                                    <th rowspan="2" style=" width:3%;">Total GST Amount</th>
+                                                    <th rowspan="2" style=" width:3%;">Total after GST</th>
+                                                    <th rowspan="2" style=" width:3%;">Action</th>
+                                                </tr>
+                                                <tr>
+                                                    <th>%</th>
+                                                    <th>Amount</th>
+                                                </tr>
                                             </thead>
                                             <tbody>
-                                            @if(!empty($objSOMAT))
-                                                @foreach($objSOMAT as $key => $row)
-                                                @php
-                                                $DISCPER      = isset($row->DISCPER) && $row->DISCPER !=''?floatVal($row->DISCPER):0;
-                                                $DISCPER      = number_format($DISCPER, 2, '.', '');
-                                                
-                                                $DISCOUNT_AMT = isset($row->DISCOUNT_AMT) && $row->DISCOUNT_AMT !=''?floatVal($row->DISCOUNT_AMT):0;
-                                                $DISCOUNT_AMT = number_format($DISCOUNT_AMT, 2, '.', '');
+              <tr  class="participantRow">
+                
+                  <td hidden><input type="hidden"  name="SCHEMEID_REF_0" id="SCHEMEID_REF_0" class="form-control" autocomplete="off" style="width:130px;"  /></td>
+                    <td hidden><input type="hidden" name="ITEM_TYPE_0" id="ITEM_TYPE_0" class="form-control" autocomplete="off" style="width:130px;" value="" /></td>            
+                     <td hidden><input type="hidden" name="SCHEMEQTY_0" id="SCHEMEQTY_0" class="form-control three-digits" maxlength="13"  autocomplete="off"  style="width:130px;text-align:right;"    /></td>
+                  <td>
+                  <input  type="text" name="txtSQ_popup_0" id="txtSQ_popup_0" class="form-control"  autocomplete="off" readonly  disabled style="width:130px;"/></td>
+                  <td hidden><input type="hidden" name="SQA_0" id="SQA_0" class="form-control" autocomplete="off" style="width:130px;" /></td>
+                  <td hidden><input type="hidden" name="SEQID_REF_0" id="SEQID_REF_0" class="form-control" autocomplete="off" /></td>
+                  <td><input type="text" name="LEADNO_0" id="LEADNO_0" class="form-control"  autocomplete="off"  readonly style="width:130px;"/></td>
+                  <td><input type="text" name="LEADDT_0" id="LEADDT_0" class="form-control"  autocomplete="off"  readonly style="width:130px;"/></td>
+                  <td><input type="text" name="popupITEMID_0" id="popupITEMID_0" class="form-control"  autocomplete="off"  readonly style="width:130px;"/></td>
+                  <td hidden><input type="hidden" name="ITEMID_REF_0" id="ITEMID_REF_0" class="form-control" autocomplete="off" /></td>
 
-                                                $IGST = isset($row->IGST) && $row->IGST !=''?floatVal($row->IGST):0;
-                                                $IGST = number_format($IGST, 2, '.', '');
-
-                                                $CGST = isset($row->CGST) && $row->CGST !=''?floatVal($row->CGST):0;
-                                                $CGST = number_format($CGST, 2, '.', '');
-
-                                                $SGST = isset($row->SGST) && $row->SGST !=''?floatVal($row->SGST):0;
-                                                $SGST = number_format($SGST, 2, '.', '');
-
-                                                $RATEPUOM = isset($row->RATEPUOM) && $row->RATEPUOM !=''?floatVal($row->RATEPUOM):0;
-                                                $RATEPUOM = number_format($RATEPUOM, 5, '.', '');
-
-                                                $SO_QTY = isset($row->SO_QTY) && $row->SO_QTY !=''?floatVal($row->SO_QTY):0;
-                                                $SO_QTY = number_format($SO_QTY, 5, '.', '');
-                                                @endphp
-
-                                                    <tr  class="participantRow">
-                                                    <td hidden><input type="hidden" name={{"SCHEMEID_REF_".$key}} id ={{"SCHEMEID_REF_".$key}}   class="form-control" autocomplete="off" style="width:130px;" value="{{ $row->SCHEMEID_REF }}"  /></td>
-                                                      <td hidden><input type="text" name={{"ITEM_TYPE_".$key}} id ={{"ITEM_TYPE_".$key}}    class="form-control" autocomplete="off" style="width:130px;"   value="{{ $row->ITEM_TYPE }}" /></td>
-
-                                                      <td hidden><input type="hidden" name={{"SCHEMEQTY_".$key}} id ={{"SCHEMEQTY_".$key}}   class="form-control three-digits" maxlength="13"  autocomplete="off"  style="width:130px;text-align:right;"   value="{{ isset($row->SCHEMEQTY) ?  $row->SCHEMEQTY : ''}}"   /></td>
-
-                    
-                                                        <td hidden>
-                                                        <input   class="form-control" type="hidden" name={{"SOMATID_".$key}} id ={{"SOMATID_".$key}} maxlength="100" value="{{ $row->SOMATID }}" autocomplete="off"   >
-                                                        </td>
-                                                        <td style="text-align:center;" >
-                                                        <input type="text" {{$ActionStatus}} name={{"txtSQ_popup_".$key}} id={{"txtSQ_popup_".$key}} class="form-control" value="{{ $row->SQNO }}"  autocomplete="off"   readonly style="width:130px;"/></td>
-                                                        <td hidden><input type="hidden" name={{"SQA_".$key}} id={{"SQA_".$key}} class="form-control" value="{{ $row->SQA }}" autocomplete="off" /></td>
-                                                        <td hidden><input type="hidden" name={{"SEQID_REF_".$key}} id={{"SEQID_REF_".$key}} class="form-control" value="{{ $row->SEQID_REF }}" autocomplete="off" /></td>
-                                                        <td><input type="text" name={{"LEADNO_".$key}} id={{"LEADNO_".$key}}  class="form-control"  autocomplete="off"  readonly value="{{ $row->LEAD_NO }}"  style="width:130px;"/></td>
-                                                    <td><input type="text" name={{"LEADDT_".$key}} id={{"LEADDT_".$key}}  class="form-control"  autocomplete="off"  readonly value="{{ $row->LEAD_DT }}"  style="width:130px;"/></td>
-                                                        <td><input type="text" {{$ActionStatus}} name={{"popupITEMID_".$key}} id={{"popupITEMID_".$key}} class="form-control"  autocomplete="off" value="{{ $row->ICODE }}" readonly style="width:130px;"/></td>
-                                                        <td><button  id={{"TECHSPEC_".$key}}  onclick="getTechnicalSpecification(this.id)" class="btn" type="button" ><i class="fa fa-clone"></i></button></td>
+                  <td><button id="TECHSPEC_0" onclick="getTechnicalSpecification(this.id)" class="btn" type="button" ><i class="fa fa-clone"></i></button></td>
                   
-                                                        <td hidden ><input type="hidden" name={{"TSID_REF_".$key}} id={{"TSID_REF_".$key}} value="{{ $row->TSID_REF }}"   class="form-control" autocomplete="off" /></td>
-
-                                                        <td hidden><input type="hidden" name={{"ITEMID_REF_".$key}} id={{"ITEMID_REF_".$key}} class="form-control"  value="{{ $row->ITEMID_REF }}" autocomplete="off" /></td>
-                                                        <td><input type="text" {{$ActionStatus}} name={{"ItemName_".$key}} id={{"ItemName_".$key}} class="form-control"  autocomplete="off" value="{{ $row->ItemName }}" readonly style="width:200px;"/></td>
-                                                        <td><input type="text" {{$ActionStatus}} name={{"Itemspec_".$key}} id={{"Itemspec_".$key}} class="form-control"  autocomplete="off" value="{{ $row->ITEMSPECI }}" style="width:200px;" /></td>
-                                                        <td {{$AlpsStatus['hidden']}}><input type="text" {{$ActionStatus}} name={{"Alpspartno_".$key}} id={{"Alpspartno_".$key}} class="form-control"  autocomplete="off" value="{{ $row->ALPS_PART_NO }}" readonly style="width:130px;"/></td>
-                                                        <td {{$AlpsStatus['hidden']}}><input type="text" {{$ActionStatus}} name={{"Custpartno_".$key}} id={{"Custpartno_".$key}} class="form-control"  autocomplete="off" value="{{ $row->CUSTOMER_PART_NO }}" readonly style="width:130px;"/></td>
-                                                        <td {{$AlpsStatus['hidden']}}><input type="text"{{$ActionStatus}} name={{"OEMpartno_".$key}} id={{"OEMpartno_".$key}} class="form-control"  autocomplete="off" value="{{ $row->OEM_PART_NO }}" readonly style="width:130px;"/></td>
-                                                        <td><input type="text" {{$ActionStatus}} name={{"SQMUOM_".$key}} id={{"SQMUOM_".$key}} class="form-control"  autocomplete="off" value="{{ $row->SQMUOM }}" readonly style="width:130px;"/></td>
-                                                        <td><input type="text" {{$ActionStatus}} name={{"SQMUOMQTY_".$key}} id={{"SQMUOMQTY_".$key}} class="form-control" maxlength="13" value="{{ $row->SQMUOMQTY }}" autocomplete="off"  readonly style="width:130px;text-align:right;"/></td>
-                                                        <td><input type="text" {{$ActionStatus}} name={{"SQAUOM_".$key}} id={{"SQAUOM_".$key}} class="form-control"  autocomplete="off" value="{{ $row->SQAUOM }}" readonly style="width:130px;"/></td>
-                                                        <td><input type="text" {{$ActionStatus}} name={{"SQAUOMQTY_".$key}} id={{"SQAUOMQTY_".$key}} class="form-control" maxlength="13" value="{{ $row->SQAUOMQTY }}" autocomplete="off"  readonly style="width:130px;text-align:right;"/></td>
-                                                        <td><input type="text" {{$ActionStatus}} name={{"popupMUOM_".$key}} id={{"popupMUOM_".$key}} class="form-control"  autocomplete="off" value="{{ $row->popupMUOM }}" readonly style="width:130px;"/></td>
-                                                        <td hidden><input type="hidden" name={{"MAIN_UOMID_REF_".$key}} id={{"MAIN_UOMID_REF_".$key}} class="form-control" value="{{ $row->MAIN_UOMID_REF }}" autocomplete="off" /></td>
-                                                        <td><input type="text" {{$ActionStatus}} name={{"SO_QTY_".$key}} id={{"SO_QTY_".$key}} class="form-control three-digits {{$row->ITEM_TYPE}}SCHEME{{$row->SCHEMEID_REF}}" maxlength="13" value="{{ $SO_QTY }}"  autocomplete="off" style="width:130px;text-align:right;" onkeyup="dataCal(this.id)" onfocusout="dataDec(this,'2')" /></td>
-                                                        <td hidden><input type="hidden" name={{"SO_FQTY_".$key}} id={{"SO_FQTY_".$key}} class="form-control three-digits" maxlength="13" value="1"  autocomplete="off"   readonly /></td>
-                                                        <td><input type="text" {{$ActionStatus}} name={{"popupAUOM_".$key}} id={{"popupAUOM_".$key}} class="form-control"  autocomplete="off" value="{{ $row->popupAUOM }}" readonly style="width:130px;" /></td>
-                                                        <td hidden><input type="hidden" name={{"ALT_UOMID_REF_".$key}} id={{"ALT_UOMID_REF_".$key}} class="form-control"  autocomplete="off" value="{{ $row->ALT_UOMID_REF }}"  readonly/></td>
-                                                        <td><input type="text" {{$ActionStatus}} name={{"ALT_UOMID_QTY_".$key}} id={{"ALT_UOMID_QTY_".$key}} class="form-control three-digits" maxlength="13" autocomplete="off" value="{{ $row->ALT_UOMID_QTY }}" style="width:130px;text-align:right;" onkeyup="dataCal(this.id)" onfocusout="dataDec(this,'2')" /></td>
+                  <td hidden ><input type="hidden" name="TSID_REF_0" id="TSID_REF_0" class="form-control" autocomplete="off" /></td>
                                                         
-                                                        <td><input type="text" {{$ActionStatus}} name={{"RATEPUOM_".$key}} id={{"RATEPUOM_".$key}} class="form-control five-digits blurRate" maxlength="13" value="{{ $RATEPUOM }}"  autocomplete="off" style="width:130px;text-align:right;" onkeyup="dataCal(this.id),get_delear_customer_price(this.id,'change')" onfocusout="dataDec(this,'5')" /></td>
-                                                        
-                                                        <td><input  type="text" {{$ActionStatus}} name={{"DISCPER_".$key}} id={{"DISCPER_".$key}} class="form-control" maxlength="8" value="{{$DISCPER}}"  autocomplete="off" style="width:130px;text-align:right;" onkeyup="dataCal(this.id)" onfocusout="dataDec(this,'2')" /></td>
-                                                        <td><input  type="text" {{$ActionStatus}} name={{"DISCOUNT_AMT_".$key}} id={{"DISCOUNT_AMT_".$key}} class="form-control" value="{{$DISCOUNT_AMT}}" maxlength="15"  autocomplete="off" style="width:130px;text-align:right;" onkeyup="dataCal(this.id)" onfocusout="dataDec(this,'2')" /></td>
-                                                        @php
-                                                            $TaxAmt=number_format((($SO_QTY*$RATEPUOM) - $DISCOUNT_AMT),2, '.', '');
-                                                        @endphp
-                                                        <td><input type="text" {{$ActionStatus}} name={{"DISAFTT_AMT_".$key}} id={{"DISAFTT_AMT_".$key}} class="form-control two-digits" maxlength="15" autocomplete="off"  readonly style="width:130px;text-align:right;"/></td>
-                                                        <td><input type="text" {{$ActionStatus}} name={{"IGST_".$key}} id={{"IGST_".$key}} class="form-control four-digits" maxlength="8" value="{{ $IGST }}" autocomplete="off" onkeyup="dataCal(this.id)"  readonly style="width:130px;text-align:right;"/></td>
-                                                        @php
-                                                            $IGSTAMT=number_format((((($SO_QTY*$RATEPUOM) - $DISCOUNT_AMT)*$IGST)/100),2, '.', '');
-                                                        @endphp
-                                                        <td><input type="text" {{$ActionStatus}} name={{"IGSTAMT_".$key}} id={{"IGSTAMT_".$key}} class="form-control two-digits" maxlength="15" autocomplete="off"  readonly/></td>
-                                                        <td><input type="text" {{$ActionStatus}} name={{"CGST_".$key}} id={{"CGST_".$key}} class="form-control four-digits" maxlength="8" value="{{ $CGST }}" autocomplete="off" onkeyup="dataCal(this.id)"  readonly style="width:130px;text-align:right;"/></td>
-                                                        @php
-                                                            $CGSTAMT=number_format((((($SO_QTY*$RATEPUOM) - $DISCOUNT_AMT)*$CGST)/100),2, '.', '');
-                                                        @endphp
-                                                        <td><input type="text" {{$ActionStatus}} name={{"CGSTAMT_".$key}} id={{"CGSTAMT_".$key}} class="form-control two-digits" maxlength="15" autocomplete="off"  readonly style="width:130px;text-align:right;"/></td>
-                                                        <td><input type="text" {{$ActionStatus}} name={{"SGST_".$key}} id={{"SGST_".$key}} class="form-control four-digits" maxlength="8" value="{{ $SGST }}" autocomplete="off" onkeyup="dataCal(this.id)"  readonly style="width:130px;text-align:right;"/></td>
-                                                        @php
-                                                            $SGSTAMT=number_format((((($SO_QTY*$RATEPUOM) - $DISCOUNT_AMT)*$SGST)/100),2, '.', '');
-                                                        @endphp
-                                                        <td><input type="text" {{$ActionStatus}} name={{"SGSTAMT_".$key}} id={{"SGSTAMT_".$key}} class="form-control two-digits" maxlength="15" autocomplete="off"  readonly style="width:130px;text-align:right;"/></td>
-                                                        @php
-                                                            $IGSTAMT=number_format((((($SO_QTY*$RATEPUOM) - $DISCOUNT_AMT)*$IGST)/100),2, '.', '');
-                                                            $CGSTAMT=number_format((((($SO_QTY*$RATEPUOM) - $DISCOUNT_AMT)*$CGST)/100),2, '.', '');
-                                                            $SGSTAMT=number_format((((($SO_QTY*$RATEPUOM) - $DISCOUNT_AMT)*$SGST)/100),2, '.', '');
-                                                            $TOTGST =number_format(($IGSTAMT+$CGSTAMT+$SGSTAMT),2, '.', '');
-                                                        @endphp
-                                                        <td><input type="text" {{$ActionStatus}} name={{"TGST_AMT_".$key}} id={{"TGST_AMT_".$key}} class="form-control two-digits" maxlength="15" autocomplete="off"  readonly style="width:130px;text-align:right;"/></td>
-                                                        @php
-                                                            $TaxAmt=number_format((($SO_QTY*$RATEPUOM) - $DISCOUNT_AMT),2, '.', '');
-                                                            $IGSTAMT=number_format((((($SO_QTY*$RATEPUOM) - $DISCOUNT_AMT)*$IGST)/100),2, '.', '');
-                                                            $CGSTAMT=number_format((((($SO_QTY*$RATEPUOM) - $DISCOUNT_AMT)*$CGST)/100),2, '.', '');
-                                                            $SGSTAMT=number_format((((($SO_QTY*$RATEPUOM) - $DISCOUNT_AMT)*$SGST)/100),2, '.', '');
-                                                            $TOTAMT =number_format(($TaxAmt+$IGSTAMT+$CGSTAMT+$SGSTAMT),2, '.', '');
-                                                        @endphp
-                                                        <td><input type="text" {{$ActionStatus}} name={{"TOT_AMT_".$key}} id={{"TOT_AMT_".$key}} class="form-control two-digits" maxlength="15" autocomplete="off"  readonly style="width:130px;text-align:right;"/></td>
-                                                        <td align="center"><button class="btn add material" title="add" data-toggle="tooltip" type="button"><i class="fa fa-plus"></i></button><button class="btn remove dmaterial" title="Delete" data-toggle="tooltip" id={{"remove_".$key}}  type="button"><i class="fa fa-trash" ></i></button></td>
-                                                    </tr>
-                                                    <tr></tr>
-                                                @endforeach 
-                                              @endif 
+                  <td><input type="text" name="ItemName_0" id="ItemName_0" class="form-control"  autocomplete="off"  readonly style="width:200px;"/></td>
+                  <td><input type="text" name="Itemspec_0" id="Itemspec_0" class="form-control"  autocomplete="off"  style="width:200px;"/></td>
+                  <td <?php echo e($AlpsStatus['hidden']); ?> style=" width:4%;"><input type="text" name="Alpspartno_0" id="Alpspartno_0" class="form-control"  autocomplete="off"  readonly style="width:130px;"/></td>
+                  <td <?php echo e($AlpsStatus['hidden']); ?> style=" width:4%;"><input type="text" name="Custpartno_0" id="Custpartno_0" class="form-control"  autocomplete="off"  readonly style="width:130px;"/></td>
+                  <td <?php echo e($AlpsStatus['hidden']); ?> style=" width:4%;"><input type="text" name="OEMpartno_0" id="OEMpartno_0" class="form-control"  autocomplete="off"  readonly style="width:130px;"/></td>
+                  <td><input type="text" name="SQMUOM_0" id="SQMUOM_0" class="form-control"  autocomplete="off"  readonly style="width:130px;"/></td>
+                  <td><input type="text" name="SQMUOMQTY_0" id="SQMUOMQTY_0" class="form-control" maxlength="13"  autocomplete="off"  readonly style="width:130px;text-align:right;"/></td>
+                  <td style=" width:4%;"><input type="text" name="SQAUOM_0" id="SQAUOM_0" class="form-control"  autocomplete="off"  readonly style="width:130px;text-align:right;"/></td>
+                  <td><input type="text" name="SQAUOMQTY_0" id="SQAUOMQTY_0" class="form-control" maxlength="13" autocomplete="off"  readonly style="width:130px;text-align:right;"/></td>
+                  <td style=" width:4%;"><input type="text" name="popupMUOM_0" id="popupMUOM_0" class="form-control"  autocomplete="off"  readonly style="width:130px;"/></td>
+                  <td hidden><input type="hidden" name="MAIN_UOMID_REF_0" id="MAIN_UOMID_REF_0" class="form-control"  autocomplete="off" /></td>
+                  <td><input type="text" name="SO_QTY_0" id="SO_QTY_0" class="form-control three-digits" maxlength="13"  autocomplete="off"  style="width:130px;text-align:right;" onkeyup="dataCal(this.id)" onfocusout="dataDec(this,'2')" /></td>
+                  <td hidden><input type="hidden" name="SO_FQTY_0" id="SO_FQTY_0" class="form-control three-digits" maxlength="13"  autocomplete="off"  readonly/></td>
+                  <td><input type="text" name="popupAUOM_0" id="popupAUOM_0" class="form-control"  autocomplete="off"  readonly style="width:130px;"/></td>
+                  <td hidden><input type="hidden" name="ALT_UOMID_REF_0" id="ALT_UOMID_REF_0" class="form-control"  autocomplete="off"  readonly /></td>
+                  <td><input type="text" name="ALT_UOMID_QTY_0" id="ALT_UOMID_QTY_0" class="form-control three-digits" maxlength="13" autocomplete="off"   style="width:130px;text-align:right;"  onkeyup="dataCal(this.id)"  onfocusout="dataCalculation(this.id)"/></td>
+                  
+                  <td><input type="text" name="RATEPUOM_0" id="RATEPUOM_0" class="form-control five-digits blurRate" maxlength="13"  autocomplete="off" style="width:130px;text-align:right;" onkeyup="dataCal(this.id),get_delear_customer_price(this.id,'change')" onfocusout="dataDec(this,'5')" /></td>
+                  
+                  <td><input  type="text" name="DISCPER_0" id="DISCPER_0" class="form-control four-digits" maxlength="8"  autocomplete="off" style="width:130px;text-align:right;" onkeyup="dataCal(this.id)" onfocusout="dataDec(this,'2')" /></td>
+                  <td><input  type="text" name="DISCOUNT_AMT_0" id="DISCOUNT_AMT_0" class="form-control two-digits" maxlength="15"  autocomplete="off"  style="width:130px;text-align:right;" onkeyup="dataCal(this.id)" onfocusout="dataDec(this,'2')" /></td>
+                <td><input type="text" name="DISAFTT_AMT_0" id="DISAFTT_AMT_0" class="form-control two-digits" maxlength="15" autocomplete="off"  readonly style="width:130px;text-align:right;"
+/></td>
+                <td><input type="text" name="IGST_0" id="IGST_0" class="form-control four-digits" maxlength="8"  autocomplete="off"  readonly onkeyup="dataCal(this.id)"/></td>
+                <td><input type="text" name="IGSTAMT_0" id="IGSTAMT_0" class="form-control two-digits" maxlength="15" autocomplete="off"  readonly style="width:130px;text-align:right;"
+/></td>
+                <td><input type="text" name="CGST_0" id="CGST_0" class="form-control four-digits" maxlength="8" autocomplete="off"  readonly style="width:130px;text-align:right;"
+                onkeyup="dataCal(this.id)" /></td>
+                <td><input type="text" name="CGSTAMT_0" id="CGSTAMT_0" class="form-control two-digits" maxlength="15" autocomplete="off"  readonly style="width:130px;text-align:right;"
+/></td>
+                <td><input type="text" name="SGST_0" id="SGST_0" class="form-control four-digits" maxlength="8" autocomplete="off"  readonly  style="width:130px;text-align:right;"
+                onkeyup="dataCal(this.id)" /></td>
+                <td><input type="text" name="SGSTAMT_0" id="SGSTAMT_0" class="form-control two-digits" maxlength="15" autocomplete="off"  readonly style="width:130px;text-align:right;"
+/></td>
+                <td><input type="text" name="TGST_AMT_0" id="TGST_AMT_0" class="form-control two-digits" maxlength="15" autocomplete="off"  readonly style="width:130px;text-align:right;"
+/></td>
+                <td><input type="text" name="TOT_AMT_0" id="TOT_AMT_0" class="form-control two-digits" maxlength="15" autocomplete="off"  readonly style="width:130px;text-align:right;"
+/></td>
+                <td align="center"><button  class="btn add material" title="add" data-toggle="tooltip" type="button"><i class="fa fa-plus"></i></button><button class="btn remove dmaterial" title="Delete"  id="remove_0" data-toggle="tooltip" type="button"><i class="fa fa-trash" ></i></button></td>
+                                              
+                                                </tr>
+                                                <tr></tr>
                                             </tbody>
                                             <tr  class="participantRowFotter">
                                                 <td colspan="6" style="text-align:center;font-weight:bold;">TOTAL</td>    
-                                                <td {{$AlpsStatus['hidden']}} ></td>
-                                                <td {{$AlpsStatus['hidden']}} ></td>
-                                                <td {{$AlpsStatus['hidden']}} ></td>                               
+                                                <td <?php echo e($AlpsStatus['hidden']); ?> ></td>
+                                                <td <?php echo e($AlpsStatus['hidden']); ?> ></td>
+                                                <td <?php echo e($AlpsStatus['hidden']); ?> ></td>                               
                                                 <td></td>
                                                 <td></td>
                                                 <td></td>
@@ -426,29 +373,25 @@
                                                 <td id="TOT_AMT_total"        style="text-align:right;font-weight:bold;"></td>
                                                 <td></td>                                                
                                           </tr>
+
                                     </table>
                                     </div>	
                                 </div>
                                 
                                 
                                 
-                                <div id="TC" class="tab-pane fade">
-                                    
+                                <div id="TC" class="tab-pane fade">                                   
                                     
                                     <div class="row" style="margin-top:10px;margin-left:3px;" >	
                                         <div class="col-lg-1 pl"><p>T&C Template</p></div>
                                         <div class="col-lg-2 pl">
-                                        <input type="text" {{$ActionStatus}} name="txtTNCID_popup" id="txtTNCID_popup" class="form-control"  autocomplete="off"  readonly/>
-                                        @if(!empty($objSOTNC))
-                                         <input type="hidden" name="TNCID_REF" id="TNCID_REF" class="form-control" value="{{$objSOTNC[0]->TNCID_REF}}" autocomplete="off" />
-                                         @else
-                                         <input type="hidden" name="TNCID_REF" id="TNCID_REF" class="form-control"  autocomplete="off" />
-                                         @endif 
+                                        <input type="text" name="txtTNCID_popup" id="txtTNCID_popup" class="form-control"  autocomplete="off"  readonly/>
+                                         <input type="hidden" name="TNCID_REF" id="TNCID_REF" class="form-control" autocomplete="off" />
                                         </div>
                                     </div>
                                     
                                     
-                                    <div class="table-responsive table-wrapper-scroll-y " style="margin-top:10px;height:240px;width:50%;">
+                                    <div class="table-responsive table-wrapper-scroll-y my-custom-scrollbar" style="margin-top:10px;height:240px;width:50%;">
                                         
                                         <table id="example3" class="display nowrap table table-striped table-bordered itemlist" style="height:auto !important;">
                                             <thead id="thead1"  style="position: sticky;top: 0">
@@ -459,31 +402,17 @@
                                             </tr>
                                             </thead>
                                             <tbody id="tncbody">
-                                            @if(!empty($objSOTNC))
-                                                @foreach($objSOTNC as $Tkey => $Trow)
-                                                    <tr  class="participantRow3">
-                                                    <td><input type="text" {{$ActionStatus}} name={{"popupTNCDID_".$Tkey}} id={{"popupTNCDID_".$Tkey}} class="form-control"  autocomplete="off"  readonly/></td>
-                                                    <td hidden><input type="hidden" name={{"TNCDID_REF_".$Tkey}} id={{"TNCDID_REF_".$Tkey}} class="form-control" value="{{$Trow->TNCDID_REF}}" autocomplete="off" /></td>
-                                                    <td hidden><input type="hidden" name={{"TNCismandatory_".$Tkey}} id={{"TNCismandatory_".$Tkey}} class="form-control" autocomplete="off" /></td>
-                                                    <td id={{"tdinputid_".$Tkey}}>
-                                                    {{-- dynamic input --}} 
-                                                    </td>
-                                                        <td align="center" ><button class="btn add TNC" title="add" data-toggle="tooltip"  type="button" disabled><i class="fa fa-plus"></i></button><button class="btn remove DTNC" title="Delete" data-toggle="tooltip" type="button" disabled><i class="fa fa-trash" ></i></button></td>
-                                                    </tr>
-                                                <tr></tr>
-                                                @endforeach 
-                                                @else
-                                                <tr  class="participantRow3">
-                                                    <td><input type="text" {{$ActionStatus}} name="popupTNCDID_0" id="popupTNCDID_0" class="form-control"  autocomplete="off"  readonly/></td>
-                                                    <td hidden><input type="hidden" name="TNCDID_REF_0" id="TNCDID_REF_0" class="form-control" autocomplete="off" /></td>
-                                                    <td hidden><input type="hidden" name="TNCismandatory_0" id="TNCismandatory_0" class="form-control" autocomplete="off" /></td>
-                                                    <td id="tdinputid_0">
-                                                      {{-- dynamic input --}} 
-                                                    </td>
-                                                        <td align="center" ><button class="btn add TNC" title="add" data-toggle="tooltip"  type="button" disabled><i class="fa fa-plus"></i></button><button class="btn remove DTNC" title="Delete" data-toggle="tooltip" type="button" disabled><i class="fa fa-trash" ></i></button></td>
-                                                    </tr>
-                                                <tr></tr>
-                                            @endif 
+                                    
+                                            <tr  class="participantRow3">
+                                             <td><input type="text" name="popupTNCDID_0" id="popupTNCDID_0" class="form-control"  autocomplete="off"  readonly/></td>
+                                             <td hidden><input type="hidden" name="TNCDID_REF_0" id="TNCDID_REF_0" class="form-control" autocomplete="off" /></td>
+                                             <td hidden><input type="hidden" name="TNCismandatory_0" id="TNCismandatory_0" class="form-control" autocomplete="off" /></td>
+                                             <td id="tdinputid_0">
+                                               
+                                             </td>
+                                                <td align="center" ><button class="btn add TNC" title="add" data-toggle="tooltip"  type="button" disabled><i class="fa fa-plus"></i></button><button class="btn remove DTNC" title="Delete" data-toggle="tooltip" type="button" disabled><i class="fa fa-trash" ></i></button></td>
+                                            </tr>
+                                        <tr></tr>
                                             </tbody>
                                         </table>
                                     </div>
@@ -491,7 +420,7 @@
                     
 
                                 <div id="udf" class="tab-pane fade">
-                                    <div class="table-responsive table-wrapper-scroll-y " style="margin-top:10px;height:280px;width:50%;">
+                                    <div class="table-responsive table-wrapper-scroll-y my-custom-scrollbar" style="margin-top:10px;height:280px;width:50%;">
                                         <table id="example4" class="display nowrap table table-striped table-bordered itemlist" style="height:auto !important;">
                                             <thead id="thead1"  style="position: sticky;top: 0">
                                             <tr >
@@ -501,50 +430,33 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                        @if(!empty($objSOUDF))
-                                            @foreach($objSOUDF as $Ukey => $Urow)
-                                                <tr  class="participantRow4">
-                                                    <td><input type="text" {{$ActionStatus}} name={{"popupUDFSOID_".$Ukey}} id={{"popupUDFSOID_".$Ukey}}  class="form-control"  autocomplete="off"  readonly/></td>
-                                                    <td hidden><input type="hidden" name={{"UDFSOID_REF_".$Ukey}}  id={{"UDFSOID_REF_".$Ukey}} class="form-control" value="{{$Urow->UDFSOID_REF}}" autocomplete="off" /></td>
-                                                    <td hidden><input type="hidden" name={{"UDFismandatory_".$Ukey}} id={{"UDFismandatory_".$Ukey}} class="form-control" autocomplete="off" /></td>
-                                                    <td id={{"udfinputid_".$Ukey}}>
-                                                    {{-- dynamic input --}} 
-                                                    </td>
-                                                    <td align="center" ><button class="btn add UDF" title="add" data-toggle="tooltip" type="button" disabled><i class="fa fa-plus"></i></button><button class="btn remove DUDF" title="Delete" data-toggle="tooltip" type="button" disabled><i class="fa fa-trash" ></i></button></td>
-                                                </tr>
-                                                <tr></tr>
-                                            @endforeach 
-                                            @else
-                                            @foreach($objUdfSOData as $uindex=>$uRow)
+                                            <?php $__currentLoopData = $objUdfSOData; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $uindex=>$uRow): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                               <tr  class="participantRow4">
-                                                  <td><input type="text" {{$ActionStatus}} name={{"popupUDFSOID_".$uindex}} id={{"popupUDFSOID_".$uindex}} class="form-control" value="{{$uRow->LABEL}}" autocomplete="off"  readonly/></td>
-                                                  <td hidden><input type="hidden" name={{"UDFSOID_REF_".$uindex}} id={{"UDFSOID_REF_".$uindex}} class="form-control" value="{{$uRow->UDFID}}" autocomplete="off"   /></td>
-                                                  <td hidden><input type="hidden" name={{"UDFismandatory_".$uindex}} id={{"UDFismandatory_".$uindex}} value="{{$uRow->ISMANDATORY}}" class="form-control"   autocomplete="off" /></td>
-                                                  <td id={{"udfinputid_".$uindex}} >
+                                                  <td><input type="text" name=<?php echo e("popupUDFSOID_".$uindex); ?> id=<?php echo e("popupUDFSOID_".$uindex); ?> class="form-control" value="<?php echo e($uRow->LABEL); ?>" autocomplete="off"  readonly/></td>
+                                                  <td hidden><input type="hidden" name=<?php echo e("UDFSOID_REF_".$uindex); ?> id=<?php echo e("UDFSOID_REF_".$uindex); ?> class="form-control" value="<?php echo e($uRow->UDFID); ?>" autocomplete="off"   /></td>
+                                                  <td hidden><input type="hidden" name=<?php echo e("UDFismandatory_".$uindex); ?> id=<?php echo e("UDFismandatory_".$uindex); ?> value="<?php echo e($uRow->ISMANDATORY); ?>" class="form-control"   autocomplete="off" /></td>
+                                                  <td id=<?php echo e("udfinputid_".$uindex); ?> >
                                                     
                                                   </td>
                                                   <td align="center" ><button class="btn add UDF" title="add" data-toggle="tooltip" type="button" disabled><i class="fa fa-plus"></i></button><button class="btn remove DUDF" title="Delete" data-toggle="tooltip" type="button" disabled><i class="fa fa-trash" ></i></button></td>
                                                   
                                               </tr>
                                               <tr></tr>
-                                            @endforeach  
-                                        @endif 
-                                        
-                                    
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>  
                                             </tbody>
                                         </table>
                                     </div>
-                                </div>
-                                
+                                </div>    
+
                                 <div id="CT" class="tab-pane fade">
                                     <div class="row" style="margin-top:10px;margin-left:3px;" >	
                                         <div class="col-lg-2 pl"><p>Calculation Template</p></div>
                                         <div class="col-lg-2 pl">
-                                          <input type="text" name="txtCTID_popup" id="txtCTID_popup" class="form-control"  autocomplete="off"  readonly/>
-                                          <input type="hidden" name="CTID_REF" id="CTID_REF" class="form-control" autocomplete="off" value="{{isset($objSOCAL[0]->CTID_REF) ? $objSOCAL[0]->CTID_REF:''}}" />
+                                         <input type="text" name="txtCTID_popup" id="txtCTID_popup" class="form-control"  autocomplete="off"  readonly/>
+                                         <input type="hidden" name="CTID_REF" id="CTID_REF" class="form-control" autocomplete="off" />
                                         </div>
                                     </div>
-                                    <div class="table-responsive table-wrapper-scroll-y" style="height:240px;margin-top:10px;" >
+                                    <div class="table-responsive table-wrapper-scroll-y my-custom-scrollbar" style="height:240px;" >
                                         <table id="example5" class="display nowrap table table-striped table-bordered itemlist " width="100%" style="height:auto !important;">
                                             <thead id="thead1"  style="position: sticky;top: 0">
                                                 <tr>
@@ -565,63 +477,39 @@
                                                 </tr>
                                             </thead>
                                             <tbody id="tbody_ctid">
-                                            @if(!empty($objSOCAL))
-                                                @foreach($objSOCAL as $Ckey => $Crow)
-                                                    <tr  class="participantRow5">
-                                                        <td><input type="text" class="form-control" autocomplete="off" readonly value="{{$Crow->CTCODE}}" /></td>
-                                                        <td hidden><input type="hidden" name="CTID_REF_{{$Ckey}}" id="CTID_REF_{{$Ckey}}" value="{{$Crow->CTID_REF}}"  /></td>
-                                                        <td hidden><input type="hidden" name="CT_TYPE_{{$Ckey}}" id="CT_TYPE_{{$Ckey}}" value="{{$Crow->TYPE}}"  /></td>
-
-                                                        <td><input type="text" {{$ActionStatus}} name={{"popupTID_".$Ckey}} id={{"popupTID_".$Ckey}}  class="form-control"  autocomplete="off"  readonly/></td>
-                                                        <td hidden><input type="hidden" name={{"TID_REF_".$Ckey}}  id={{"TID_REF_".$Ckey}}  class="form-control" autocomplete="off" value="{{$Crow->TID_REF}}" /></td>
-                                                        <td><input type="text" {{$ActionStatus}} name={{"RATE_".$Ckey}}  id={{"RATE_".$Ckey}} class="form-control four-digits" maxlength="8" autocomplete="off" value="{{$Crow->RATE}}"  readonly/></td>
-                                                        <td hidden><input type="hidden" name={{"BASIS_".$Ckey}} id={{"BASIS_".$Ckey}} class="form-control" autocomplete="off"  /></td>
-                                                        <td hidden><input type="hidden" name={{"SQNO_".$Ckey}} id={{"SQNO_".$Ckey}} class="form-control" autocomplete="off" /></td>
-                                                        <td hidden><input type="hidden" name={{"FORMULA_".$Ckey}} id={{"FORMULA_".$Ckey}} class="form-control" autocomplete="off" /></td>
-                                                        <td><input type="text" {{$ActionStatus}} name={{"VALUE_".$Ckey}} id={{"VALUE_".$Ckey}} class="form-control two-digits" maxlength="15" autocomplete="off" value="{{$Crow->VALUE}}" readonly/></td>
-                                                        <td style="text-align:center;" ><input type="checkbox" {{$ActionStatus}} class="filter-none" name={{"calGST_".$Ckey}} id={{"calGST_".$Ckey}} {{$Crow->GST == 1 ? 'checked' : ''}}   ></td>
-                                                        
-                                                        <td><input type="text" {{$ActionStatus}} name={{"calIGST_".$Ckey}} id={{"calIGST_".$Ckey}} class="form-control four-digits" maxlength="8" autocomplete="off" value="{{$Crow->IGST}}" readonly/></td>
-                                                        <td><input type="text" {{$ActionStatus}} name={{"AMTIGST_".$Ckey}} id={{"AMTIGST_".$Ckey}} class="form-control two-digits" maxlength="15" autocomplete="off"  readonly/></td>
-                                                        <td><input type="text" {{$ActionStatus}} name={{"calCGST_".$Ckey}} id={{"calCGST_".$Ckey}} class="form-control four-digits" maxlength="8" autocomplete="off" value="{{$Crow->CGST}}" readonly/></td>
-                                                        <td><input type="text" {{$ActionStatus}} name={{"AMTCGST_".$Ckey}} id={{"AMTCGST_".$Ckey}} class="form-control two-digits" maxlength="15" autocomplete="off"  readonly/></td>
-                                                        <td><input type="text" {{$ActionStatus}} name={{"calSGST_".$Ckey}} id={{"calSGST_".$Ckey}} class="form-control four-digits" maxlength="8" autocomplete="off" value="{{$Crow->SGST}}" readonly/></td>
-                                                        <td><input type="text" {{$ActionStatus}} name={{"AMTSGST_".$Ckey}} id={{"AMTSGST_".$Ckey}} class="form-control two-digits" maxlength="15" autocomplete="off"  readonly/></td>
-                                                        <td><input type="text" {{$ActionStatus}} name={{"TOTGSTAMT_".$Ckey}} id={{"TOTGSTAMT_".$Ckey}} class="form-control two-digits"  maxlength="15" autocomplete="off"  readonly/></td>
-                                                        <td style="text-align:center;"><input type="checkbox" class="filter-none" name={{"calACTUAL_".$Ckey}} id={{"calACTUAL_".$Ckey}} value="" {{$Crow->ACTUAL == 1 ? 'checked' : ''}}  ></td>
-                                                        <td align="center" ><button class="btn add" title="add" data-toggle="tooltip" type="button" disabled><i class="fa fa-plus"></i></button><button class="btn remove" title="Delete" data-toggle="tooltip" type="button" disabled><i class="fa fa-trash" ></i></button></td>
-                                                    </tr>
-                                                    <tr></tr>
-                                                @endforeach 
-                                                @else
-                                                <tr  class="participantRow5">
-                                                    <td><input type="text" {{$ActionStatus}} name="popupTID_0" id="popupTID_0" class="form-control"  autocomplete="off"  readonly/></td>
-                                                    <td hidden><input type="hidden" name="TID_REF_0" id="TID_REF_0" class="form-control" autocomplete="off" /></td>
-                                                    <td><input type="text" {{$ActionStatus}} name="RATE_0" id="RATE_0" class="form-control four-digits" maxlength="8" autocomplete="off"  readonly/></td>
-                                                    <td hidden><input type="hidden" name="BASIS_0" id="BASIS_0" class="form-control" autocomplete="off" /></td>
-                                                    <td hidden><input type="hidden" name="SQNO_0" id="SQNO_0" class="form-control" autocomplete="off" /></td>
-                                                    <td><input type="text" {{$ActionStatus}} name="VALUE_0" id="VALUE_0" class="form-control two-digits" maxlength="15" autocomplete="off"  readonly/></td>
-                                                    <td style="text-align:center;" ><input type="checkbox" class="filter-none" name="calGST_0" id="calGST_0" value="" ></td>
-                                                    <td><input type="text" {{$ActionStatus}} name="calIGST_0" id="calIGST_0" class="form-control four-digits" maxlength="8" autocomplete="off"  readonly/></td>
-                                                    <td><input type="text" {{$ActionStatus}} name="AMTIGST_0" id="AMTIGST_0" class="form-control two-digits" maxlength="15" autocomplete="off"  readonly/></td>
-                                                    <td><input type="text" {{$ActionStatus}} name="calCGST_0" id="calCGST_0" class="form-control four-digits" maxlength="8" autocomplete="off"  readonly/></td>
-                                                    <td><input type="text" {{$ActionStatus}} name="AMTCGST_0" id="AMTCGST_0" class="form-control two-digits" maxlength="15" autocomplete="off"  readonly/></td>
-                                                    <td><input type="text" {{$ActionStatus}} name="calSGST_0" id="calSGST_0" class="form-control four-digits" maxlength="8" autocomplete="off"  readonly/></td>
-                                                    <td><input type="text" {{$ActionStatus}} name="AMTSGST_0" id="AMTSGST_0" class="form-control two-digits" maxlength="15" autocomplete="off"  readonly/></td>
-                                                    <td><input type="text" {{$ActionStatus}} name="TOTGSTAMT_0" id="TOTGSTAMT_0" class="form-control two-digits"  maxlength="15" autocomplete="off"  readonly/></td>
-                                                    <td style="text-align:center;"><input type="checkbox" {{$ActionStatus}} class="filter-none" name="calACTUAL_0" id="calACTUAL_0" value=""   ></td>
-                                                    <td align="center" ><button class="btn add" title="add" data-toggle="tooltip" type="button" disabled><i class="fa fa-plus"></i></button><button class="btn remove" title="Delete" data-toggle="tooltip" type="button" disabled><i class="fa fa-trash" ></i></button></td>
-                                                </tr>
-                                                <tr></tr>
-                                            @endif 
+                                              <tr  class="participantRow5">
+                                                <td><input type="text" class="form-control" autocomplete="off" readonly  /></td>
+                                                <td hidden><input type="hidden" name="CTID_REF_0" id="CTID_REF_0"/></td>
+                                                <td hidden><input type="hidden" name="CT_TYPE_0" id="CT_TYPE_0" /></td>
+                                                <td><input type="text" name="popupTID_0" id="popupTID_0" class="form-control"  autocomplete="off"  readonly/></td>
+                                                <td hidden><input type="hidden" name="TID_REF_0" id="TID_REF_0" class="form-control" autocomplete="off" /></td>
+                                                <td><input type="text" name="RATE_0" id="RATE_0" class="form-control four-digits" maxlength="8" autocomplete="off"  readonly/></td>
+                                                <td hidden><input type="hidden" name="BASIS_0" id="BASIS_0" class="form-control" autocomplete="off" /></td>
+                                                <td hidden><input type="hidden" name="SQNO_0" id="SQNO_0" class="form-control" autocomplete="off" /></td>
+                                                <td><input type="text" name="VALUE_0" id="VALUE_0" class="form-control two-digits" maxlength="15" autocomplete="off"  readonly/></td>
+                                                <td style="text-align:center;" ><input type="checkbox" class="filter-none" name="calGST_0" id="calGST_0" value="" ></td>
+                                                <td><input type="text" name="calIGST_0" id="calIGST_0" class="form-control four-digits" maxlength="8" autocomplete="off"  readonly/></td>
+                                                <td><input type="text" name="AMTIGST_0" id="AMTIGST_0" class="form-control two-digits" maxlength="15" autocomplete="off"  readonly/></td>
+                                                <td><input type="text" name="calCGST_0" id="calCGST_0" class="form-control four-digits" maxlength="8" autocomplete="off"  readonly/></td>
+                                                <td><input type="text" name="AMTCGST_0" id="AMTCGST_0" class="form-control two-digits" maxlength="15" autocomplete="off"  readonly/></td>
+                                                <td><input type="text" name="calSGST_0" id="calSGST_0" class="form-control four-digits" maxlength="8" autocomplete="off"  readonly/></td>
+                                                <td><input type="text" name="AMTSGST_0" id="AMTSGST_0" class="form-control two-digits" maxlength="15" autocomplete="off"  readonly/></td>
+                                                <td><input type="text" name="TOTGSTAMT_0" id="TOTGSTAMT_0" class="form-control two-digits"  maxlength="15" autocomplete="off"  readonly/></td>
+                                                <td style="text-align:center;"><input type="checkbox" class="filter-none" name="calACTUAL_0" id="calACTUAL_0" value=""   ></td>
+                                                <td align="center" ><button class="btn add" title="add" data-toggle="tooltip" type="button" disabled><i class="fa fa-plus"></i></button><button class="btn remove" title="Delete" data-toggle="tooltip" type="button" disabled><i class="fa fa-trash" ></i></button></td>
+                                              </tr>
                                             </tbody>
                                     </table>
                                     </div>	
                                 </div>
+
+
+
+
                                 
                                 
                                 <div id="PaymentSlabs" class="tab-pane fade">
-                                    <div class="table-responsive table-wrapper-scroll-y " style="margin-top:10px;height:280px;width:50%;">
+                                    <div class="table-responsive table-wrapper-scroll-y my-custom-scrollbar" style="margin-top:10px;height:280px;width:55%;">
                                         <table id="example6" class="display nowrap table table-striped table-bordered itemlist" style="height:auto !important;">
                                             <thead id="thead1"  style="position: sticky;top: 0">
                                             <tr >
@@ -633,28 +521,15 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            @if(!empty($objSOPSLB))
-                                                @foreach($objSOPSLB as $Pkey => $Prow)
-                                                    <tr  class="participantRow6">
-                                                        <td> <input type="text" {{$ActionStatus}} class="form-control" id={{"PAY_DAYS_".$Pkey}} name={{"PAY_DAYS_".$Pkey}} value="{{$Prow->PAY_DAYS}}" autocomplete="off"  /> </td>
-                                                        <td> <input type="text" {{$ActionStatus}} class="form-control four-digits" id={{"DUE_".$Pkey}} name={{"DUE_".$Pkey}} value="{{$Prow->DUE}}" maxlength="8" autocomplete="off" /> </td>
-                                                        <td> <input type="text" {{$ActionStatus}} class="form-control" id={{"PSREMARKS_".$Pkey}} name={{"PSREMARKS_".$Pkey}} value="{{$Prow->REMARKS}}" autocomplete="off"  /> </td>
-                                                        <td> <input type="text" {{$ActionStatus}} class="form-control" id={{"DUE_DATE_".$Pkey}} name={{"DUE_DATE_".$Pkey}} value="{{$Prow->DUE_DATE}}" autocomplete="off"  /> </td>
-                                                        
-                                                        <td align="center" style="width:105px;" ><button class="btn add" title="add" data-toggle="tooltip" type="button"><i class="fa fa-plus"></i></button><button class="btn remove" title="Delete" data-toggle="tooltip" type="button" ><i class="fa fa-trash" ></i></button></td>
-                                                    </tr>
-                                                    <tr></tr>
-                                                @endforeach 
-                                                @else
-                                                <tr  class="participantRow6">
-                                                        <td> <input type="text" {{$ActionStatus}} class="form-control" id="PAY_DAYS_0" name="PAY_DAYS_0"  autocomplete="off" /> </td>
-                                                        <td> <input type="text" {{$ActionStatus}} class="form-control four-digits" id="DUE_0" name="DUE_0"  maxlength="8" autocomplete="off" /> </td>
-                                                        <td> <input type="text" {{$ActionStatus}} class="form-control" id="PSREMARKS_0" name="PSREMARKS_0" autocomplete="off"  /> </td>
-                                                        <td> <input type="date" {{$ActionStatus}} class="form-control" id="DUE_DATE_0" name="DUE_DATE_0" autocomplete="off"  readonly /> </td>
-                                                        <td align="center" style="width:105px;" ><button class="btn add" title="add" data-toggle="tooltip" type="button"><i class="fa fa-plus"></i></button><button class="btn remove" title="Delete" data-toggle="tooltip" type="button" ><i class="fa fa-trash" ></i></button></td>
-                                                    </tr>
-                                                <tr></tr>
-                                            @endif 
+                                            <tr  class="participantRow6">
+                                                <td> <input type="text" class="form-control" id="PAY_DAYS_0" name="PAY_DAYS_0"  autocomplete="off" /> </td>
+                                                <td> <input type="text" class="form-control four-digits" id="DUE_0" name="DUE_0" maxlength="8" autocomplete="off" /> </td>
+                                                <td> <input type="text" class="form-control" id="PSREMARKS_0" name="PSREMARKS_0" autocomplete="off"  /> </td>
+                                                <td> <input type="date" class="form-control" id="DUE_DATE_0" name="DUE_DATE_0" autocomplete="off"  readonly /> </td>
+                                                <td align="center" style="width:105px;" ><button class="btn add" title="add" data-toggle="tooltip" type="button"><i class="fa fa-plus"></i></button><button class="btn remove" title="Delete" data-toggle="tooltip" type="button" ><i class="fa fa-trash" ></i></button></td>
+                                            </tr>
+                                        <tr></tr>
+                                        
                                         
                                     
                                             </tbody>
@@ -662,117 +537,80 @@
                                     </div>
                                 </div>
 
-              <div id="TDS" class="tab-pane fade">
-            <div class="row" style="margin-top:10px;margin-left:3px;" >	
-                <div class="col-lg-1 pl"><p>TDS Applicable</p></div>
-                <div class="col-lg-2 pl">
-                  <select {{$ActionStatus}} name="drpTDS" id="drpTDS" class="form-control">
-                      <option value=""></option>    
-                      <option {{ isset($objSO->TDS) && $objSO->TDS =='1'?'selected="selected"':'' }} value="Yes">Yes</option>
-                      <option {{ isset($objSO->TDS) && $objSO->TDS =='0'?'selected="selected"':'' }} value="No">No</option>
-                  </select>
-                </div>
-            </div>
-            <div class="table-responsive table-wrapper-scroll-y my-custom-scrollbar" style="height:280px;margin-top:10px;" >
-                <table id="example7" class="display nowrap table table-striped table-bordered itemlist" width="100%" style="height:auto !important;">
-                    <thead id="thead1"  style="position: sticky;top: 0">
-                          <tr>
-                              <th width="8%">TDS<input class="form-control" type="hidden" name="Row_Count6" id ="Row_Count6"  value="{{$objCount6}}" /></th>
-                              <th width="8%">TDS Ledger</th>
-                              <th width="5%">Applicable</th>
-                              <th width="8%">Assessable Value</th>
-                              <th width="5%">TDS Rate</th>
-                              <th width="8%">TDS Amount</th>
-                              <th width="8%">Assessable Value</th>
-                              <th width="5%">Surcharge Rate</th>
-                              <th width="8%">Surcharge Amount</th>
-                              <th width="8%">Assessable Value</th>
-                              <th width="5%">Cess Rate</th>
-                              <th width="8%">Cess Amount</th>
-                              <th width="8%">Assessable Value</th>
-                              <th width="5%">Special Cess Rate </th>
-                              <th width="8%">Special Cess Amount</th>
-                              <th width="8%">Total TDS Amount</th>                         
-                              <th width="8%">Action</th>
-                          </tr>
-                    </thead>
-                    <tbody id="tbody_tds">
-                    @if(!empty($objSOTDS))
-                      @foreach($objSOTDS as $tkey => $trow)
-                        <tr  class="participantRow7">
-                          <td style="text-align:center;" >
-                          <input {{$ActionStatus}} type="text" {{$ActionStatus}} name={{"txtTDS_".$tkey}} id={{"txtTDS_".$tkey}} class="form-control" value="{{$trow->CODE}}" autocomplete="off"  readonly/></td>
-                          <td hidden><input type="hidden" name={{"TDSID_REF_".$tkey}} id={{"TDSID_REF_".$tkey}} value="{{$trow->TDSID_REF}}" class="form-control" autocomplete="off" /></td>
-                          <td><input {{$ActionStatus}} type="text"  name={{"TDSLedger_".$tkey}} id={{"TDSLedger_".$tkey}} class="form-control" value="{{$trow->CODE_DESC}}" autocomplete="off"  readonly/></td>
-                          <td  align="center" style="text-align:center;" ><input {{$ActionStatus}} type="checkbox" name={{"TDSApplicable_".$tkey}} id={{"TDSApplicable_".$tkey}} {{isset($trow->TDS_APPLICABLE) && $trow->TDS_APPLICABLE == 1?'checked' : ''}}/></td>
-                          <td><input {{$ActionStatus}} type="text" name={{"ASSESSABLE_VL_TDS_".$tkey}} id={{"ASSESSABLE_VL_TDS_".$tkey}} class="form-control two-digits" value="{{$trow->ASSESSABLE_VL_TDS}}" maxlength="15"  autocomplete="off"  /></td>
-                          <td><input {{$ActionStatus}} type="text" name={{"TDS_RATE_".$tkey}} id={{"TDS_RATE_".$tkey}} class="form-control four-digits" maxlength="12" value="{{$trow->TDS_RATE}}" autocomplete="off"  /></td>
-                          <td hidden><input type="hidden" name={{"TDS_EXEMPT_".$tkey}} id={{"TDS_EXEMPT_".$tkey}} class="form-control two-digits" value="0.00" /></td>
-                          <td><input {{$ActionStatus}} type="text" name={{"TDS_AMT_".$tkey}} id={{"TDS_AMT_".$tkey}} class="form-control two-digits" maxlength="15"  autocomplete="off"  value="{{$trow->TDS_AMT}}" readonly/></td>
-                          <td><input {{$ActionStatus}} type="text" name={{"ASSESSABLE_VL_SURCHARGE_".$tkey}} id={{"ASSESSABLE_VL_SURCHARGE_".$tkey}} class="form-control two-digits" value="{{$trow->ASSESSABLE_VL_SURCHARGE}}" maxlength="15"  autocomplete="off" /></td>
-                          <td><input {{$ActionStatus}} type="text" name={{"SURCHARGE_RATE_".$tkey}} id={{"SURCHARGE_RATE_".$tkey}} class="form-control four-digits" maxlength="12" value="{{$trow->SURCHARGE_RATE}}"  autocomplete="off"  /></td>
-                          <td hidden><input type="hidden" name={{"SURCHARGE_EXEMPT_".$tkey}} id={{"SURCHARGE_EXEMPT_".$tkey}} class="form-control two-digits" value="0.00" /></td>
-                          <td><input {{$ActionStatus}} type="text" name={{"SURCHARGE_AMT_".$tkey}} id={{"SURCHARGE_AMT_".$tkey}} class="form-control two-digits" maxlength="15" value="{{$trow->SURCHARGE_AMT}}" autocomplete="off"  readonly/></td>
-                          <td><input {{$ActionStatus}} type="text" name={{"ASSESSABLE_VL_CESS_".$tkey}} id={{"ASSESSABLE_VL_CESS_".$tkey}} class="form-control two-digits" maxlength="15" value="{{$trow->ASSESSABLE_VL_CESS}}" autocomplete="off" /></td>
-                          <td><input {{$ActionStatus}} type="text" name={{"CESS_RATE_".$tkey}} id={{"CESS_RATE_".$tkey}} class="form-control four-digits" maxlength="12" value="{{$trow->CESS_RATE}}" autocomplete="off"  /></td>
-                          <td hidden><input type="hidden" name={{"CESS_EXEMPT_".$tkey}} id={{"CESS_EXEMPT_".$tkey}} class="form-control two-digits" value="0.00" /></td>
-                          <td><input {{$ActionStatus}} type="text" name={{"CESS_AMT_".$tkey}} id={{"CESS_AMT_".$tkey}} class="form-control two-digits" maxlength="15" value="{{$trow->CESS_AMT}}" autocomplete="off"  readonly/></td>
-                          <td><input {{$ActionStatus}} type="text" name={{"ASSESSABLE_VL_SPCESS_".$tkey}} id={{"ASSESSABLE_VL_SPCESS_".$tkey}} class="form-control two-digits" maxlength="15" value="{{$trow->ASSESSABLE_VL_SPCESS}}"  autocomplete="off" /></td>
-                          <td><input {{$ActionStatus}} type="text" name={{"SPCESS_RATE_".$tkey}} id={{"SPCESS_RATE_".$tkey}} class="form-control four-digits" maxlength="12" value="{{$trow->SPCESS_RATE}}" autocomplete="off"  /></td>
-                          <td hidden><input type="hidden" name={{"SPCESS_EXEMPT_".$tkey}} id={{"SPCESS_EXEMPT_".$tkey}} class="form-control two-digits" value="0.00" /></td>
-                          <td><input {{$ActionStatus}} type="text" name={{"SPCESS_AMT_".$tkey}} id={{"SPCESS_AMT_".$tkey}} class="form-control two-digits" maxlength="15" value="{{$trow->SPCESS_AMT}}"  autocomplete="off"  readonly/></td>
-                  @php
-                    $TotalTDS=number_format(($trow->TDS_AMT+$trow->SURCHARGE_AMT+$trow->CESS_AMT+$trow->SPCESS_AMT),2, '.', '');
-                  @endphp
-                            <td><input {{$ActionStatus}} type="text" name={{"TOT_TD_AMT_".$tkey}} id={{"TOT_TD_AMT_".$tkey}} class="form-control two-digits" maxlength="15" value="{{$TotalTDS}}"  autocomplete="off"  readonly/></td>
-                            <td style="min-width: 100px;" >
-                            <button {{$ActionStatus}} class="btn add" title="add" data-toggle="tooltip" type="button"><i class="fa fa-plus"></i></button>
-                            <button {{$ActionStatus}} class="btn remove" title="Delete" data-toggle="tooltip" type="button"><i class="fa fa-trash" ></i></button>
-                          </td>
-                        </tr>
-                        <tr></tr>
-                      @endforeach
-                    @else
-                        <tr  class="participantRow7">
-                            <td style="text-align:center;" >
-                            <input {{$ActionStatus}} type="text" name="txtTDS_0" id="txtTDS_0" class="form-control"  autocomplete="off"  readonly/></td>
-                            <td hidden><input type="hidden" name="TDSID_REF_0" id="TDSID_REF_0" class="form-control" autocomplete="off" /></td>
-                            <td><input {{$ActionStatus}} type="text" name="TDSLedger_0" id="TDSLedger_0" class="form-control"  autocomplete="off"  readonly/></td>
-                            <td  align="center" style="text-align:center;" ><input {{$ActionStatus}} type="checkbox" name="TDSApplicable_0" id="TDSApplicable_0" /></td>
-                            <td><input {{$ActionStatus}} type="text" name="ASSESSABLE_VL_TDS_0" id="ASSESSABLE_VL_TDS_0" class="form-control two-digits" maxlength="15"  autocomplete="off"  /></td>
-                            <td><input {{$ActionStatus}} type="text" name="TDS_RATE_0" id="TDS_RATE_0" class="form-control four-digits" maxlength="12"  autocomplete="off"  /></td>
-                            <td hidden><input type="hidden" name="TDS_EXEMPT_0" id="TDS_EXEMPT_0" class="form-control two-digits" /></td>
-                            <td><input {{$ActionStatus}} type="text" name="TDS_AMT_0" id="TDS_AMT_0" class="form-control two-digits" maxlength="15"  autocomplete="off"  readonly/></td>
-                            <td><input {{$ActionStatus}} type="text" name="ASSESSABLE_VL_SURCHARGE_0" id="ASSESSABLE_VL_SURCHARGE_0" class="form-control two-digits" maxlength="15"  autocomplete="off" /></td>
-                            <td><input {{$ActionStatus}} type="text" name="SURCHARGE_RATE_0" id="SURCHARGE_RATE_0" class="form-control four-digits" maxlength="12"  autocomplete="off"  /></td>
-                            <td hidden><input type="hidden" name="SURCHARGE_EXEMPT_0" id="SURCHARGE_EXEMPT_0" class="form-control two-digits" /></td>
-                            <td><input {{$ActionStatus}} type="text" name="SURCHARGE_AMT_0" id="SURCHARGE_AMT_0" class="form-control two-digits" maxlength="15"  autocomplete="off"  readonly/></td>
-                            <td><input {{$ActionStatus}} type="text" name="ASSESSABLE_VL_CESS_0" id="ASSESSABLE_VL_CESS_0" class="form-control two-digits" maxlength="15"  autocomplete="off" /></td>
-                            <td><input {{$ActionStatus}} type="text" name="CESS_RATE_0" id="CESS_RATE_0" class="form-control four-digits" maxlength="12"  autocomplete="off"  /></td>
-                            <td hidden><input type="hidden" name="CESS_EXEMPT_0" id="CESS_EXEMPT_0" class="form-control two-digits" /></td>
-                            <td><input {{$ActionStatus}} type="text" name="CESS_AMT_0" id="CESS_AMT_0" class="form-control two-digits" maxlength="15"  autocomplete="off"  readonly/></td>
-                            <td><input {{$ActionStatus}} type="text" name="ASSESSABLE_VL_SPCESS_0" id="ASSESSABLE_VL_SPCESS_0" class="form-control two-digits" maxlength="15"  autocomplete="off" /></td>
-                            <td><input {{$ActionStatus}} type="text" name="SPCESS_RATE_0" id="SPCESS_RATE_0" class="form-control four-digits" maxlength="12"  autocomplete="off"  /></td>
-                            <td hidden><input type="hidden" name="SPCESS_EXEMPT_0" id="SPCESS_EXEMPT_0" class="form-control two-digits" /></td>
-                            <td><input {{$ActionStatus}} type="text" name="SPCESS_AMT_0" id="SPCESS_AMT_0" class="form-control two-digits" maxlength="15"  autocomplete="off"  readonly/></td>
-                            <td><input {{$ActionStatus}} type="text" name="TOT_TD_AMT_0" id="TOT_TD_AMT_0" class="form-control two-digits" maxlength="15"  autocomplete="off"  readonly/></td>
-                            <td style="min-width: 100px;" >
-                            <button {{$ActionStatus}} class="btn add" title="add" data-toggle="tooltip" type="button"><i class="fa fa-plus"></i></button>
-                            <button {{$ActionStatus}} class="btn remove" title="Delete" data-toggle="tooltip" type="button"><i class="fa fa-trash" ></i></button>
-                          </td>
-                        </tr>
-                        <tr></tr>
-                    @endif
-                    </tbody>
-                </table>
-            </div>	
-        </div> 
+                                
+                                <div id="TDS" class="tab-pane fade">
+                                  <div class="row" style="margin-top:10px;margin-left:3px;" >	
+                                    <div class="col-lg-1 pl"><p>TDS Applicable</p></div>
+                                    <div class="col-lg-2 pl">
+                                    <select name="drpTDS" id="drpTDS" class="form-control">
+                                      <option value=""></option>    
+                                      <option value="Yes">Yes</option>
+                                      <option value="No">No</option>
+                                    </select>
+                                    </div>
+                                  </div>
+                                  <div class="table-responsive table-wrapper-scroll-y my-custom-scrollbar" style="height:280px;margin-top:10px;" >
+                                    <table id="example7" class="display nowrap table table-striped table-bordered itemlist" width="100%" style="height:auto !important;">
+                                      <thead id="thead1"  style="position: sticky;top: 0">
+                                        <tr>
+                                          <th width="8%">TDS<input class="form-control" type="hidden" name="Row_Count6" id ="Row_Count6"></th>
+                                          <th width="8%">TDS Ledger</th>
+                                          <th width="5%">Applicable</th>
+                                          <th width="8%">Assessable Value</th>
+                                          <th width="5%">TDS Rate</th>
+                                          <th width="8%">TDS Amount</th>
+                                          <th width="8%">Assessable Value</th>
+                                          <th width="5%">Surcharge Rate</th>
+                                          <th width="8%">Surcharge Amount</th>
+                                          <th width="8%">Assessable Value</th>
+                                          <th width="5%">Cess Rate</th>
+                                          <th width="8%">Cess Amount</th>
+                                          <th width="8%">Assessable Value</th>
+                                          <th width="5%">Special Cess Rate </th>
+                                          <th width="8%">Special Cess Amount</th>
+                                          <th width="8%">Total TDS Amount</th>                         
+                                          <th width="8%">Action</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody id="tbody_tds">
+                                        <tr  class="participantRow7">
+                                          <td style="text-align:center;" >
+                                          <input type="text" name="txtTDS_0" id="txtTDS_0" class="form-control"  autocomplete="off"  readonly/></td>
+                                          <td hidden><input type="hidden" name="TDSID_REF_0" id="TDSID_REF_0" class="form-control" autocomplete="off" /></td>
+                                          <td><input type="text" name="TDSLedger_0" id="TDSLedger_0" class="form-control"  autocomplete="off"  readonly/></td>
+                                          <td  align="center" style="text-align:center;" ><input type="checkbox" name="TDSApplicable_0" id="TDSApplicable_0" /></td>
+                                          <td><input type="text" name="ASSESSABLE_VL_TDS_0" id="ASSESSABLE_VL_TDS_0" class="form-control two-digits" maxlength="15"  autocomplete="off"  /></td>
+                                          <td><input type="text" name="TDS_RATE_0" id="TDS_RATE_0" class="form-control four-digits" maxlength="12"  autocomplete="off"  /></td>
+                                          <td hidden><input type="hidden" name="TDS_EXEMPT_0" id="TDS_EXEMPT_0" class="form-control two-digits" /></td>
+                                          <td><input type="text" name="TDS_AMT_0" id="TDS_AMT_0" class="form-control two-digits" maxlength="15"  autocomplete="off"  readonly/></td>
+                                          <td><input type="text" name="ASSESSABLE_VL_SURCHARGE_0" id="ASSESSABLE_VL_SURCHARGE_0" class="form-control two-digits" maxlength="15"  autocomplete="off" /></td>
+                                          <td><input type="text" name="SURCHARGE_RATE_0" id="SURCHARGE_RATE_0" class="form-control four-digits" maxlength="12"  autocomplete="off"  /></td>
+                                          <td hidden><input type="hidden" name="SURCHARGE_EXEMPT_0" id="SURCHARGE_EXEMPT_0" class="form-control two-digits" /></td>
+                                          <td><input type="text" name="SURCHARGE_AMT_0" id="SURCHARGE_AMT_0" class="form-control two-digits" maxlength="15"  autocomplete="off"  readonly/></td>
+                                          <td><input type="text" name="ASSESSABLE_VL_CESS_0" id="ASSESSABLE_VL_CESS_0" class="form-control two-digits" maxlength="15"  autocomplete="off" /></td>
+                                          <td><input type="text" name="CESS_RATE_0" id="CESS_RATE_0" class="form-control four-digits" maxlength="12"  autocomplete="off"  /></td>
+                                          <td hidden><input type="hidden" name="CESS_EXEMPT_0" id="CESS_EXEMPT_0" class="form-control two-digits" /></td>
+                                          <td><input type="text" name="CESS_AMT_0" id="CESS_AMT_0" class="form-control two-digits" maxlength="15"  autocomplete="off"  readonly/></td>
+                                          <td><input type="text" name="ASSESSABLE_VL_SPCESS_0" id="ASSESSABLE_VL_SPCESS_0" class="form-control two-digits" maxlength="15"  autocomplete="off" /></td>
+                                          <td><input type="text" name="SPCESS_RATE_0" id="SPCESS_RATE_0" class="form-control four-digits" maxlength="12"  autocomplete="off"  /></td>
+                                          <td hidden><input type="hidden" name="SPCESS_EXEMPT_0" id="SPCESS_EXEMPT_0" class="form-control two-digits" /></td>
+                                          <td><input type="text" name="SPCESS_AMT_0" id="SPCESS_AMT_0" class="form-control two-digits" maxlength="15"  autocomplete="off"  readonly/></td>
+                                          <td><input type="text" name="TOT_TD_AMT_0" id="TOT_TD_AMT_0" class="form-control two-digits" maxlength="15"  autocomplete="off"  readonly/></td>
+                                          <td style="min-width: 100px;" ><button class="btn add" title="add" data-toggle="tooltip" type="button"><i class="fa fa-plus"></i></button>
+                                          <button class="btn remove" title="Delete" data-toggle="tooltip" type="button"><i class="fa fa-trash" ></i></button></td>
+                                        </tr>
+                                        <tr></tr>
+                                      </tbody>
+                                  </table>
+                                  </div>	
+                                </div>
 
-        <div id="ADDITIONAL" class="tab-pane fade">
+
+                                <div id="ADDITIONAL" class="tab-pane fade">
                                     <div class="row" style="margin-top:10px;margin-left:3px;" >	
                                         <div class="col-lg-2 pl"><p>Template Master</p></div>
                                         <div class="col-lg-2 pl">
-                                        <input type="text" name="txtTemplate_popup" {{$ActionStatus}} id="txtTemplate_popup" class="form-control"  autocomplete="off"  readonly/>
+                                        <input type="text" name="txtTemplate_popup" id="txtTemplate_popup" class="form-control"  autocomplete="off"  readonly/>
                                          <input type="hidden" name="TEMPID_REF" id="TEMPID_REF" class="form-control" autocomplete="off" />
                                         </div>
                                     </div>
@@ -780,21 +618,23 @@
                                         <div class="col-lg-2 pl"><p>Template Description</p></div>
                                         <div class="col-lg-6 pl">
                              
-                                        <textarea name="Template_Description" {{$ActionStatus}} id="Template_Description" cols="118" rows="10" tabindex="3" >{{ isset($Template->TEMPLATE)?$Template->TEMPLATE:'' }}</textarea>
+                                        <textarea name="Template_Description" id="Template_Description" cols="118" rows="10" tabindex="3" ></textarea>
                                         </div>
-                                    </div>            
+                                    </div>                                
+
+                                   
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
                 </div>
         
     </div><!--purchase-order-view-->
 
 <!-- </div> -->
 </form>
-@endsection
-@section('alert')
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('alert'); ?>
 
 <div id="tech_data_model" class="modal" role="dialog"  data-backdrop="static">
   <div class="modal-dialog modal-md" style="width:40%;">
@@ -923,7 +763,6 @@
         </div>
     </div>
 </div>
-
 
 
 <!-- Scheme Popup starts here   -->
@@ -1097,15 +936,16 @@
          
         </thead>
         <tbody>
-        @foreach ($objTNCHeader as $tncindex=>$tncRow)
-        <tr>
-              <td class="ROW1"> <input type="checkbox" name="SELECT_TNCID[]" id="tncidcode_{{ $tncindex }}" class="clstncid" value="{{ $tncRow-> TNCID }}" ></td>
-              <td class="ROW2">{{ $tncRow-> TNC_CODE }}
-                <input type="hidden" id="txttncidcode_{{ $tncindex }}" data-desc="{{ $tncRow-> TNC_CODE }}" data-desc2="{{ $tncRow-> TNC_DESC }}"  value="{{ $tncRow-> TNCID }}"/>
+        <?php $__currentLoopData = $objTNCHeader; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tncindex=>$tncRow): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+          <tr>
+              <td class="ROW1"> <input type="checkbox" name="SELECT_TNCID[]" id="tncidcode_<?php echo e($tncindex); ?>" class="clstncid" value="<?php echo e($tncRow-> TNCID); ?>" ></td>
+              <td class="ROW2"><?php echo e($tncRow-> TNC_CODE); ?>
+
+                <input type="hidden" id="txttncidcode_<?php echo e($tncindex); ?>" data-desc="<?php echo e($tncRow-> TNC_CODE); ?>" data-desc2="<?php echo e($tncRow-> TNC_DESC); ?>"  value="<?php echo e($tncRow-> TNCID); ?>"/>
               </td>
-              <td class="ROW3">{{ $tncRow-> TNC_DESC }}</td>
+              <td class="ROW3"><?php echo e($tncRow-> TNC_DESC); ?></td>
           </tr>
-        @endforeach
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </tbody>
       </table>
     </div>
@@ -1162,6 +1002,60 @@
 </div>
 <!-- TNC Details Dropdown-->
 
+
+<!-- Template Master Dropdown-->
+
+<div id="Templatepopup" class="modal" role="dialog"  data-backdrop="static">
+  <div class="modal-dialog modal-md column3_modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" id='Template_closePopup' >&times;</button>
+      </div>
+    <div class="modal-body">
+	  <div class="tablename"><p>Template Master</p></div>
+	  <div class="single single-select table-responsive  table-wrapper-scroll-y my-custom-scrollbar">
+    <table id="TemplateTable" class="display nowrap table  table-striped table-bordered">
+    <thead>
+    <tr>
+      <th class="ROW1">Select</th> 
+      <th class="ROW2">Name</th>
+      <th class="ROW3">Date</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <th class="ROW1"><span class="check_th">&#10004;</span></th>
+        <td class="ROW2"><input type="text" id="Templatecodesearch" class="form-control" onkeyup="TemplateCodeFunction()"></td>
+        <td class="ROW3"><input type="text" id="Templatenamesearch" class="form-control" onkeyup="TemplateDateFunction()"></td>
+    </tr>
+    </tbody>
+    </table>
+      <table id="TemplateTable2" class="display nowrap table  table-striped table-bordered">
+        <thead id="thead2">
+         
+        </thead>
+        <tbody>
+        <?php $__currentLoopData = $objTemplateMaster; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $calindex=>$TempRow): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+        <tr>
+            <td class="ROW1"> <input type="checkbox" name="SELECT_TEMPLATE[]" id="Templatecode_<?php echo e($calindex); ?>" class="clstemplateid" value="<?php echo e($TempRow-> TEMPLATEID); ?>" ></td>
+            <td class="ROW2"><?php echo e($TempRow-> TEMPLATE_NAME); ?>
+
+              <input type="hidden" id="txtTemplatecode_<?php echo e($calindex); ?>" data-desc="<?php echo e($TempRow-> TEMPLATE_NAME); ?>" data-desc2="<?php echo e(isset($TempRow->INDATE) && $TempRow->INDATE !='' && $TempRow->INDATE !='1900-01-01' ? date('d-m-Y',strtotime($TempRow->INDATE)):''); ?>" data-desc3="<?php echo e($TempRow-> TEMPLATE); ?>"  value="<?php echo e($TempRow-> TEMPLATEID); ?>"/>
+            </td>
+            <td class="ROW3"><?php echo e(isset($TempRow->INDATE) && $TempRow->INDATE !='' && $TempRow->INDATE !='1900-01-01' ? date('d-m-Y',strtotime($TempRow->INDATE)):''); ?></td>
+        </tr>
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+        </tbody>
+      </table>
+    </div>
+		<div class="cl"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Template Master Dropdown-->
+
+
 <!-- Calculation Header Dropdown -->
 <div id="CTIDpopup" class="modal" role="dialog"  data-backdrop="static">
   <div class="modal-dialog modal-md column3_modal">
@@ -1193,15 +1087,16 @@
          
         </thead>
         <tbody>
-        @foreach ($objCalculationHeader as $calindex=>$calRow)
+        <?php $__currentLoopData = $objCalculationHeader; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $calindex=>$calRow): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
         <tr>
-            <td class="ROW1"> <input type="checkbox" name="SELECT_CTID[]" id="CTIDcode_{{ $calindex }}" class="clsctid" value="{{ $calRow-> CTID }}" onchange="getCalculationComponent()" ></td>
-            <td class="ROW2">{{ $calRow-> CTCODE }}
-              <input type="hidden" id="txtCTIDcode_{{ $calindex }}" data-desc="{{ $calRow-> CTCODE }}" data-desc2="{{ $calRow-> CTDESCRIPTION }}"  value="{{ $calRow-> CTID }}"/>
+            <td class="ROW1"> <input type="checkbox" name="SELECT_CTID[]" id="CTIDcode_<?php echo e($calindex); ?>" class="clsctid" value="<?php echo e($calRow-> CTID); ?>" onchange="getCalculationComponent()" ></td>
+            <td class="ROW2"><?php echo e($calRow-> CTCODE); ?>
+
+              <input type="hidden" id="txtCTIDcode_<?php echo e($calindex); ?>" data-desc="<?php echo e($calRow-> CTCODE); ?>" data-desc2="<?php echo e($calRow-> CTDESCRIPTION); ?>"  value="<?php echo e($calRow-> CTID); ?>"/>
             </td>
-            <td class="ROW3">{{ $calRow-> CTDESCRIPTION }}</td>
+            <td class="ROW3"><?php echo e($calRow-> CTDESCRIPTION); ?></td>
         </tr>
-        @endforeach
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </tbody>
       </table>
     </div>
@@ -1305,15 +1200,16 @@
           
         </thead>
         <tbody>
-        @foreach ($objothcurrency as $crindex=>$crRow)
+        <?php $__currentLoopData = $objothcurrency; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $crindex=>$crRow): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
         <tr>
-          <td class="ROW1"> <input type="checkbox" name="SELECT_CRID[]" id="cridcode_{{ $crindex }}" class="clscrid" value="{{ $crRow-> CRID }}" ></td>
-          <td class="ROW2">{{ $crRow-> CRCODE }}
-            <input type="hidden" id="txtcridcode_{{ $crindex }}" data-desc="{{ $crRow-> CRCODE }}" data-desc2="{{ $crRow-> CRDESCRIPTION }}"  value="{{ $crRow-> CRID }}"/>
+          <td class="ROW1"> <input type="checkbox" name="SELECT_CRID[]" id="cridcode_<?php echo e($crindex); ?>" class="clscrid" value="<?php echo e($crRow-> CRID); ?>" ></td>
+          <td class="ROW2"><?php echo e($crRow-> CRCODE); ?>
+
+            <input type="hidden" id="txtcridcode_<?php echo e($crindex); ?>" data-desc="<?php echo e($crRow-> CRCODE); ?>" data-desc2="<?php echo e($crRow-> CRDESCRIPTION); ?>"  value="<?php echo e($crRow-> CRID); ?>"/>
           </td>
-          <td class="ROW3">{{ $crRow-> CRDESCRIPTION }}</td>
+          <td class="ROW3"><?php echo e($crRow-> CRDESCRIPTION); ?></td>
         </tr>
-        @endforeach
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </tbody>
       </table>
     </div>
@@ -1345,8 +1241,8 @@
     <tbody>
     <tr>
         <td class="ROW1"><span class="check_th">&#10004;</span></td>
-        <td class="ROW2"><input type="text" id="customercodesearch" class="form-control" onkeyup="CustomerCodeFunction('{{$FormId}}')"></td>
-        <td class="ROW3"><input type="text" id="customernamesearch" class="form-control" onkeyup="CustomerNameFunction('{{$FormId}}')"></td>
+        <td class="ROW2"><input type="text" id="customercodesearch" class="form-control" onkeyup="CustomerCodeFunction('<?php echo e($FormId); ?>')"></td>
+        <td class="ROW3"><input type="text" id="customernamesearch" class="form-control" onkeyup="CustomerNameFunction('<?php echo e($FormId); ?>')"></td>
     </tr>
     </tbody>
     </table>
@@ -1395,16 +1291,17 @@
         <thead id="thead2">          
         </thead>
         <tbody >     
-        @foreach ($objSalesPerson as $spindex=>$spRow)
+        <?php $__currentLoopData = $objSalesPerson; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $spindex=>$spRow): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
         <tr>
-          <td class="ROW1"> <input type="checkbox" name="SELECT_EMPID[]" id="spidcode_{{ $spindex }}" class="clsspid" value="{{ $spRow-> EMPID }}" ></td>
-          <td class="ROW2">{{ $spRow-> EMPCODE }}
-            <input type="hidden" id="txtspidcode_{{ $spindex }}" data-desc="{{ $spRow-> EMPCODE }}" data-desc2="{{ $spRow-> FNAME }}"  
-            data-desc3="{{ $spRow-> LNAME }}" value="{{ $spRow-> EMPID }}"/>
+          <td class="ROW1"> <input type="checkbox" name="SELECT_EMPID[]" id="spidcode_<?php echo e($spindex); ?>" class="clsspid" value="<?php echo e($spRow-> EMPID); ?>" ></td>
+          <td class="ROW2"><?php echo e($spRow-> EMPCODE); ?>
+
+            <input type="hidden" id="txtspidcode_<?php echo e($spindex); ?>" data-desc="<?php echo e($spRow-> EMPCODE); ?>" data-desc2="<?php echo e($spRow-> FNAME); ?>"  
+            data-desc3="<?php echo e($spRow-> LNAME); ?>" value="<?php echo e($spRow-> EMPID); ?>"/>
           </td>
-          <td class="ROW3">{{ $spRow-> FNAME }} {{ $spRow-> MNAME }} {{ $spRow-> LNAME }}</td>
+          <td class="ROW3"><?php echo e($spRow-> FNAME); ?> <?php echo e($spRow-> MNAME); ?> <?php echo e($spRow-> LNAME); ?></td>
         </tr>
-        @endforeach  
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>  
         </tbody>
       </table>
     </div>
@@ -1509,26 +1406,26 @@
             <th style="width:8%;">Item Group</th>
             <th style="width:8%;">Item Category</th>
             <th style="width:8%;">Business Unit</th>
-            <th style="width:8%;" {{$AlpsStatus['hidden']}} >{{isset($TabSetting->FIELD8) && $TabSetting->FIELD8 !=''?$TabSetting->FIELD8:'Add. Info Part No'}}</th>
-            <th style="width:8%;" {{$AlpsStatus['hidden']}} >{{isset($TabSetting->FIELD9) && $TabSetting->FIELD9 !=''?$TabSetting->FIELD9:'Add. Info Customer Part No'}}</th>
-            <th style="width:8%;" {{$AlpsStatus['hidden']}} >{{isset($TabSetting->FIELD10) && $TabSetting->FIELD10 !=''?$TabSetting->FIELD10:'Add. Info OEM Part No.'}}</th>
+            <th style="width:8%;" <?php echo e($AlpsStatus['hidden']); ?> ><?php echo e(isset($TabSetting->FIELD8) && $TabSetting->FIELD8 !=''?$TabSetting->FIELD8:'Add. Info Part No'); ?></th>
+            <th style="width:8%;" <?php echo e($AlpsStatus['hidden']); ?> ><?php echo e(isset($TabSetting->FIELD9) && $TabSetting->FIELD9 !=''?$TabSetting->FIELD9:'Add. Info Customer Part No'); ?></th>
+            <th style="width:8%;" <?php echo e($AlpsStatus['hidden']); ?> ><?php echo e(isset($TabSetting->FIELD10) && $TabSetting->FIELD10 !=''?$TabSetting->FIELD10:'Add. Info OEM Part No.'); ?></th>
             <th style="width:8%;">Status</th>
       </tr>
     </thead>
     <tbody>
     <tr>
         <td style="width:8%;text-align:center;"><input type="checkbox" class="js-selectall" data-target=".js-selectall1" /></td>
-        <td style="width:10%;"><input type="text" id="Itemcodesearch" class="form-control" onkeyup="ItemCodeFunction('{{$FormId}}')"></td>
-        <td style="width:10%;"><input type="text" id="Itemnamesearch" class="form-control" onkeyup="ItemNameFunction('{{$FormId}}')"></td>
-        <td style="width:8%;"><input type="text" id="ItemUOMsearch" class="form-control" onkeyup="ItemUOMFunction('{{$FormId}}')"></td>
-        <td style="width:8%;"><input type="text" id="ItemQTYsearch" class="form-control" onkeyup="ItemQTYFunction()"></td>
-        <td style="width:8%;"><input type="text" id="ItemGroupsearch" class="form-control" onkeyup="ItemGroupFunction('{{$FormId}}')"></td>
-        <td style="width:8%;"><input type="text" id="ItemCategorysearch" class="form-control" onkeyup="ItemCategoryFunction('{{$FormId}}')"></td>
-        <td style="width:8%;"><input type="text" id="ItemBUsearch" class="form-control" onkeyup="ItemBUFunction('{{$FormId}}')"></td>
-        <td style="width:8%;" {{$AlpsStatus['hidden']}} ><input type="text" id="ItemAPNsearch" class="form-control" onkeyup="ItemAPNFunction('{{$FormId}}')"></td>
-        <td style="width:8%;" {{$AlpsStatus['hidden']}} ><input type="text" id="ItemCPNsearch" class="form-control" onkeyup="ItemCPNFunction('{{$FormId}}')"></td>
-        <td style="width:8%;" {{$AlpsStatus['hidden']}} ><input type="text" id="ItemOEMPNsearch" class="form-control" onkeyup="ItemOEMPNFunction('{{$FormId}}')"></td>
-        <td style="width:8%;"><input type="text" id="ItemStatussearch" class="form-control" onkeyup="ItemStatusFunction()"></td>
+        <td style="width:10%;"><input type="text" id="Itemcodesearch" class="form-control" onkeyup="ItemCodeFunction('<?php echo e($FormId); ?>',event)"></td>
+        <td style="width:10%;"><input type="text" id="Itemnamesearch" class="form-control" onkeyup="ItemNameFunction('<?php echo e($FormId); ?>',event)"></td>
+        <td style="width:8%;"><input type="text" id="ItemUOMsearch" class="form-control" onkeyup="ItemUOMFunction('<?php echo e($FormId); ?>',event)"></td>
+        <td style="width:8%;"><input type="text" id="ItemQTYsearch" class="form-control" onkeyup="ItemQTYFunction(event)" readonly></td>
+        <td style="width:8%;"><input type="text" id="ItemGroupsearch" class="form-control" onkeyup="ItemGroupFunction('<?php echo e($FormId); ?>',event)"></td>
+        <td style="width:8%;"><input type="text" id="ItemCategorysearch" class="form-control" onkeyup="ItemCategoryFunction('<?php echo e($FormId); ?>',event)"></td>
+        <td style="width:8%;"><input type="text" id="ItemBUsearch" class="form-control" onkeyup="ItemBUFunction('<?php echo e($FormId); ?>',event)" readonly></td>
+        <td style="width:8%;" <?php echo e($AlpsStatus['hidden']); ?> ><input type="text" id="ItemAPNsearch" class="form-control" onkeyup="ItemAPNFunction('<?php echo e($FormId); ?>',event)"></td>
+        <td style="width:8%;" <?php echo e($AlpsStatus['hidden']); ?> ><input type="text" id="ItemCPNsearch" class="form-control" onkeyup="ItemCPNFunction('<?php echo e($FormId); ?>',event)"></td>
+        <td style="width:8%;" <?php echo e($AlpsStatus['hidden']); ?> ><input type="text" id="ItemOEMPNsearch" class="form-control" onkeyup="ItemOEMPNFunction('<?php echo e($FormId); ?>',event)"></td>
+        <td style="width:8%;"><input type="text" id="ItemStatussearch" class="form-control" onkeyup="ItemStatusFunction(event)" readonly></td>
       </tr>                
     </tbody>
     </table>
@@ -1632,16 +1529,18 @@
         <thead id="thead2">
         </thead>
         <tbody id="tbody_udfsoid"> 
-        @foreach ($objUdfSOData as $udfindex=>$udfRow)
-        <tr id="udfsoid_{{ $udfindex }}" class="clsudfsoid">
-          <td width="50%">{{ $udfRow->LABEL }}
-          <input type="hidden" id="txtudfsoid_{{ $udfindex }}" data-desc="{{ $udfRow->LABEL }}"  value="{{ $udfRow->UDFID }}"/>
+        <?php $__currentLoopData = $objUdfSOData; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $udfindex=>$udfRow): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+        <tr id="udfsoid_<?php echo e($udfindex); ?>" class="clsudfsoid">
+          <td width="50%"><?php echo e($udfRow->LABEL); ?>
+
+          <input type="hidden" id="txtudfsoid_<?php echo e($udfindex); ?>" data-desc="<?php echo e($udfRow->LABEL); ?>"  value="<?php echo e($udfRow->UDFID); ?>"/>
           </td>
-          <td id="udfvalue_{{ $udfindex }}">{{ $udfRow-> VALUETYPE }}
-          <input type="hidden" id="txtudfvalue__{{ $udfindex }}" data-desc="{{ $udfRow->DESCRIPTIONS }}"  
-          value="{{ $udfRow->ISMANDATORY }}"/></td>
+          <td id="udfvalue_<?php echo e($udfindex); ?>"><?php echo e($udfRow-> VALUETYPE); ?>
+
+          <input type="hidden" id="txtudfvalue__<?php echo e($udfindex); ?>" data-desc="<?php echo e($udfRow->DESCRIPTIONS); ?>"  
+          value="<?php echo e($udfRow->ISMANDATORY); ?>"/></td>
         </tr>
-        @endforeach        
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>        
         </tbody>
       </table>
     </div>
@@ -1651,6 +1550,47 @@
   </div>
 </div>
 <!-- UDF Dropdown-->
+
+<!-- Print -->
+<div id="ReportView" class="modal" role="dialog"  data-backdrop="static"  >
+  <div class="modal-dialog modal-md" style="width:90%; height:90%">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" id='ReportViewclosePopup' >&times;</button>          
+      </div>
+    <div class="modal-body">
+	  <div class="tablename"><p>Sales Order Print</p></div>
+        <div class="row">
+          <div class="frame-container col-lg-12 pl text-center" >
+                <button class="btn topnavbt" id="btnReport">
+                    Print
+                </button>
+                <button class="btn topnavbt" id="btnPdf">
+                    PDF
+                </button>
+                <button class="btn topnavbt" id="btnExcel">
+                    Excel
+                </button>
+          </div>
+        </div>
+        
+	  <div class="single single-select table-responsive  table-wrapper-scroll-y my-custom-scrollbar">
+          <div class="inner-form">
+              <div class="row">
+                  <div class="frame-container col-lg-12 pl " >                      
+                      <iframe id="iframe_rpt" width="100%" height="1000" >
+                      </iframe>
+                  </div>
+              </div>
+          </div>
+    </div>
+		<div class="cl"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Print-->
+
 
 <div id="alert" class="modal"  role="dialog"  data-backdrop="static" >
   <div class="modal-dialog"  >
@@ -1676,67 +1616,20 @@
 
 <!-- Alert -->
 
-
-<!-- Template Master Dropdown-->
-
-<div id="Templatepopup" class="modal" role="dialog"  data-backdrop="static">
-  <div class="modal-dialog modal-md column3_modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" id='Template_closePopup' >&times;</button>
-      </div>
-    <div class="modal-body">
-	  <div class="tablename"><p>Template Master</p></div>
-	  <div class="single single-select table-responsive  table-wrapper-scroll-y my-custom-scrollbar">
-    <table id="TemplateTable" class="display nowrap table  table-striped table-bordered">
-    <thead>
-    <tr>
-      <th class="ROW1">Select</th> 
-      <th class="ROW2">Name</th>
-      <th class="ROW3">Date</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <th class="ROW1"><span class="check_th">&#10004;</span></th>
-        <td class="ROW2"><input type="text" id="Templatecodesearch" class="form-control" onkeyup="TemplateCodeFunction()"></td>
-        <td class="ROW3"><input type="text" id="Templatenamesearch" class="form-control" onkeyup="TemplateDateFunction()"></td>
-    </tr>
-    </tbody>
-    </table>
-      <table id="TemplateTable2" class="display nowrap table  table-striped table-bordered">
-        <thead id="thead2">
-         
-        </thead>
-        <tbody>
-        @foreach ($objTemplateMaster as $calindex=>$TempRow)
-        <tr>
-            <td class="ROW1"> <input type="checkbox" name="SELECT_TEMPLATE[]" id="Templatecode_{{ $calindex }}" class="clstemplateid" value="{{ $TempRow-> TEMPLATEID }}" ></td>
-            <td class="ROW2">{{ $TempRow-> TEMPLATE_NAME }}
-              <input type="hidden" id="txtTemplatecode_{{ $calindex }}" data-desc="{{ $TempRow-> TEMPLATE_NAME }}" data-desc2="{{isset($TempRow->INDATE) && $TempRow->INDATE !='' && $TempRow->INDATE !='1900-01-01' ? date('d-m-Y',strtotime($TempRow->INDATE)):''}}" data-desc3="{{ $TempRow-> TEMPLATE }}"  value="{{ $TempRow-> TEMPLATEID }}"/>
-            </td>
-            <td class="ROW3">{{isset($TempRow->INDATE) && $TempRow->INDATE !='' && $TempRow->INDATE !='1900-01-01' ? date('d-m-Y',strtotime($TempRow->INDATE)):''}}</td>
-        </tr>
-        @endforeach
-        </tbody>
-      </table>
-    </div>
-		<div class="cl"></div>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- Template Master Dropdown-->
+<?php $__env->stopSection(); ?>
 
 
-@endsection
-
-
-@push('bottom-css')
+<?php $__env->startPush('bottom-css'); ?>
 <style>
 #custom_dropdown, #frm_trn_so_filter {
     display: inline-table;
     margin-left: 15px;
+}
+.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+    padding: 7px;
+    line-height: 1.42857143;
+    vertical-align: top;
+    border-top: 1px solid #ddd;
 }
 .dataTables_wrapper .row:nth-child(1) .col-sm-6:nth-child(2){text-align:right;}
 #filtercolumn{color: #555;
@@ -1744,6 +1637,7 @@
     background-image: none;
     border: 1px solid #ccc;
     }
+
 
 #ItemIDcodesearch {
   background-image: url('/css/searchicon.png');
@@ -1774,9 +1668,9 @@
 #ItemIDTable th {
     text-align: center;
     padding: 5px;
-    
-    font-size: 11px;
    
+    font-size: 11px;
+    
     color: #0f69cc;
     font-weight: 600;
 }
@@ -1801,7 +1695,7 @@
     padding: 5px;
    
     font-size: 11px;
-   
+  
     color: #0f69cc;
     font-weight: 600;
 }
@@ -1835,72 +1729,14 @@
   text-align: left;
     padding: 5px;
     font-size: 11px;
-   
+  
     font-weight: 600;
     width: 20%;
 }
 </style>
-@endpush
-@push('bottom-scripts')
+<?php $__env->stopPush(); ?>
+<?php $__env->startPush('bottom-scripts'); ?>
 <script>
-
-
-
-
-
-  //Check duplicacy of Customer PO No
-// $('#CUSTOMERPONO').focusout(function(){
-//   var objSO = <?php echo json_encode($objSO); ?>;
-
-//       var CUSTOMERPONO   =   $.trim($(this).val());
-//       if(CUSTOMERPONO ===""){
-//                 $("#FocusId").val('CUSTOMERPONO');
-//                 // $("[id*=txtlabel]").blur(); 
-//                 $("#ProceedBtn").focus();
-//                 $("#YesBtn").hide();
-//                 $("#NoBtn").hide();
-//                 $("#OkBtn1").show();
-//                 $("#AlertMessage").text('Please enter value in CUSTOMERPONO.');
-//                 $("#alert").modal('show');
-//                 $("#OkBtn1").focus();
-//                 highlighFocusBtn('activeOk1');
-//                 // return false;
-//             }else if(objSO.CUSTOMERPONO!=CUSTOMERPONO)
-//       {
-//         var trnsoForm = $("#frm_trn_so");
-//         var formData = trnsoForm.serialize();
-//         $.ajaxSetup({
-//             headers: {
-//                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-//             }
-//         });
-//         $.ajax({
-//             url:'{{route("transaction",[38,"checkcustomerpono"])}}',
-//             type:'POST',
-//             data:formData,
-//             success:function(data) {
-//                if(data.exists) {
-//                     $(".text-danger").hide();
-//                     if(data.exists) {                   
-//                         console.log("cancel MSG="+data.msg);
-//                                       $("#YesBtn").hide();
-//                                       $("#NoBtn").hide();
-//                                       $("#OkBtn1").show();
-//                                       $("#AlertMessage").text(data.msg);
-//                                       $(".text-danger").hide();
-//                                       $("#CUSTOMERPONO").val('');
-//                                       $("#alert").modal('show');
-//                                       $("#OkBtn1").focus();
-//                                       highlighFocusBtn('activeOk1');
-//                     }                 
-//                 }                
-//             },
-//             error:function(data){
-//               console.log("Error: Something went wrong.");
-//             },
-//         });
-//     }
-// });
 
 "use strict";
 	var w3 = {};
@@ -1947,6 +1783,14 @@
       }
     }
   };
+
+
+
+
+
+
+
+
 
 //UDF Tab Starts
 //------------------------
@@ -1999,6 +1843,8 @@ let udftid = "#UDFSOIDTable2";
           }       
     }
   }
+
+
 $("#udfsoid_closePopup").on("click",function(event){ 
      $("#udfsoidpopup").hide();
 });
@@ -2030,17 +1876,17 @@ $('.clsudfsoid').dblclick(function(){
 
         if(chkvaltype2=='date'){
 
-          strinp = '<input type="date" placeholder="dd/mm/yyyy" name="'+dynamicid+ '" id="'+dynamicid+'" class="form-control" autocomplete="off" /> ';       
+          strinp = '<input type="date" placeholder="dd/mm/yyyy" name="'+dynamicid+ '" id="'+dynamicid+'" class="form-control" /> ';       
 
         }else if(chkvaltype2=='time'){
-          strinp= '<input type="time" placeholder="h:i" name="'+dynamicid+ '" id="'+dynamicid+'" class="form-control" autocomplete="off" /> ';
+          strinp= '<input type="time" placeholder="h:i" name="'+dynamicid+ '" id="'+dynamicid+'" class="form-control" /> ';
 
         }else if(chkvaltype2=='numeric'){
-          strinp = '<input type="text" name="'+dynamicid+ '" id="'+dynamicid+'" class="form-control" autocomplete="off" /> ';
+          strinp = '<input type="text" name="'+dynamicid+ '" id="'+dynamicid+'" class="form-control" /> ';
 
         }else if(chkvaltype2=='text'){
 
-          strinp = '<input type="text" name="'+dynamicid+ '" id="'+dynamicid+'" class="form-control" autocomplete="off" /> ';
+          strinp = '<input type="text" name="'+dynamicid+ '" id="'+dynamicid+'" class="form-control" /> ';
         
         }else if(chkvaltype2=='boolean'){
 
@@ -2067,7 +1913,7 @@ $('.clsudfsoid').dblclick(function(){
         $("#udfsoidpopup").hide();
         $("#UDFSOIDcodesearch").val(''); 
         $("#UDFSOIDnamesearch").val(''); 
-      
+       
         event.preventDefault();
             
  });
@@ -2127,7 +1973,7 @@ $('.clsudfsoid').dblclick(function(){
     }
   }
 
-  $('#txtTNCID_popup').click(function(event){
+  $('#TC').on('click','#txtTNCID_popup',function(event){
          $("#TNCIDpopup").show();
          event.preventDefault();
       });
@@ -2160,7 +2006,7 @@ $('.clsudfsoid').dblclick(function(){
                 }
             });
             $.ajax({
-                url:'{{route("transaction",[38,"gettncdetails2"])}}',
+                url:'<?php echo e(route("transaction",[38,"gettncdetails2"])); ?>',
                 type:'POST',
                 data:{'id':customid},
                 success:function(data) {
@@ -2173,7 +2019,7 @@ $('.clsudfsoid').dblclick(function(){
                 },
             });            
             $.ajax({
-                url:'{{route("transaction",[38,"gettncdetails3"])}}',
+                url:'<?php echo e(route("transaction",[38,"gettncdetails3"])); ?>',
                 type:'POST',
                 data:{'id':customid},
                 success:function(data) {
@@ -2186,7 +2032,7 @@ $('.clsudfsoid').dblclick(function(){
                 },
             });
             $.ajax({
-                url:'{{route("transaction",[38,"gettncdetails"])}}',
+                url:'<?php echo e(route("transaction",[38,"gettncdetails"])); ?>',
                 type:'POST',
                 data:{'id':customid},
                 success:function(data) {
@@ -2259,6 +2105,7 @@ $('.clsudfsoid').dblclick(function(){
     }
   }
 
+
 $("#tncdet_closePopup").on("click",function(event){ 
      $("#tncdetpopup").hide();
 });
@@ -2291,17 +2138,17 @@ function bindTNCDetailsEvents(){
 
             if(chkvaltype=='date'){
 
-              strinp = '<input type="date" placeholder="dd/mm/yyyy" name="'+dynamicid+ '" id="'+dynamicid+'" class="form-control" autocomplete="off" /> ';       
+              strinp = '<input type="date" placeholder="dd/mm/yyyy" name="'+dynamicid+ '" id="'+dynamicid+'" class="form-control" /> ';       
 
             }else if(chkvaltype=='time'){
-              strinp= '<input type="time" placeholder="h:i" name="'+dynamicid+ '" id="'+dynamicid+'" class="form-control" autocomplete="off" /> ';
+              strinp= '<input type="time" placeholder="h:i" name="'+dynamicid+ '" id="'+dynamicid+'" class="form-control" /> ';
 
             }else if(chkvaltype=='numeric'){
-              strinp = '<input type="text" name="'+dynamicid+ '" id="'+dynamicid+'" class="form-control" autocomplete="off" /> ';
+              strinp = '<input type="text" name="'+dynamicid+ '" id="'+dynamicid+'" class="form-control" /> ';
 
             }else if(chkvaltype=='text'){
 
-              strinp = '<input type="text" name="'+dynamicid+ '" id="'+dynamicid+'" class="form-control" autocomplete="off" /> ';
+              strinp = '<input type="text" name="'+dynamicid+ '" id="'+dynamicid+'" class="form-control" /> ';
             
             }else if(chkvaltype=='boolean'){
 
@@ -2334,9 +2181,7 @@ function bindTNCDetailsEvents(){
         });
   }
 //TNC Details Ends
-//------------------------
-
-//------------------------
+//------------------------ 
 
 //Calculation Header
 let cttid = "#CTIDTable2";
@@ -2419,7 +2264,7 @@ function getCalculationComponent(){
   });
 
   $.ajax({
-    url:'{{route("transaction",[38,"getcalculationdetails2"])}}',
+    url:'<?php echo e(route("transaction",[38,"getcalculationdetails2"])); ?>',
     type:'POST',
     data:{'id':customid},
     success:function(data) {
@@ -2434,7 +2279,7 @@ function getCalculationComponent(){
   });
 
   $.ajax({
-      url:'{{route("transaction",[38,"getcalculationdetails3"])}}',
+      url:'<?php echo e(route("transaction",[38,"getcalculationdetails3"])); ?>',
       type:'POST',
       data:{'id':customid},
       success:function(data) {
@@ -2452,6 +2297,241 @@ function getCalculationComponent(){
   $("#CTIDnamesearch").val(''); 
 }
 
+
+
+      function bindGSTCalTemplate(){ 
+          $('#CT').find('.participantRow5').each(function()
+            { 
+                var basis = $(this).find('[id*="BASIS"]').val();
+                var sqno = $(this).find('[id*="SQNO"]').val();
+                var formula = $(this).find('[id*="FORMULA"]').val();
+                var rate = $(this).find('[id*="RATE"]').val();
+                var amountnet = $(this).find('[id*="VALUE"]').val();
+                var netTaxableAmount = 0.00;
+                var netGSTAmount = 0.00;
+                var netTotalAmount = 0.00;
+                var totamount = 0.00;
+                var tamt = 0.00;
+                var IGSTamt = 0.00;
+                var CGSTamt = 0.00;
+                var SGSTamt = 0.00;
+                var TotGSTamt = 0.00;
+
+                $('#Material').find('.participantRow').each(function()
+                {                       
+                  var TaxableAmount = $(this).find('[id*="DISAFTT_AMT"]').val();
+                  if (!isNaN(TaxableAmount) && TaxableAmount.length !== 0) {
+                    netTaxableAmount += parseFloat(TaxableAmount);
+                    }                      
+                  
+                  var GSTAmount = $(this).find('[id*="TGST_AMT"]').val();
+                  if (!isNaN(GSTAmount) && GSTAmount.length !== 0) {
+                    netGSTAmount += parseFloat(GSTAmount);
+                    }
+                  
+                  var TotalAmount = $(this).find('[id*="TOT_AMT"]').val();
+                  if (!isNaN(TotalAmount) && TotalAmount.length !== 0) {
+                    netTotalAmount += parseFloat(TotalAmount);
+                    }
+                })
+                var IGST = $('#IGST_0').val();
+                var CGST = $('#CGST_0').val();
+                var SGST = $('#SGST_0').val();
+                
+                  if(formula == '')
+                  {
+                    if(rate > 0)
+                    { 
+                      if(basis == 'Item Taxable Amount')
+                      {
+                        totamount = parseFloat((rate * netTaxableAmount)/100).toFixed(2);
+                      }
+                      if(basis == 'Item GST Amount')
+                      {
+                        totamount = parseFloat((rate * netGSTAmount)/100).toFixed(2);
+                      }
+                      if(basis == 'Amount After GST Item')
+                      {
+                        totamount = parseFloat((rate * netTotalAmount)/100).toFixed(2);
+                      }
+                    }
+                    else
+                    {
+                      totamount = amountnet;
+                    }
+                  }
+                  else
+                  {
+                    if(basis == 'Item Taxable Amount')
+                    {
+                      var basis1 = '( '+netTaxableAmount+' * '+rate+' ) / 100';
+                      var basis2 = netTaxableAmount;
+                      var rate1 = rate +' ) / 100';
+                      if(formula.indexOf("BASIS*RATE") != -1){
+                        var formula1 = formula.replace ("BASIS*RATE", basis1);
+                        tamt = eval(formula1);
+                        totamount = parseFloat((tamt * rate)/100).toFixed(2);
+                      }
+                      else if(formula.indexOf("BASIS") != -1){
+                        var formula1 = formula.replace ("BASIS", basis2);
+                        tamt = eval(formula1);
+                        totamount = parseFloat((tamt * rate)/100).toFixed(2);
+                      }
+                      else if(formula.indexOf("RATE") != -1){
+                        var formula1 = formula.replace ("RATE", rate1);
+                        tamt = eval(formula1);
+                        totamount = parseFloat(( tamt * rate)/100).toFixed(2);
+                      }
+                    }
+                    if(basis == 'Item GST Amount')
+                    {
+                      var basis1 = '('+netGSTAmount+'*'+rate+')/100';
+                      var basis2 = netGSTAmount;
+                      var rate1 = rate+')/100';
+                      if(formula.indexOf("BASIS*RATE") != -1){
+                        var formula1 = formula.replace ("BASIS*RATE", basis1);
+                        tamt = eval(formula1);
+                        totamount = parseFloat((tamt * rate)/100).toFixed(2);
+                      }
+                      else if(formula.indexOf("BASIS") != -1){
+                        var formula1 = formula.replace ("BASIS", basis2);
+                        tamt = eval(formula1);
+                        totamount = parseFloat((tamt * rate)/100).toFixed(2);
+                      }
+                      else if(formula.indexOf("RATE") != -1){
+                        var formula1 = formula.replace ("RATE", rate1);
+                        tamt = eval(formula1);
+                        totamount = parseFloat(( tamt * rate)/100).toFixed(2);
+                      }
+                    }
+                    if(basis == 'Amount After GST Item')
+                    {
+                      var basis1 = '( '+netTotalAmount+' * '+rate+' ) / 100';
+                      var basis2 = netTotalAmount;
+                      var rate1 = rate+' ) / 100';
+                      if(formula.indexOf("BASIS*RATE") != -1){
+                        var formula1 = formula.replace ("BASIS*RATE", basis1);
+                        tamt = eval(formula1);
+                        totamount = parseFloat((tamt * rate)/100).toFixed(2);
+                      }
+                      else if(formula.indexOf("BASIS") != -1){
+                        var formula1 = formula.replace ("BASIS", basis2);
+                        tamt = eval(formula1);
+                        totamount = parseFloat((tamt * rate)/100).toFixed(2);
+                      }
+                      else if(formula.indexOf("RATE") != -1){
+                        var formula1 = formula.replace ("RATE", rate1);
+                        tamt = eval(formula1);
+                        totamount = parseFloat(( tamt * rate)/100).toFixed(2);
+                      }
+                    }
+                    
+                  }
+                  $(this).find('[id*="VALUE_"]').val(totamount);
+                    IGSTamt = parseFloat((IGST * totamount)/100).toFixed(2);
+                    CGSTamt = parseFloat((CGST * totamount)/100).toFixed(2);
+                    SGSTamt = parseFloat((SGST * totamount)/100).toFixed(2);
+                    TotGSTamt = parseFloat(parseFloat(IGSTamt)+parseFloat(CGSTamt)+parseFloat(SGSTamt)).toFixed(2);
+                if($(this).find('[id*="calGST"]').is(":checked") != false)
+                {
+                  if (IGST != '')
+                  {
+                  $(this).find('[id*="calIGST_"]').val(IGST);
+                  $(this).find('[id*="AMTIGST_"]').val(IGSTamt);
+                  $(this).find('[id*="calIGST_"]').removeAttr('readonly');
+                  }
+                  else
+                  {
+                    $(this).find('[id*="calIGST_"]').val('0');
+                    $(this).find('[id*="AMTIGST_"]').val('0');
+                    $(this).find('[id*="calIGST_"]').prop('readonly',true);
+                    
+                  }
+                  if (CGST != '')
+                  {
+                  $(this).find('[id*="calCGST_"]').val(CGST);
+                  $(this).find('[id*="AMTCGST_"]').val(CGSTamt);
+                  $(this).find('[id*="calCGST_"]').removeAttr('readonly');
+                  }
+                  else
+                  {
+                    $(this).find('[id*="calCGST_"]').val('0');
+                    $(this).find('[id*="AMTCGST_"]').val('0');
+                    $(this).find('[id*="calCGST_"]').prop('readonly',true);
+                  }
+                  if (SGST != '')
+                  {
+                  $(this).find('[id*="calSGST_"]').val(SGST);
+                  $(this).find('[id*="AMTSGST_"]').val(SGSTamt);
+                  $(this).find('[id*="calSGST_"]').removeAttr('readonly');
+                  }
+                  else
+                  {
+                    $(this).find('[id*="calSGST_"]').val('0');
+                    $(this).find('[id*="AMTSGST_"]').val('0');
+                    $(this).find('[id*="calSGST_"]').prop('readonly',true);
+                  }
+                  $(this).find('[id*="TOTGSTAMT_"]').val(TotGSTamt);
+                }
+                else
+                {
+                  $(this).find('[id*="calSGST_"]').val('0');
+                  $(this).find('[id*="AMTSGST_"]').val('0');
+                  $(this).find('[id*="calCGST_"]').val('0');
+                  $(this).find('[id*="AMTCGST_"]').val('0');
+                  $(this).find('[id*="calIGST_"]').val('0');
+                  $(this).find('[id*="AMTIGST_"]').val('0');
+                  $(this).find('[id*="TOTGSTAMT_"]').val('0');
+                  $(this).find('[id*="calIGST_"]').prop('readonly',true);
+                  $(this).find('[id*="calCGST_"]').prop('readonly',true);
+                  $(this).find('[id*="calSGST_"]').prop('readonly',true);
+                }
+            });
+
+            var totalvalue = 0.00;
+            var tvalue = 0.00;
+            var ctvalue = 0.00;
+            var ctgstvalue = 0.00;
+            $('#Material').find('.participantRow').each(function()
+            {
+              tvalue = $(this).find('[id*="TOT_AMT"]').val();
+              totalvalue = parseFloat(totalvalue) + parseFloat(tvalue);
+              totalvalue = parseFloat(totalvalue).toFixed(2);
+            });
+            if($('#CTID_REF').val() != '')
+            {
+              $('#CT').find('.participantRow5').each(function()
+              {
+                ctvalue = $(this).find('[id*="VALUE"]').val();
+                ctgstvalue = $(this).find('[id*="TOTGSTAMT"]').val();
+
+
+                if($(this).find('[id*="CT_TYPE"]').val() ==="DISCOUNT"){
+                  totalvalue  = parseFloat(totalvalue) - parseFloat(ctvalue);
+                  totalvalue  = totalvalue > 0?totalvalue:0;
+                }
+                else{
+                  totalvalue = parseFloat(totalvalue) + parseFloat(ctvalue);
+                }
+
+                totalvalue = parseFloat(totalvalue) + parseFloat(ctgstvalue);
+                totalvalue = parseFloat(totalvalue).toFixed(2);
+ 
+
+
+              });
+            }
+            $('#TotalValue').val(totalvalue);
+            MultiCurrency_Conversion('TotalValue'); 
+
+            
+            getActionEvent();
+            event.preventDefault();
+        }
+
+      
+
+  //Calculation Header Ends
 //------------------------
 
 //Calculation Details Starts
@@ -2561,6 +2641,7 @@ function getCalculationComponent(){
       }
     }
 
+
 $("#ctiddet_closePopup").on("click",function(event){ 
      $("#ctiddetpopup").hide();
 });
@@ -2580,9 +2661,8 @@ function bindCTIDDetailsEvents(){
             var txtformula =  $("#txt"+fieldid3+"").data("desc");
             var txtamount = $.trim($(this).find('[id*="ctidamount_"]').text());
             var txtcol = $('#hdn_ctiddet').val();
-            txtamount = parseFloat(txtamount).toFixed(2);
             if(intRegex.test(txtrate)){
-              txtrate = (txtrate +'.0000');
+              txtrate = (txtrate +'.00');
             }
             $("#"+txtcol).val(txtname);
             $("#"+txtcol).parent().parent().find("[id*='TID_REF']").val(txtid);
@@ -2604,18 +2684,12 @@ function bindCTIDDetailsEvents(){
             if(txtgst == 1)
             {
               $("#"+txtcol).parent().parent().find("[id*='calGST']").prop('checked','true');
-              if($.trim($('#Tax_State').val())=="OutofState")
-              {              
               $("#"+txtcol).parent().parent().find("[id*='calIGST']").removeAttr('readonly');
               $("#"+txtcol).parent().parent().find("[id*='AMTIGST']").removeAttr('readonly');
-              }
-              else
-              {
               $("#"+txtcol).parent().parent().find("[id*='calCGST']").removeAttr('readonly');
               $("#"+txtcol).parent().parent().find("[id*='calSGST']").removeAttr('readonly');
               $("#"+txtcol).parent().parent().find("[id*='AMTCGST']").removeAttr('readonly');
               $("#"+txtcol).parent().parent().find("[id*='AMTSGST']").removeAttr('readonly');
-              }
             }     
             else
             {
@@ -2627,10 +2701,9 @@ function bindCTIDDetailsEvents(){
               {
                 var amount1 = $(this).find('[id*="DISAFTT_AMT"]').val();
 
-                totaltaxableamount += parseFloat(amount1);                 
+                totaltaxableamount += parseFloat(amount1);
               });
-              
-            if(txtrate > 0.0000)
+            if(txtrate > 0)
             {
               txtamount = 0;
               txtamount = parseFloat((totaltaxableamount*txtrate)/100).toFixed(2);
@@ -2653,8 +2726,7 @@ function bindCTIDDetailsEvents(){
             $("#CTIDdetratesearch").val(''); 
             $("#CTIDdetamountsearch").val(''); 
             $("#CTIDdetformulasearch").val(''); 
-
-            getActionEvent();
+           
             event.preventDefault();
             
         });
@@ -2665,11 +2737,13 @@ function bindCTIDDetailsEvents(){
 
 //Sub GL Account Starts
 //------------------------
+
+      
 $("#txtsubgl_popup").click(function(event)
 {
     var CODE = ''; 
     var NAME = ''; 
-    var FORMID = "{{$FormId}}";
+    var FORMID = "<?php echo e($FormId); ?>";
     loadCustomer(CODE,NAME,FORMID);
     $("#customer_popus").show();
     event.preventDefault();
@@ -2684,16 +2758,21 @@ $("#customer_closePopup").on("click",function(event){
 });
 function bindSubLedgerEvents(){ 
   $(".clssubgl").click(function(){
-      var id = $(this).attr('id');
-      var txtval =    $("#txt"+id+"").val();
-      var texdesc =   $("#txt"+id+"").data("desc");
-      var glid    =   $("#txt"+id+"").data("desc2");
-      var oldSLID =   $("#SLID_REF").val();
-      var MaterialClone = $('#hdnmaterial').val();
-      $("#txtsubgl_popup").val(texdesc);
-      $("#txtsubgl_popup").blur();
-      $("#SLID_REF").val(txtval);
-      $("#GLID_REF").val(glid);
+    var id = $(this).attr('id');
+    var txtval =    $("#txt"+id+"").val();
+    var texdesc =   $("#txt"+id+"").data("desc");
+    var glid    =   $("#txt"+id+"").data("desc2");
+
+    var oldSLID =   $("#SLID_REF").val();
+    var MaterialClone = $('#hdnmaterial').val();
+    var TCClone = $('#hdnTC').val();
+    var TDSClone = $('#hdnTDS').val();  
+    var CTClone = $('#hdnCT').val();
+    var PaymentSlabsClone = $('#hdnPaymentSlabs').val();
+    $("#txtsubgl_popup").val(texdesc);
+    $("#txtsubgl_popup").blur();
+    $("#SLID_REF").val(txtval);
+    $("#GLID_REF").val(glid);
 
     $("#txtDealerpopup").val('');
     $("#DEALERID_REF").val('');
@@ -2704,102 +2783,198 @@ function bindSubLedgerEvents(){
       $("#DEALERID_REF").val(txtval);
     }
     $("#CUSTOMER_TYPE").val(CUSTOMER_TYPE);
+    
 
-      if (txtval != oldSLID)
-      { 
+    if (txtval != oldSLID)
+    {
         $('#Material').html(MaterialClone);
+        $('#TC').html(TCClone);
+        $('#CT').html(CTClone);
+        $('#TDS').html(TDSClone);
+        $('#PaymentSlabs').html(PaymentSlabsClone);
         $('#TotalValue').val('0.00');
         MultiCurrency_Conversion('TotalValue'); 
-        var count11 = <?php echo json_encode($objCount1); ?>;
-        $('#Row_Count1').val(count11);
-        $('#Material').find('.participantRow').each(function(){
-          $(this).find('input:text').val('');
-          $(this).find('input:hidden').val('');
-          var rowcount = $('#Row_Count1').val();
-          if(rowcount > 1)
-          {
-            $(this).closest('.participantRow').remove();
-            rowcount = parseInt(rowcount) - 1;
-            $('#Row_Count1').val(rowcount);
-          }
-        });
+        $('#Row_Count1').val('1');
+        $('#Row_Count2').val('1');
+        $('#Row_Count4').val('1');
+        $('#Row_Count5').val('1');
+        $('#Row_Count6').val('1');
         
-      }
-      $("#customer_popus").hide();
-      $("#customercodesearch").val(''); 
-      $("#customernamesearch").val(''); 
-     
-      var customid = txtval;
-        if(customid!=''){
-          $("#CREDITDAYS").val('');
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.ajax({
-                url:'{{route("transaction",[38,"getcreditdays"])}}',
-                type:'POST',
-                data:{'id':customid},
-                success:function(data) {
-                  $("#CREDITDAYS").val(data);                        
-                },
-                error:function(data){
-                  console.log("Error: Something went wrong.");
-                  $("#CREDITDAYS").val('');                        
-                },
-            }); 
-          $("#txtBILLTO").val('');
-          $("#BILLTO").val('');
-          $("#txtBILLTO1").val('');
-          $("#BILLTO1").val('');
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.ajax({
-                url:'{{route("transaction",[38,"getBillTo"])}}',
-                type:'POST',
-                data:{'id':customid},
-                success:function(data) {
-                  $("#txtBILLTO1").hide();
-                  $("#div_billto").html(data);
-                },
-                error:function(data){
-                  console.log("Error: Something went wrong.");
-                  $("#txtBILLTO").hide();
-                  $("#txtBILLTO1").show();
-                },
-            });  
-
-          $("#txtSHIPTO").val('');
-          $("#SHIPTO").val('');
-          $("#txtSHIPTO1").val('');
-          $("#SHIPTO1").val('');
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.ajax({
-                url:'{{route("transaction",[38,"getShipTo"])}}',
-                type:'POST',
-                data:{'id':customid},
-                success:function(data) {
-                  $("#txtSHIPTO1").hide();
-                  $("#div_shipto").html(data);
-                },
-                error:function(data){
-                  console.log("Error: Something went wrong.");
-                  $("#txtSHIPTO").hide();
-                  $("#txtSHIPTO1").show();
-                },
-            });       
+        if ($('#DirectSO').is(":checked") == true){
+            $('#Material').find('[id*="txtSQ_popup"]').prop('disabled','true')
+            event.preventDefault();
         }
-        event.preventDefault();
-  });
+        else
+        {
+            $('#Material').find('[id*="txtSQ_popup"]').removeAttr('disabled');
+            event.preventDefault();
+        }
+    }
+    $("#customer_popus").hide();
+    $("#customercodesearch").val(''); 
+    $("#customernamesearch").val(''); 
+  
+    var customid = txtval;
+      if(customid!=''){
+        $("#CREDITDAYS").val('');
+          $.ajaxSetup({
+              headers: {
+                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+              }
+          });
+          $.ajax({
+              url:'<?php echo e(route("transaction",[38,"getcreditdays"])); ?>',
+              type:'POST',
+              data:{'id':customid},
+              success:function(data) {
+                $("#CREDITDAYS").val(data);                        
+              },
+              error:function(data){
+                console.log("Error: Something went wrong.");
+                $("#CREDITDAYS").val('');                        
+              },
+          }); 
+        $("#txtBILLTO").val('');
+        $("#BILLTO").val('');
+        $("#txtBILLTO1").val('');
+        $("#BILLTO1").val('');
+          $.ajaxSetup({
+              headers: {
+                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+              }
+          });
+          $.ajax({
+              url:'<?php echo e(route("transaction",[38,"getBillTo"])); ?>',
+              type:'POST',
+              data:{'id':customid},
+              success:function(data) {
+                $("#txtBILLTO1").hide();
+                $("#div_billto").html(data);
+              },
+              error:function(data){
+                console.log("Error: Something went wrong.");
+                $("#txtBILLTO").hide();
+                $("#txtBILLTO1").show();
+              },
+          });  
+
+        $("#txtSHIPTO").val('');
+        $("#SHIPTO").val('');
+        $("#txtSHIPTO1").val('');
+        $("#SHIPTO1").val('');
+          $.ajaxSetup({
+              headers: {
+                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+              }
+          });
+          $.ajax({
+              url:'<?php echo e(route("transaction",[38,"getShipTo"])); ?>',
+              type:'POST',
+              data:{'id':customid},
+              success:function(data) {
+                $("#txtSHIPTO1").hide();
+                $("#div_shipto").html(data);
+              },
+              error:function(data){
+                console.log("Error: Something went wrong.");
+                $("#txtSHIPTO").hide();
+                $("#txtSHIPTO1").show();
+              },
+          });  
+          $("#tbody_BillTo").html('');
+          $.ajax({
+              url:'<?php echo e(route("transaction",[38,"getBillAddress"])); ?>',
+              type:'POST',
+              data:{'id':customid},
+              success:function(data) {
+                $("#tbody_BillTo").html(data);
+                BindBillAddress();
+              },
+              error:function(data){
+                console.log("Error: Something went wrong.");
+                $("#tbody_BillTo").html('');
+              },
+          });   
+          $("#tbody_ShipTo").html('');
+          $.ajax({
+              url:'<?php echo e(route("transaction",[38,"getShipAddress"])); ?>',
+              type:'POST',
+              data:{'id':customid},
+              success:function(data) {
+                $("#tbody_ShipTo").html(data);       
+                BindShipAddress();                 
+              },
+              error:function(data){
+                console.log("Error: Something went wrong.");
+                $("#tbody_ShipTo").html('');
+              },
+          });  
+          $("#tbody_SQ").html('');
+          $.ajaxSetup({
+              headers: {
+                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+              }
+          })
+          $.ajax({
+              url:'<?php echo e(route("transaction",[38,"getsalesquotation"])); ?>',
+              type:'POST',
+              data:{'id':customid},
+              success:function(data) {
+                $("#tbody_SQ").html(data);
+                BindSalesQuotation();
+              },
+              error:function(data){
+                console.log("Error: Something went wrong.");
+                $("#tbody_SQ").html('');
+              },
+          });
+            $.ajax({
+                  url:'<?php echo e(route("transaction",[38,"getTDSApplicability"])); ?>',
+                  type:'POST',
+                  data:{'id':customid},
+                  success:function(data) {
+                  if(data == 1)
+                  {
+                    $('#drpTDS').val('Yes');
+                    $.ajaxSetup({
+                      headers: {
+                      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                      }
+                    });
+                    $.ajax({
+                      url:'<?php echo e(route("transaction",[38,"getTDSDetails"])); ?>',
+                      type:'POST',
+                      data:{'id':customid},
+                      success:function(data) {                        
+                      $("#tbody_tds").html('');
+                      $("#tbody_tds").html(data);
+                      },
+                      error:function(data){
+                      console.log("Error: Something went wrong.");
+                      var TDSBody = $('#tbody_tds').html();
+                      $("#tbody_tds").html(TDSBody);
+                      },
+                    });
+                  }
+                  else
+                  {
+                    $('#drpTDS').val('No');
+                  }
+                  },
+                  error:function(data){
+                  console.log("Error: Something went wrong.");
+                  $('#drpTDS').val('');
+                  },
+                  });
+
+
+                  getTaxStatus(customid);
+          
+      }
+      event.preventDefault();
+});
 }
+  
 //Sub GL Account Ends
 //------------------------
 
@@ -2853,80 +3028,69 @@ function bindSubLedgerEvents(){
           }       
     }
   }
+
   $('#div_billto').on('click','#txtBILLTO',function(event){
-        var customid = $('#SLID_REF').val();
-        $("#tbody_BillTo").html('');
-                  $.ajaxSetup({
-                      headers: {
-                          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                      }
-                  })
-                  $.ajax({
-                      url:'{{route("transaction",[38,"getBillAddress"])}}',
-                      type:'POST',
-                      data:{'id':customid},
-                      success:function(data) {
-                        $("#tbody_BillTo").html(data);       
-                        BindBillAddress();                 
-                      },
-                      error:function(data){
-                        console.log("Error: Something went wrong.");
-                        $("#tbody_BillTo").html('');
-                      },
-                  });
-         $("#BillTopopup").show();
-         event.preventDefault();
-      });
+      $("#BillTopopup").show();
+      event.preventDefault();
+  });
 
-      $("#BillToclosePopup").click(function(event){
-        $("#BillTopopup").hide();
-        event.preventDefault();
-      });
+  $("#BillToclosePopup").click(function(event){
+    $("#BillTopopup").hide();
+    event.preventDefault();
+  });
 
-      function BindBillAddress(){
-        $(".clsbillto").click(function(){
-          var fieldid = $(this).attr('id');
-          var txtval =    $("#txt"+fieldid+"").val();
-          var texdesc =   $("#txt"+fieldid+"").data("desc");
-          var taxstype =  $("#txt"+fieldid+"").data("desc3")
+  function BindBillAddress(){
+    $(".clsbillto").click(function(){
+      var fieldid = $(this).attr('id');
+      var txtval =    $("#txt"+fieldid+"").val();
+      var texdesc =   $("#txt"+fieldid+"").data("desc");
+      var taxstate =  $("#txt"+fieldid+"").data("desc2")
+      var taxstype =  $("#txt"+fieldid+"").data("desc3")
 
-          var oldBillto =   $("#BILLTO").val();
-            var MaterialClone =  $('#hdnmaterial').val();
-            if (txtval != oldBillto)
-            { 
-              $('#Material').html(MaterialClone);
-              $('#TotalValue').val('0.00');
-              MultiCurrency_Conversion('TotalValue'); 
-              var count11 = <?php echo json_encode($objCount1); ?>;
-              $('#Row_Count1').val(count11);
-              $('#Material').find('.participantRow').each(function(){
-                $(this).find('input:text').val('');
-                var rowcount = $('#Row_Count1').val();
-                if(rowcount > 1)
-                {
-                  $(this).closest('.participantRow').remove();
-                  rowcount = parseInt(rowcount) - 1;
-                  $('#Row_Count1').val(rowcount);
-                }
-              });
-              
-            }
-
-
-          $('#txtBILLTO').val(texdesc);
-          $('#BILLTO').val(txtval);
-
-          if(taxstype ==='BILL TO'){
-            $('#Tax_State').val(taxstate);
-          }
-
-          $("#BillTopopup").hide();
-          $("#BillTocodesearch").val(''); 
-          $("#BillTonamesearch").val(''); 
-          BillToCodeFunction();        
+      var oldBillto =   $("#BILLTO").val();
+      var MaterialClone = $('#hdnmaterial').val();
+      var TCClone = $('#hdnTC').val();
+      var CTClone = $('#hdnCT').val();
+      var PaymentSlabsClone = $('#hdnPaymentSlabs').val();
+      if (txtval != oldBillto)
+      {
+        $('#Material').html(MaterialClone);
+        $('#TC').html(TCClone);
+        $('#CT').html(CTClone);
+        $('#PaymentSlabs').html(PaymentSlabsClone);
+        $('#TotalValue').val('0.00');
+        MultiCurrency_Conversion('TotalValue'); 
+        $('#Row_Count1').val('1');
+        $('#Row_Count2').val('1');
+        $('#Row_Count4').val('1');
+        $('#Row_Count5').val('1');
+        
+        if ($('#DirectSO').is(":checked") == true){
+          $('#Material').find('[id*="txtSQ_popup"]').prop('disabled','true')
           event.preventDefault();
-        });
+        }
+        else
+        {
+          $('#Material').find('[id*="txtSQ_popup"]').removeAttr('disabled');
+          event.preventDefault();
+        }
       }
+
+
+      $('#txtBILLTO').val(texdesc);
+      $('#BILLTO').val(txtval);
+
+      if(taxstype ==='BILL TO'){
+        $('#Tax_State').val(taxstate);
+      }
+
+      $("#BillTopopup").hide();
+      $("#BillTocodesearch").val(''); 
+      $("#BillTonamesearch").val(''); 
+      BillToCodeFunction();        
+      event.preventDefault();
+    });
+  }
   //Bill Address Ends
 //------------------------
 
@@ -2982,26 +3146,6 @@ function bindSubLedgerEvents(){
   }
 
   $('#div_shipto').on('click','#txtSHIPTO',function(event){
-        var customid = $('#SLID_REF').val();
-        $("#tbody_ShipTo").html('');
-                  $.ajaxSetup({
-                      headers: {
-                          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                      }
-                  })
-                  $.ajax({
-                      url:'{{route("transaction",[38,"getShipAddress"])}}',
-                      type:'POST',
-                      data:{'id':customid},
-                      success:function(data) {
-                        $("#tbody_ShipTo").html(data);       
-                        BindShipAddress();                 
-                      },
-                      error:function(data){
-                        console.log("Error: Something went wrong.");
-                        $("#tbody_ShipTo").html('');
-                      },
-                  });
          $("#ShipTopopup").show();
          event.preventDefault();
       });
@@ -3018,27 +3162,34 @@ function bindSubLedgerEvents(){
           var texdesc =   $("#txt"+fieldid+"").data("desc");
           var taxstate =  $("#txt"+fieldid+"").data("desc2");
           var taxstype =  $("#txt"+fieldid+"").data("desc3");
-          var oldshipto =   $("#SHIPTO").val();
-            var MaterialClone =  $('#hdnmaterial').val();
-            if (txtval != oldshipto)
-            { 
+          var oldShipto =   $("#SHIPTO").val();
+          var MaterialClone = $('#hdnmaterial').val();
+          var TCClone = $('#hdnTC').val();
+          var CTClone = $('#hdnCT').val();
+          var PaymentSlabsClone = $('#hdnPaymentSlabs').val();
+          if (txtval != oldShipto)
+          {
               $('#Material').html(MaterialClone);
+              $('#TC').html(TCClone);
+              $('#CT').html(CTClone);
+              $('#PaymentSlabs').html(PaymentSlabsClone);
               $('#TotalValue').val('0.00');
               MultiCurrency_Conversion('TotalValue'); 
-              var count11 = <?php echo json_encode($objCount1); ?>;
-              $('#Row_Count1').val(count11);
-              $('#Material').find('.participantRow').each(function(){
-                $(this).find('input:text').val('');
-                var rowcount = $('#Row_Count1').val();
-                if(rowcount > 1)
-                {
-                  $(this).closest('.participantRow').remove();
-                  rowcount = parseInt(rowcount) - 1;
-                  $('#Row_Count1').val(rowcount);
-                }
-              });
+              $('#Row_Count1').val('1');
+              $('#Row_Count2').val('1');
+              $('#Row_Count4').val('1');
+              $('#Row_Count5').val('1');
               
-            }
+              if ($('#DirectSO').is(":checked") == true){
+                    $('#Material').find('[id*="txtSQ_popup"]').prop('disabled','true')
+                    event.preventDefault();
+              }
+              else
+              {
+                  $('#Material').find('[id*="txtSQ_popup"]').removeAttr('disabled');
+                  event.preventDefault();
+              }
+          }
           $('#txtSHIPTO').val(texdesc);
           $('#SHIPTO').val(txtval);
 
@@ -3049,7 +3200,7 @@ function bindSubLedgerEvents(){
           $("#ShipTopopup").hide();
           $("#ShipTocodesearch").val(''); 
           $("#ShipTonamesearch").val(''); 
-         
+            
           event.preventDefault();
         });
       }
@@ -3130,7 +3281,6 @@ function bindSubLedgerEvents(){
         MultiCurrency_Conversion('TotalValue'); 
         event.preventDefault();
       });
-
 
       
 
@@ -3267,27 +3417,7 @@ function bindSubLedgerEvents(){
     }
   }
 
-  $('#Material').on('click','[id*="txtSQ_popup"]',function(event){
-    var customid = $('#SLID_REF').val();
-    $("#tbody_SQ").html('');
-                  $.ajaxSetup({
-                      headers: {
-                          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                      }
-                  })
-                  $.ajax({
-                      url:'{{route("transaction",[38,"getsalesquotation"])}}',
-                      type:'POST',
-                      data:{'id':customid},
-                      success:function(data) {
-                        $("#tbody_SQ").html(data);
-                        BindSalesQuotation();
-                      },
-                      error:function(data){
-                        console.log("Error: Something went wrong.");
-                        $("#tbody_SQ").html('');
-                      },
-                  });
+  $('#Material').on('click','[id*="txtSQ_popup_"]',function(event){
         $("#SQApopup").show();
         var id = $(this).attr('id');
         var id2 = $(this).parent().parent().find('[id*="SQA"]').attr('id');
@@ -3322,6 +3452,7 @@ function bindSubLedgerEvents(){
         event.preventDefault();
       });
       }
+
       
 
   //Sales Quotation Dropdown Ends
@@ -3339,12 +3470,13 @@ itemtidheaders.forEach(function(element, i) {
   });
 });
 
-function ItemCodeFunction(FORMID) {
+function ItemCodeFunction(FORMID,e) {
+  if(e.which == 13){
   var input, filter, table, tr, td, i, txtValue;
   input = document.getElementById("Itemcodesearch");
   filter = input.value.toUpperCase();
 
-  if(filter.length == 0 && $("#DirectSO").is(":checked") == true)
+  if($("#DirectSO").is(":checked") == true)
   {
     if ($('#Tax_State').length) 
     {
@@ -3354,36 +3486,15 @@ function ItemCodeFunction(FORMID) {
     {
       var taxstate = '';
     }
-    var CODE = ''; 
-    var NAME = ''; 
-    var MUOM = ''; 
-    var GROUP = ''; 
-    var CTGRY = ''; 
-    var BUNIT = ''; 
-    var APART = ''; 
-    var CPART = ''; 
-    var OPART = ''; 
-    loadItem(taxstate,CODE,NAME,MUOM,GROUP,CTGRY,BUNIT,APART,CPART,OPART,FORMID); 
-  }
-  else if(filter.length >= 3 && $("#DirectSO").is(":checked") == true)
-  {
-    if ($('#Tax_State').length) 
-    {
-      var taxstate = $('#Tax_State').val();
-    }
-    else
-    {
-      var taxstate = '';
-    }
-    var CODE = filter; 
-    var NAME = ''; 
-    var MUOM = ''; 
-    var GROUP = ''; 
-    var CTGRY = ''; 
-    var BUNIT = ''; 
-    var APART = ''; 
-    var CPART = ''; 
-    var OPART = ''; 
+    var CODE  = $("#Itemcodesearch").val();
+    var NAME  = $("#Itemnamesearch").val();
+    var MUOM  = $("#ItemUOMsearch").val();
+    var GROUP = $("#ItemGroupsearch").val(); 
+    var CTGRY = $("#ItemCategorysearch").val(); 
+    var BUNIT = $("#ItemBUsearch").val(); 
+    var APART = $("#ItemAPNsearch").val();
+    var CPART = $("#ItemCPNsearch").val(); 
+    var OPART = $("#ItemOEMPNsearch").val();
     loadItem(taxstate,CODE,NAME,MUOM,GROUP,CTGRY,BUNIT,APART,CPART,OPART,FORMID); 
   }
   else
@@ -3403,13 +3514,15 @@ function ItemCodeFunction(FORMID) {
     }
   }
 }
+}
 
-function ItemNameFunction(FORMID) {
+function ItemNameFunction(FORMID,e) {
+  if(e.which == 13){
   var input, filter, table, tr, td, i, txtValue;
   input = document.getElementById("Itemnamesearch");
   filter = input.value.toUpperCase();
 
-  if(filter.length == 0 && $("#DirectSO").is(":checked") == true)
+  if($("#DirectSO").is(":checked") == true)
   {
     if ($('#Tax_State').length) 
     {
@@ -3419,36 +3532,15 @@ function ItemNameFunction(FORMID) {
     {
       var taxstate = '';
     }
-    var CODE = ''; 
-    var NAME = ''; 
-    var MUOM = ''; 
-    var GROUP = ''; 
-    var CTGRY = ''; 
-    var BUNIT = ''; 
-    var APART = ''; 
-    var CPART = ''; 
-    var OPART = ''; 
-    loadItem(taxstate,CODE,NAME,MUOM,GROUP,CTGRY,BUNIT,APART,CPART,OPART,FORMID); 
-  }
-  else if(filter.length >= 3 && $("#DirectSO").is(":checked") == true)
-  {
-    if ($('#Tax_State').length) 
-    {
-      var taxstate = $('#Tax_State').val();
-    }
-    else
-    {
-      var taxstate = '';
-    }
-    var CODE = ''; 
-    var NAME = filter; 
-    var MUOM = ''; 
-    var GROUP = ''; 
-    var CTGRY = ''; 
-    var BUNIT = ''; 
-    var APART = ''; 
-    var CPART = ''; 
-    var OPART = ''; 
+    var CODE  = $("#Itemcodesearch").val();
+    var NAME  = $("#Itemnamesearch").val();
+    var MUOM  = $("#ItemUOMsearch").val();
+    var GROUP = $("#ItemGroupsearch").val(); 
+    var CTGRY = $("#ItemCategorysearch").val(); 
+    var BUNIT = $("#ItemBUsearch").val(); 
+    var APART = $("#ItemAPNsearch").val();
+    var CPART = $("#ItemCPNsearch").val(); 
+    var OPART = $("#ItemOEMPNsearch").val();
     loadItem(taxstate,CODE,NAME,MUOM,GROUP,CTGRY,BUNIT,APART,CPART,OPART,FORMID); 
   }
   else
@@ -3468,12 +3560,15 @@ function ItemNameFunction(FORMID) {
     }
   }
 }
+}
 
-function ItemUOMFunction(FORMID) {
+function ItemUOMFunction(FORMID,e) {
+  if(e.which == 13){
   var input, filter, table, tr, td, i, txtValue;
   input = document.getElementById("ItemUOMsearch");
   filter = input.value.toUpperCase();  
-  if(filter.length == 0 && $("#DirectSO").is(":checked") == true)
+  
+  if($("#DirectSO").is(":checked") == true)
   {
     if ($('#Tax_State').length) 
     {
@@ -3483,36 +3578,15 @@ function ItemUOMFunction(FORMID) {
     {
       var taxstate = '';
     }
-    var CODE = ''; 
-    var NAME = ''; 
-    var MUOM = ''; 
-    var GROUP = ''; 
-    var CTGRY = ''; 
-    var BUNIT = ''; 
-    var APART = ''; 
-    var CPART = ''; 
-    var OPART = ''; 
-    loadItem(taxstate,CODE,NAME,MUOM,GROUP,CTGRY,BUNIT,APART,CPART,OPART,FORMID); 
-  }
-  else if(filter.length >= 3 && $("#DirectSO").is(":checked") == true)
-  {
-    if ($('#Tax_State').length) 
-    {
-      var taxstate = $('#Tax_State').val();
-    }
-    else
-    {
-      var taxstate = '';
-    }
-    var CODE = ''; 
-    var NAME = ''; 
-    var MUOM = filter; 
-    var GROUP = ''; 
-    var CTGRY = ''; 
-    var BUNIT = ''; 
-    var APART = ''; 
-    var CPART = ''; 
-    var OPART = ''; 
+    var CODE  = $("#Itemcodesearch").val();
+    var NAME  = $("#Itemnamesearch").val();
+    var MUOM  = $("#ItemUOMsearch").val();
+    var GROUP = $("#ItemGroupsearch").val(); 
+    var CTGRY = $("#ItemCategorysearch").val(); 
+    var BUNIT = $("#ItemBUsearch").val(); 
+    var APART = $("#ItemAPNsearch").val();
+    var CPART = $("#ItemCPNsearch").val(); 
+    var OPART = $("#ItemOEMPNsearch").val();
     loadItem(taxstate,CODE,NAME,MUOM,GROUP,CTGRY,BUNIT,APART,CPART,OPART,FORMID); 
   }
   else
@@ -3532,7 +3606,9 @@ function ItemUOMFunction(FORMID) {
     }
   }
 }
-function ItemQTYFunction() {
+}
+function ItemQTYFunction(e) {
+  if(e.which == 13){
   var input, filter, table, tr, td, i, txtValue;
   input = document.getElementById("ItemQTYsearch");
   filter = input.value.toUpperCase();        
@@ -3550,12 +3626,15 @@ function ItemQTYFunction() {
     }       
   }
 }
+}
 
-function ItemGroupFunction(FORMID) {
+function ItemGroupFunction(FORMID,e) {
+  if(e.which == 13){
   var input, filter, table, tr, td, i, txtValue;
   input = document.getElementById("ItemGroupsearch");
   filter = input.value.toUpperCase();
-  if(filter.length == 0 && $("#DirectSO").is(":checked") == true)
+  
+  if($("#DirectSO").is(":checked") == true)
   {
     if ($('#Tax_State').length) 
     {
@@ -3565,36 +3644,15 @@ function ItemGroupFunction(FORMID) {
     {
       var taxstate = '';
     }
-    var CODE = ''; 
-    var NAME = ''; 
-    var MUOM = ''; 
-    var GROUP = ''; 
-    var CTGRY = ''; 
-    var BUNIT = ''; 
-    var APART = ''; 
-    var CPART = ''; 
-    var OPART = ''; 
-    loadItem(taxstate,CODE,NAME,MUOM,GROUP,CTGRY,BUNIT,APART,CPART,OPART,FORMID); 
-  }
-  else if(filter.length >= 3 && $("#DirectSO").is(":checked") == true)
-  {
-    if ($('#Tax_State').length) 
-    {
-      var taxstate = $('#Tax_State').val();
-    }
-    else
-    {
-      var taxstate = '';
-    }
-    var CODE = ''; 
-    var NAME = ''; 
-    var MUOM = ''; 
-    var GROUP = filter; 
-    var CTGRY = ''; 
-    var BUNIT = ''; 
-    var APART = ''; 
-    var CPART = ''; 
-    var OPART = ''; 
+    var CODE  = $("#Itemcodesearch").val();
+    var NAME  = $("#Itemnamesearch").val();
+    var MUOM  = $("#ItemUOMsearch").val();
+    var GROUP = $("#ItemGroupsearch").val(); 
+    var CTGRY = $("#ItemCategorysearch").val(); 
+    var BUNIT = $("#ItemBUsearch").val(); 
+    var APART = $("#ItemAPNsearch").val();
+    var CPART = $("#ItemCPNsearch").val(); 
+    var OPART = $("#ItemOEMPNsearch").val();
     loadItem(taxstate,CODE,NAME,MUOM,GROUP,CTGRY,BUNIT,APART,CPART,OPART,FORMID); 
   }
   else
@@ -3614,12 +3672,15 @@ function ItemGroupFunction(FORMID) {
     }
   }
 }
+}
 
-function ItemCategoryFunction(FORMID) {
+function ItemCategoryFunction(FORMID,e) {
+  if(e.which == 13){
   var input, filter, table, tr, td, i, txtValue;
   input = document.getElementById("ItemCategorysearch");
   filter = input.value.toUpperCase();
-  if(filter.length == 0 && $("#DirectSO").is(":checked") == true)
+  
+  if($("#DirectSO").is(":checked") == true)
   {
     if ($('#Tax_State').length) 
     {
@@ -3629,36 +3690,15 @@ function ItemCategoryFunction(FORMID) {
     {
       var taxstate = '';
     }
-    var CODE = ''; 
-    var NAME = ''; 
-    var MUOM = ''; 
-    var GROUP = ''; 
-    var CTGRY = ''; 
-    var BUNIT = ''; 
-    var APART = ''; 
-    var CPART = ''; 
-    var OPART = ''; 
-    loadItem(taxstate,CODE,NAME,MUOM,GROUP,CTGRY,BUNIT,APART,CPART,OPART,FORMID); 
-  }
-  else if(filter.length >= 3 && $("#DirectSO").is(":checked") == true)
-  {
-    if ($('#Tax_State').length) 
-    {
-      var taxstate = $('#Tax_State').val();
-    }
-    else
-    {
-      var taxstate = '';
-    }
-    var CODE = ''; 
-    var NAME = ''; 
-    var MUOM = ''; 
-    var GROUP = ''; 
-    var CTGRY = filter; 
-    var BUNIT = ''; 
-    var APART = ''; 
-    var CPART = ''; 
-    var OPART = ''; 
+    var CODE  = $("#Itemcodesearch").val();
+    var NAME  = $("#Itemnamesearch").val();
+    var MUOM  = $("#ItemUOMsearch").val();
+    var GROUP = $("#ItemGroupsearch").val(); 
+    var CTGRY = $("#ItemCategorysearch").val(); 
+    var BUNIT = $("#ItemBUsearch").val(); 
+    var APART = $("#ItemAPNsearch").val();
+    var CPART = $("#ItemCPNsearch").val(); 
+    var OPART = $("#ItemOEMPNsearch").val();
     loadItem(taxstate,CODE,NAME,MUOM,GROUP,CTGRY,BUNIT,APART,CPART,OPART,FORMID); 
   }
   else
@@ -3678,12 +3718,15 @@ function ItemCategoryFunction(FORMID) {
     }
   }
 }
+}
 
-function ItemBUFunction(FORMID) {
+function ItemBUFunction(FORMID,e) {
+  if(e.which == 13){
 var input, filter, table, tr, td, i, txtValue;
 input = document.getElementById("ItemBUsearch");
 filter = input.value.toUpperCase();
-if(filter.length == 0 && $("#DirectSO").is(":checked") == true)
+
+if($("#DirectSO").is(":checked") == true)
   {
     if ($('#Tax_State').length) 
     {
@@ -3693,36 +3736,15 @@ if(filter.length == 0 && $("#DirectSO").is(":checked") == true)
     {
       var taxstate = '';
     }
-    var CODE = ''; 
-    var NAME = ''; 
-    var MUOM = ''; 
-    var GROUP = ''; 
-    var CTGRY = ''; 
-    var BUNIT = ''; 
-    var APART = ''; 
-    var CPART = ''; 
-    var OPART = ''; 
-    loadItem(taxstate,CODE,NAME,MUOM,GROUP,CTGRY,BUNIT,APART,CPART,OPART,FORMID); 
-  }
-  else if(filter.length >= 3 && $("#DirectSO").is(":checked") == true)
-  {
-    if ($('#Tax_State').length) 
-    {
-      var taxstate = $('#Tax_State').val();
-    }
-    else
-    {
-      var taxstate = '';
-    }
-    var CODE = ''; 
-    var NAME = ''; 
-    var MUOM = ''; 
-    var GROUP = ''; 
-    var CTGRY = ''; 
-    var BUNIT = filter; 
-    var APART = ''; 
-    var CPART = ''; 
-    var OPART = ''; 
+    var CODE  = $("#Itemcodesearch").val();
+    var NAME  = $("#Itemnamesearch").val();
+    var MUOM  = $("#ItemUOMsearch").val();
+    var GROUP = $("#ItemGroupsearch").val(); 
+    var CTGRY = $("#ItemCategorysearch").val(); 
+    var BUNIT = $("#ItemBUsearch").val(); 
+    var APART = $("#ItemAPNsearch").val();
+    var CPART = $("#ItemCPNsearch").val(); 
+    var OPART = $("#ItemOEMPNsearch").val();
     loadItem(taxstate,CODE,NAME,MUOM,GROUP,CTGRY,BUNIT,APART,CPART,OPART,FORMID); 
   }
   else
@@ -3742,12 +3764,15 @@ if(filter.length == 0 && $("#DirectSO").is(":checked") == true)
     }
   }
 }
+}
 
-function ItemAPNFunction(FORMID) {
+function ItemAPNFunction(FORMID,e) {
+  if(e.which == 13){
   var input, filter, table, tr, td, i, txtValue;
   input = document.getElementById("ItemAPNsearch");
   filter = input.value.toUpperCase();
-  if(filter.length == 0 && $("#DirectSO").is(":checked") == true)
+  
+  if($("#DirectSO").is(":checked") == true)
   {
     if ($('#Tax_State').length) 
     {
@@ -3757,36 +3782,15 @@ function ItemAPNFunction(FORMID) {
     {
       var taxstate = '';
     }
-    var CODE = ''; 
-    var NAME = ''; 
-    var MUOM = ''; 
-    var GROUP = ''; 
-    var CTGRY = ''; 
-    var BUNIT = ''; 
-    var APART = ''; 
-    var CPART = ''; 
-    var OPART = ''; 
-    loadItem(taxstate,CODE,NAME,MUOM,GROUP,CTGRY,BUNIT,APART,CPART,OPART,FORMID); 
-  }
-  else if(filter.length >= 3 && $("#DirectSO").is(":checked") == true)
-  {
-    if ($('#Tax_State').length) 
-    {
-      var taxstate = $('#Tax_State').val();
-    }
-    else
-    {
-      var taxstate = '';
-    }
-    var CODE = ''; 
-    var NAME = ''; 
-    var MUOM = ''; 
-    var GROUP = ''; 
-    var CTGRY = ''; 
-    var BUNIT = ''; 
-    var APART = filter; 
-    var CPART = ''; 
-    var OPART = ''; 
+    var CODE  = $("#Itemcodesearch").val();
+    var NAME  = $("#Itemnamesearch").val();
+    var MUOM  = $("#ItemUOMsearch").val();
+    var GROUP = $("#ItemGroupsearch").val(); 
+    var CTGRY = $("#ItemCategorysearch").val(); 
+    var BUNIT = $("#ItemBUsearch").val(); 
+    var APART = $("#ItemAPNsearch").val();
+    var CPART = $("#ItemCPNsearch").val(); 
+    var OPART = $("#ItemOEMPNsearch").val();
     loadItem(taxstate,CODE,NAME,MUOM,GROUP,CTGRY,BUNIT,APART,CPART,OPART,FORMID); 
   }
   else
@@ -3806,12 +3810,15 @@ function ItemAPNFunction(FORMID) {
     }
   }
 }
+}
 
-function ItemCPNFunction(FORMID) {
+function ItemCPNFunction(FORMID,e) {
+  if(e.which == 13){
   var input, filter, table, tr, td, i, txtValue;
   input = document.getElementById("ItemCPNsearch");
   filter = input.value.toUpperCase();
-  if(filter.length == 0 && $("#DirectSO").is(":checked") == true)
+  
+  if($("#DirectSO").is(":checked") == true)
   {
     if ($('#Tax_State').length) 
     {
@@ -3821,36 +3828,15 @@ function ItemCPNFunction(FORMID) {
     {
       var taxstate = '';
     }
-    var CODE = ''; 
-    var NAME = ''; 
-    var MUOM = ''; 
-    var GROUP = ''; 
-    var CTGRY = ''; 
-    var BUNIT = ''; 
-    var APART = ''; 
-    var CPART = ''; 
-    var OPART = ''; 
-    loadItem(taxstate,CODE,NAME,MUOM,GROUP,CTGRY,BUNIT,APART,CPART,OPART,FORMID); 
-  }
-  else if(filter.length >= 3 && $("#DirectSO").is(":checked") == true)
-  {
-    if ($('#Tax_State').length) 
-    {
-      var taxstate = $('#Tax_State').val();
-    }
-    else
-    {
-      var taxstate = '';
-    }
-    var CODE = ''; 
-    var NAME = ''; 
-    var MUOM = ''; 
-    var GROUP = ''; 
-    var CTGRY = ''; 
-    var BUNIT = ''; 
-    var APART = ''; 
-    var CPART = filter; 
-    var OPART = ''; 
+    var CODE  = $("#Itemcodesearch").val();
+    var NAME  = $("#Itemnamesearch").val();
+    var MUOM  = $("#ItemUOMsearch").val();
+    var GROUP = $("#ItemGroupsearch").val(); 
+    var CTGRY = $("#ItemCategorysearch").val(); 
+    var BUNIT = $("#ItemBUsearch").val(); 
+    var APART = $("#ItemAPNsearch").val();
+    var CPART = $("#ItemCPNsearch").val(); 
+    var OPART = $("#ItemOEMPNsearch").val();
     loadItem(taxstate,CODE,NAME,MUOM,GROUP,CTGRY,BUNIT,APART,CPART,OPART,FORMID);
   }
   else
@@ -3870,12 +3856,15 @@ function ItemCPNFunction(FORMID) {
     }
   }
 }
+}
 
-function ItemOEMPNFunction(FORMID) {
+function ItemOEMPNFunction(FORMID,e) {
+  if(e.which == 13){
   var input, filter, table, tr, td, i, txtValue;
   input = document.getElementById("ItemOEMPNsearch");
   filter = input.value.toUpperCase();
-  if(filter.length == 0 && $("#DirectSO").is(":checked") == true)
+  
+  if($("#DirectSO").is(":checked") == true)
   {
     if ($('#Tax_State').length) 
     {
@@ -3885,36 +3874,15 @@ function ItemOEMPNFunction(FORMID) {
     {
       var taxstate = '';
     }
-    var CODE = ''; 
-    var NAME = ''; 
-    var MUOM = ''; 
-    var GROUP = ''; 
-    var CTGRY = ''; 
-    var BUNIT = ''; 
-    var APART = ''; 
-    var CPART = ''; 
-    var OPART = ''; 
-    loadItem(taxstate,CODE,NAME,MUOM,GROUP,CTGRY,BUNIT,APART,CPART,OPART,FORMID);
-  }
-  else if(filter.length >= 3 && $("#DirectSO").is(":checked") == true)
-  {
-    if ($('#Tax_State').length) 
-    {
-      var taxstate = $('#Tax_State').val();
-    }
-    else
-    {
-      var taxstate = '';
-    }
-    var CODE = ''; 
-    var NAME = ''; 
-    var MUOM = ''; 
-    var GROUP = ''; 
-    var CTGRY = ''; 
-    var BUNIT = ''; 
-    var APART = ''; 
-    var CPART = ''; 
-    var OPART = filter; 
+    var CODE  = $("#Itemcodesearch").val();
+    var NAME  = $("#Itemnamesearch").val();
+    var MUOM  = $("#ItemUOMsearch").val();
+    var GROUP = $("#ItemGroupsearch").val(); 
+    var CTGRY = $("#ItemCategorysearch").val(); 
+    var BUNIT = $("#ItemBUsearch").val(); 
+    var APART = $("#ItemAPNsearch").val();
+    var CPART = $("#ItemCPNsearch").val(); 
+    var OPART = $("#ItemOEMPNsearch").val();
     loadItem(taxstate,CODE,NAME,MUOM,GROUP,CTGRY,BUNIT,APART,CPART,OPART,FORMID);
   }
   else
@@ -3934,8 +3902,10 @@ function ItemOEMPNFunction(FORMID) {
     }
   }
 }
+}
 
-function ItemStatusFunction() {
+function ItemStatusFunction(e) {
+  if(e.which == 13){
   var input, filter, table, tr, td, i, txtValue;
   input = document.getElementById("ItemStatussearch");
   filter = input.value.toUpperCase();
@@ -3953,6 +3923,7 @@ function ItemStatusFunction() {
     }       
   }
 }
+}
 
 function loadItem(taxstate,CODE,NAME,MUOM,GROUP,CTGRY,BUNIT,APART,CPART,OPART,FORMID){
 	
@@ -3969,9 +3940,9 @@ function loadItem(taxstate,CODE,NAME,MUOM,GROUP,CTGRY,BUNIT,APART,CPART,OPART,FO
 			type:'POST',
 			data:{'taxstate':taxstate,'CODE':CODE,'NAME':NAME,'MUOM':MUOM,'GROUP':GROUP,'CTGRY':CTGRY,'BUNIT':BUNIT,'APART':APART,'CPART':CPART,'OPART':OPART},
 			success:function(data) {
-			$("#tbody_ItemID").html(data); 
-			bindItemEvents(); 
-      $('.js-selectall').prop("disabled", true);
+        $("#tbody_ItemID").html(data); 
+        bindItemEvents(); 
+        $('.js-selectall').prop("disabled", true);
 			},
 			error:function(data){
 			console.log("Error: Something went wrong.");
@@ -4183,9 +4154,9 @@ function loadItem(taxstate,CODE,NAME,MUOM,GROUP,CTGRY,BUNIT,APART,CPART,OPART,FO
           type:'POST',
           data:{'CODE':CODE,'NAME':NAME},
           success:function(data) {
-          $("#tbody_subglacct").html(data); 
-          bindSubLedgerEvents(); 
-
+            $("#tbody_subglacct").html(data); 
+            bindSubLedgerEvents(); 
+            
           },
           error:function(data){
           console.log("Error: Something went wrong.");
@@ -4197,10 +4168,12 @@ function loadItem(taxstate,CODE,NAME,MUOM,GROUP,CTGRY,BUNIT,APART,CPART,OPART,FO
   //Vendor Popup Ends
 //------------------------
       
-      $('#Material').on('click','[id*="popupITEMID"]',function(event){
+
+  $('#Material').on('click','[id*="popupITEMID"]',function(event){
         var SalesQuotationID = $(this).parent().parent().find('[id*="txtSQ_popup"]').val();
         var sq_text_id = $(this).parent().parent().find('[id*="txtSQ_popup"]').attr('id');
-        var taxstate =$.trim($('#Tax_State').val());
+
+        var taxstate = $.trim($('#Tax_State').val());
         if(SalesQuotationID!=''){
                 $("#tbody_ItemID").html('');
                   $.ajaxSetup({
@@ -4209,13 +4182,13 @@ function loadItem(taxstate,CODE,NAME,MUOM,GROUP,CTGRY,BUNIT,APART,CPART,OPART,FO
                       }
                   });
                   $.ajax({
-                      url:'{{route("transaction",[38,"getItemDetailsQuotationwise"])}}',
+                      url:'<?php echo e(route("transaction",[38,"getItemDetailsQuotationwise"])); ?>',
                       type:'POST',
                       data:{'id':SalesQuotationID, 'taxstate':taxstate},
                       success:function(data) {
                         $("#tbody_ItemID").html(data);   
-                        bindItemEvents();
-                        $('.js-selectall').prop("disabled", false);                     
+                        bindItemEvents();     
+                        $('.js-selectall').prop("disabled", false);                
                       },
                       error:function(data){
                         console.log("Error: Something went wrong.");
@@ -4227,7 +4200,6 @@ function loadItem(taxstate,CODE,NAME,MUOM,GROUP,CTGRY,BUNIT,APART,CPART,OPART,FO
         }
         else
         {
-
           if($("#DirectSO").is(":checked") == true) {
             var CODE = ''; 
             var NAME = ''; 
@@ -4238,10 +4210,10 @@ function loadItem(taxstate,CODE,NAME,MUOM,GROUP,CTGRY,BUNIT,APART,CPART,OPART,FO
             var APART = ''; 
             var CPART = ''; 
             var OPART = ''; 
-            var FORMID = "{{$FormId}}";
+            var FORMID = "<?php echo e($FormId); ?>";
             loadItem(taxstate,CODE,NAME,MUOM,GROUP,CTGRY,BUNIT,APART,CPART,OPART,FORMID);  
             $('.js-selectall').prop("disabled", true); 
-                  $("#ITEMIDpopup").show();
+            $("#ITEMIDpopup").show();
           }
           else{
             $("#FocusId").val(sq_text_id);
@@ -4254,9 +4226,10 @@ function loadItem(taxstate,CODE,NAME,MUOM,GROUP,CTGRY,BUNIT,APART,CPART,OPART,FO
             $("#OkBtn1").focus();
             highlighFocusBtn('activeOk1');
           }
+
         }
 
-       
+        
         var id = $(this).attr('id');
         var id2 = $(this).parent().parent().find('[id*="ITEMID_REF"]').attr('id');
         var id3 = $(this).parent().parent().find('[id*="ItemName"]').attr('id');
@@ -4326,971 +4299,966 @@ function loadItem(taxstate,CODE,NAME,MUOM,GROUP,CTGRY,BUNIT,APART,CPART,OPART,FO
         $('.js-selectall').prop("checked", false);
       });
 
-      function bindItemEvents(){
+    function bindItemEvents(){
 
-$('#ItemIDTable2').off(); 
-$('.js-selectall').change(function(){
-  var isChecked = $(this).prop("checked");
-  var selector = $(this).data('target');
-  $(selector).prop("checked", isChecked);
-  
-  
-  $('#ItemIDTable2').find('.clsitemid').each(function(){
-    var fieldid = $(this).attr('id');
-    var txtval =   $("#txt"+fieldid+"").val();
-    var texdesc =  $("#txt"+fieldid+"").data("desc");
-    var offer_status  =  $("#txt"+fieldid+"").data("desc10");
-    var fieldid2 = $(this).find('[id*="itemname"]').attr('id');
-    var txtname =  $("#txt"+fieldid2+"").val();
-    var txtspec =  $("#txt"+fieldid2+"").data("desc");
-    var fieldid3 = $(this).find('[id*="itemuom"]').attr('id');
-    var txtmuomid =  $("#txt"+fieldid3+"").val();
-    var txtauom =  $("#txt"+fieldid3+"").data("desc");
-    var apartno =  $("#txt"+fieldid3+"").data("desc2");
-    var cpartno =  $("#txt"+fieldid3+"").data("desc3");
-    var opartno =  $("#txt"+fieldid3+"").data("desc4");
-    var txtmuom =  $(this).find('[id*="itemuom"]').text();
-    var fieldid4 = $(this).find('[id*="uomqty"]').attr('id');
-    var txtauomid =  $("#txt"+fieldid4+"").val();
-    var txtauomqty =  $("#txt"+fieldid4+"").data("desc");
-    var txtmuomqty =  $(this).find('[id*="uomqty"]').text();
-    var fieldid5 = $(this).find('[id*="irate"]').attr('id');
-    var txtruom =  $("#txt"+fieldid5+"").val();
-    var txtmqtyf = $("#txt"+fieldid5+"").data("desc");
-    var fieldid6 = $(this).find('[id*="itax"]').attr('id');
-    var txttax2 =  $("#txt"+fieldid6+"").val();
-    var txttax1 = $("#txt"+fieldid6+"").data("desc");
-    var fieldid7 = $(this).find('[id*="ise"]').attr('id');
-    var txtenqno = $("#txt"+fieldid7+"").val();
-    var txtenqid = $("#txt"+fieldid7+"").data("desc");
-    var rcount1 = parseInt($(this).closest('table').find('.clsitemid').length);
-    var rcount2 = $('#hdn_ItemID21').val();
-    var r_count2 = 0;
+      $('#ItemIDTable2').off(); 
+      $('.js-selectall').change(function(){
+        var isChecked = $(this).prop("checked");
+        var selector = $(this).data('target');
+        $(selector).prop("checked", isChecked);
+        
+        
+        $('#ItemIDTable2').find('.clsitemid').each(function(){
+          var fieldid = $(this).attr('id');
+          var txtval =   $("#txt"+fieldid+"").val();
+          var texdesc =  $("#txt"+fieldid+"").data("desc");
+          var offer_status  =  $("#txt"+fieldid+"").data("desc10");
+          var fieldid2 = $(this).find('[id*="itemname"]').attr('id');
+          var txtname =  $("#txt"+fieldid2+"").val();
+          var txtspec =  $("#txt"+fieldid2+"").data("desc");
+          var fieldid3 = $(this).find('[id*="itemuom"]').attr('id');
+          var txtmuomid =  $("#txt"+fieldid3+"").val();
+          var txtauom =  $("#txt"+fieldid3+"").data("desc");
+          var apartno =  $("#txt"+fieldid3+"").data("desc2");
+          var cpartno =  $("#txt"+fieldid3+"").data("desc3");
+          var opartno =  $("#txt"+fieldid3+"").data("desc4");
+          var txtmuom =  $(this).find('[id*="itemuom"]').text();
+          var fieldid4 = $(this).find('[id*="uomqty"]').attr('id');
+          var txtauomid =  $("#txt"+fieldid4+"").val();
+          var txtauomqty =  $("#txt"+fieldid4+"").data("desc");
+          var txtmuomqty =  $(this).find('[id*="uomqty"]').text();
+          var fieldid5 = $(this).find('[id*="irate"]').attr('id');
+          var txtruom =  $("#txt"+fieldid5+"").val();
+          var txtmqtyf = $("#txt"+fieldid5+"").data("desc");
+          var fieldid6 = $(this).find('[id*="itax"]').attr('id');
+          var txttax2 =  $("#txt"+fieldid6+"").val();
+          var txttax1 = $("#txt"+fieldid6+"").data("desc");
+          var fieldid7 = $(this).find('[id*="ise"]').attr('id');
+          var txtenqno = $("#txt"+fieldid7+"").val();
+          var txtenqid = $("#txt"+fieldid7+"").data("desc");
+          var rcount1 = parseInt($(this).closest('table').find('.clsitemid').length);
+          var rcount2 = $('#hdn_ItemID21').val();
+          var r_count2 = 0;
 
-    var texdescountPer    =  $("#txt"+fieldid+"").data("desc1");
-    var texdescountAmount =  $("#txt"+fieldid+"").data("desc2");
+          var texdescountPer    =  $("#txt"+fieldid+"").data("desc1");
+          var texdescountAmount =  $("#txt"+fieldid+"").data("desc2");
 
 
-    if(txtenqno == undefined)
-    {
-      txtenqno = '';
-    }
-    if(txtenqid == undefined)
-    {
-      txtenqid = '';
-    }
-    var totalvalue = 0.00;
-    var txttaxamt1 = 0.00;
-    var txttaxamt2 = 0.00;
-    var txttottaxamt = 0.00;
-    var txttotamtatax =0.00;
+          if(txtenqno == undefined)
+          {
+            txtenqno = '';
+          }
+          if(txtenqid == undefined)
+          {
+            txtenqid = '';
+          }
+          var totalvalue = 0.00;
+          var txttaxamt1 = 0.00;
+          var txttaxamt2 = 0.00;
+          var txttottaxamt = 0.00;
+          var txttotamtatax =0.00;
 
-    txtruom = parseFloat(txtruom).toFixed(5);
-    
-    txtauomqty = (parseInt(txtmuomqty)/parseInt(txtmqtyf))*parseInt(txtauomqty);
-    
-    
-    var txtamt = parseFloat((parseFloat(txtmuomqty)*parseFloat(txtruom))).toFixed(2);
-    if(txttax1 == undefined || txttax1 == '')
-    {
-      txttax1 = 0.0000;
-        txttaxamt1 = 0.00;
-    }
-    else
-    {
-       txttaxamt1 = parseFloat((parseFloat(txtamt)*parseFloat(txttax1))/100).toFixed(2);
-    }
-    if(txttax2 == undefined || txttax2 == '')
-    {
-      txttax2 = 0.0000;
-       txttaxamt2 = 0.00;
-    }
-    else
-    {
-       txttaxamt2 = parseFloat((parseFloat(txtamt)*parseFloat(txttax2))/100).toFixed(2);
-    }
-    
-    var txttottaxamt = parseFloat((parseFloat(txttaxamt1)+parseFloat(txttaxamt2))).toFixed(2);
-    var txttotamtatax = parseFloat((parseFloat(txtamt)+parseFloat(txttottaxamt))).toFixed(2);
+          txtruom = parseFloat(txtruom).toFixed(5);
+          
+          txtauomqty = (parseInt(txtmuomqty)/parseInt(txtmqtyf))*parseInt(txtauomqty);
+          
+          
+          var txtamt = parseFloat((parseFloat(txtmuomqty)*parseFloat(txtruom))).toFixed(2);
+          if(txttax1 == undefined || txttax1 == '')
+          {
+            txttax1 = 0.0000;
+              txttaxamt1 = 0.00;
+          }
+          else
+          {
+             txttaxamt1 = parseFloat((parseFloat(txtamt)*parseFloat(txttax1))/100).toFixed(2);
+          }
+          if(txttax2 == undefined || txttax2 == '')
+          {
+            txttax2 = 0.0000;
+             txttaxamt2 = 0.00;
+          }
+          else
+          {
+             txttaxamt2 = parseFloat((parseFloat(txtamt)*parseFloat(txttax2))/100).toFixed(2);
+          }
+          
+          var txttottaxamt = parseFloat((parseFloat(txttaxamt1)+parseFloat(txttaxamt2))).toFixed(2);
+          var txttotamtatax = parseFloat((parseFloat(txtamt)+parseFloat(txttottaxamt))).toFixed(2);
 
- 
-  // var intRegex = /^\d+$/;
-  if(intRegex.test(txtauomqty)){
-      txtauomqty = (txtauomqty +'.000');
-  }
-
-  if(intRegex.test(txtmuomqty)){
-    txtmuomqty = (txtmuomqty +'.000');
-  }
-
-  if(intRegex.test(txtruom)){
-    txtruom = (txtruom +'.00000');
-  }
-
-  if(intRegex.test(txtamt)){
-    txtamt = (txtamt +'.00');
-  }
-
-  if(intRegex.test(txttax1)){
-    txttax1 = (txttax1 +'.0000');
-  }
-  if(intRegex.test(txttax2)){
-    txttax2 = (txttax2 +'.0000');
-  }
-  if(intRegex.test(txttaxamt1)){
-    txttaxamt1 = (txttaxamt1 +'.00');
-  }
-  if(intRegex.test(txttaxamt2)){
-    txttaxamt2 = (txttaxamt2 +'.00');
-  }
-
-  if(intRegex.test(txttottaxamt)){
-    txttottaxamt = (txttottaxamt +'.00');
-  }
-  if(intRegex.test(txttotamtatax)){
-    txttotamtatax = (txttotamtatax +'.00');
-  }
-  var SalesEnq2 = [];
-  $('#Material').find('.participantRow').each(function(){
-    if($(this).find('[id*="ITEMID_REF"]').val() != '')
-    {
-      var seitem = $(this).find('[id*="txtSQ_popup"]').val()+'-'+$(this).find('[id*="SEQID_REF"]').val()+'-'+$(this).find('[id*="ITEMID_REF"]').val();
-      SalesEnq2.push(seitem);
-      r_count2 = parseInt(r_count2) + 1;
-    }
-  });
-  
-  var salesenquiry =  $('#hdn_ItemID18').val();
-  var itemids =  $('#hdn_ItemID19').val();
-  var enquiryids =  $('#hdn_ItemID20').val();
-
-      if($(this).find('[id*="chkId"]').is(":checked") == true) 
-      {
-        rcount1 = parseInt(rcount2)+parseInt(rcount1);
-        if(parseInt(r_count2) >= parseInt(rcount1))
-        {
-          $('#hdn_ItemID').val('');
-              $('#hdn_ItemID2').val('');
-              $('#hdn_ItemID3').val('');
-              $('#hdn_ItemID4').val('');
-              $('#hdn_ItemID5').val('');
-              $('#hdn_ItemID6').val('');
-              $('#hdn_ItemID7').val('');
-              $('#hdn_ItemID8').val('');
-              $('#hdn_ItemID9').val('');
-              $('#hdn_ItemID10').val('');
-              $('#hdn_ItemID11').val('');
-              $('#hdn_ItemID12').val('');
-              $('#hdn_ItemID13').val('');
-              $('#hdn_ItemID14').val('');
-              $('#hdn_ItemID15').val('');
-              $('#hdn_ItemID16').val('');
-              $('#hdn_ItemID17').val('');
-              $('#hdn_ItemID18').val('');
-              $('#hdn_ItemID19').val('');
-              $('#hdn_ItemID20').val('');
-              txtval = '';
-              texdesc = '';
-              txtname = '';
-              txtmuom = '';
-              txtauom = '';
-              txtmuomid = '';
-              txtauomid = '';
-              txtauomqty='';
-              txtmuomqty='';
-              txtruom = '';
-              txtamt = '';
-              txttax1 = '';
-              txttax2 = '';
-              txtenqno = '';
-              txtenqid = '';
-              $(".blurRate").blur();
-              $('.js-selectall').prop("checked", false);
-              return false;
+       
+        // var intRegex = /^\d+$/;
+        if(intRegex.test(txtauomqty)){
+            txtauomqty = (txtauomqty +'.000');
         }
 
-        
-      
-          var txtenqitem = txtenqno+'-'+txtenqid+'-'+txtval;
-          if($.trim($("#SCHEMEID_REF").val()) ==='' && jQuery.inArray(txtenqitem, SalesEnq2) !== -1 && parseFloat(offer_status) == 0){
-                $("#ITEMIDpopup").hide();
-                $("#YesBtn").hide();
-                $("#NoBtn").hide();
-                $("#OkBtn").hide();
-                $("#OkBtn1").show();
-                $("#AlertMessage").text('Item already exists.');
-                $("#alert").modal('show');
-                $("#OkBtn1").focus();
-                highlighFocusBtn('activeOk1');
-                $('#hdn_ItemID').val('');
-                $('#hdn_ItemID2').val('');
-                $('#hdn_ItemID3').val('');
-                $('#hdn_ItemID4').val('');
-                $('#hdn_ItemID5').val('');
-                $('#hdn_ItemID6').val('');
-                $('#hdn_ItemID7').val('');
-                $('#hdn_ItemID8').val('');
-                $('#hdn_ItemID9').val('');
-                $('#hdn_ItemID10').val('');
-                $('#hdn_ItemID11').val('');
-                $('#hdn_ItemID12').val('');
-                $('#hdn_ItemID13').val('');
-                $('#hdn_ItemID14').val('');
-                $('#hdn_ItemID15').val('');
-                $('#hdn_ItemID16').val('');
-                $('#hdn_ItemID17').val('');
-                $('#hdn_ItemID18').val('');
-                $('#hdn_ItemID19').val('');
-                $('#hdn_ItemID20').val('');
-                txtval = '';
-                texdesc = '';
-                txtname = '';
-                txtmuom = '';
-                txtauom = '';
-                txtmuomid = '';
-                txtauomid = '';
-                txtauomqty='';
-                txtmuomqty='';
-                txtruom = '';
-                txtamt = '';
-                txttax1 = '';
-                txttax2 = '';
-                txtenqno = '';
-                txtenqid = '';
-                $(".blurRate").blur();
-                $('.js-selectall').prop("checked", false);
-                return false;
+        if(intRegex.test(txtmuomqty)){
+          txtmuomqty = (txtmuomqty +'.000');
+        }
+
+        if(intRegex.test(txtruom)){
+          txtruom = (txtruom +'.00000');
+        }
+
+        if(intRegex.test(txtamt)){
+          txtamt = (txtamt +'.00');
+        }
+
+        if(intRegex.test(txttax1)){
+          txttax1 = (txttax1 +'.0000');
+        }
+        if(intRegex.test(txttax2)){
+          txttax2 = (txttax2 +'.0000');
+        }
+        if(intRegex.test(txttaxamt1)){
+          txttaxamt1 = (txttaxamt1 +'.00');
+        }
+        if(intRegex.test(txttaxamt2)){
+          txttaxamt2 = (txttaxamt2 +'.00');
+        }
+
+        if(intRegex.test(txttottaxamt)){
+          txttottaxamt = (txttottaxamt +'.00');
+        }
+        if(intRegex.test(txttotamtatax)){
+          txttotamtatax = (txttotamtatax +'.00');
+        }
+        var SalesEnq2 = [];
+        $('#Material').find('.participantRow').each(function(){
+          if($(this).find('[id*="ITEMID_REF"]').val() != '')
+          {
+            var seitem = $(this).find('[id*="txtSQ_popup"]').val()+'-'+$(this).find('[id*="SEQID_REF"]').val()+'-'+$(this).find('[id*="ITEMID_REF"]').val();
+            SalesEnq2.push(seitem);
+            r_count2 = parseInt(r_count2) + 1;
           }
+        });
         
-
-        
-            if($('#hdn_ItemID').val() == "" && txtval != '')
+        var salesenquiry =  $('#hdn_ItemID18').val();
+        var itemids =  $('#hdn_ItemID19').val();
+        var enquiryids =  $('#hdn_ItemID20').val();
+    
+            if($(this).find('[id*="chkId"]').is(":checked") == true) 
             {
-              var txtid= $('#hdn_ItemID').val();
-              var txt_id2= $('#hdn_ItemID2').val();
-              var txt_id3= $('#hdn_ItemID3').val();
-              var txt_id4= $('#hdn_ItemID4').val();
-              var txt_id5= $('#hdn_ItemID5').val();
-              var txt_id6= $('#hdn_ItemID6').val();
-              var txt_id7= $('#hdn_ItemID7').val();
-              var txt_id8= $('#hdn_ItemID8').val();
-              var txt_id9= $('#hdn_ItemID9').val();
-              var txt_id10= $('#hdn_ItemID10').val();
-              var txt_id11= $('#hdn_ItemID11').val();
-              var txt_id12= $('#hdn_ItemID12').val();
-              var txt_id13= $('#hdn_ItemID13').val();
-              var txt_id14= $('#hdn_ItemID14').val();
-              var txt_id15= $('#hdn_ItemID15').val();
-              var txt_id16= $('#hdn_ItemID16').val();
+              rcount1 = parseInt(rcount2)+parseInt(rcount1);
+              if(parseInt(r_count2) >= parseInt(rcount1))
+              {
+                $('#hdn_ItemID').val('');
+                    $('#hdn_ItemID2').val('');
+                    $('#hdn_ItemID3').val('');
+                    $('#hdn_ItemID4').val('');
+                    $('#hdn_ItemID5').val('');
+                    $('#hdn_ItemID6').val('');
+                    $('#hdn_ItemID7').val('');
+                    $('#hdn_ItemID8').val('');
+                    $('#hdn_ItemID9').val('');
+                    $('#hdn_ItemID10').val('');
+                    $('#hdn_ItemID11').val('');
+                    $('#hdn_ItemID12').val('');
+                    $('#hdn_ItemID13').val('');
+                    $('#hdn_ItemID14').val('');
+                    $('#hdn_ItemID15').val('');
+                    $('#hdn_ItemID16').val('');
+                    $('#hdn_ItemID17').val('');
+                    $('#hdn_ItemID18').val('');
+                    $('#hdn_ItemID19').val('');
+                    $('#hdn_ItemID20').val('');
+                    txtval = '';
+                    texdesc = '';
+                    txtname = '';
+                    txtmuom = '';
+                    txtauom = '';
+                    txtmuomid = '';
+                    txtauomid = '';
+                    txtauomqty='';
+                    txtmuomqty='';
+                    txtruom = '';
+                    txtamt = '';
+                    txttax1 = '';
+                    txttax2 = '';
+                    txtenqno = '';
+                    txtenqid = '';
+                    $(".blurRate").blur();
+                    $('.js-selectall').prop("checked", false);
+                    return false;
+              }
 
-              var $tr = $('.material').closest('table');
-              var allTrs = $tr.find('.participantRow').last();
-              var lastTr = allTrs[allTrs.length-1];
-              var $clone = $(lastTr).clone();
+              
+            
+                var txtenqitem = txtenqno+'-'+txtenqid+'-'+txtval;
+                if($.trim($("#SCHEMEID_REF").val()) ==='' && jQuery.inArray(txtenqitem, SalesEnq2) !== -1 && parseFloat(offer_status) == 0){
+                      $("#ITEMIDpopup").hide();
+                      $("#YesBtn").hide();
+                      $("#NoBtn").hide();
+                      $("#OkBtn").hide();
+                      $("#OkBtn1").show();
+                      $("#AlertMessage").text('Item already exists.');
+                      $("#alert").modal('show');
+                      $("#OkBtn1").focus();
+                      highlighFocusBtn('activeOk1');
+                      $('#hdn_ItemID').val('');
+                      $('#hdn_ItemID2').val('');
+                      $('#hdn_ItemID3').val('');
+                      $('#hdn_ItemID4').val('');
+                      $('#hdn_ItemID5').val('');
+                      $('#hdn_ItemID6').val('');
+                      $('#hdn_ItemID7').val('');
+                      $('#hdn_ItemID8').val('');
+                      $('#hdn_ItemID9').val('');
+                      $('#hdn_ItemID10').val('');
+                      $('#hdn_ItemID11').val('');
+                      $('#hdn_ItemID12').val('');
+                      $('#hdn_ItemID13').val('');
+                      $('#hdn_ItemID14').val('');
+                      $('#hdn_ItemID15').val('');
+                      $('#hdn_ItemID16').val('');
+                      $('#hdn_ItemID17').val('');
+                      $('#hdn_ItemID18').val('');
+                      $('#hdn_ItemID19').val('');
+                      $('#hdn_ItemID20').val('');
+                      txtval = '';
+                      texdesc = '';
+                      txtname = '';
+                      txtmuom = '';
+                      txtauom = '';
+                      txtmuomid = '';
+                      txtauomid = '';
+                      txtauomqty='';
+                      txtmuomqty='';
+                      txtruom = '';
+                      txtamt = '';
+                      txttax1 = '';
+                      txttax2 = '';
+                      txtenqno = '';
+                      txtenqid = '';
+                      $(".blurRate").blur();
+                      $('.js-selectall').prop("checked", false);
+                      return false;
+                }
+              
 
-              $clone.find('td').each(function(){
-                var el = $(this).find(':first-child');
-                var id = el.attr('id') || null;
-                  if(id){
-                      var idLength = id.split('_').pop();
-                      var i = id.substr(id.length-idLength.length);
-                      var prefix = id.substr(0, (id.length-idLength.length));
-                      el.attr('id', prefix+(+i+1));
+              
+                  if($('#hdn_ItemID').val() == "" && txtval != '')
+                  {
+                    var txtid= $('#hdn_ItemID').val();
+                    var txt_id2= $('#hdn_ItemID2').val();
+                    var txt_id3= $('#hdn_ItemID3').val();
+                    var txt_id4= $('#hdn_ItemID4').val();
+                    var txt_id5= $('#hdn_ItemID5').val();
+                    var txt_id6= $('#hdn_ItemID6').val();
+                    var txt_id7= $('#hdn_ItemID7').val();
+                    var txt_id8= $('#hdn_ItemID8').val();
+                    var txt_id9= $('#hdn_ItemID9').val();
+                    var txt_id10= $('#hdn_ItemID10').val();
+                    var txt_id11= $('#hdn_ItemID11').val();
+                    var txt_id12= $('#hdn_ItemID12').val();
+                    var txt_id13= $('#hdn_ItemID13').val();
+                    var txt_id14= $('#hdn_ItemID14').val();
+                    var txt_id15= $('#hdn_ItemID15').val();
+                    var txt_id16= $('#hdn_ItemID16').val();
+
+                    var $tr = $('.material').closest('table');
+                    var allTrs = $tr.find('.participantRow').last();
+                    var lastTr = allTrs[allTrs.length-1];
+                    var $clone = $(lastTr).clone();
+
+                    $clone.find('td').each(function(){
+                      var el = $(this).find(':first-child');
+                      var id = el.attr('id') || null;
+                        if(id){
+                            var idLength = id.split('_').pop();
+                            var i = id.substr(id.length-idLength.length);
+                            var prefix = id.substr(0, (id.length-idLength.length));
+                            el.attr('id', prefix+(+i+1));
+                        }
+                        var name = el.attr('name') || null;
+                      if(name){
+                        var nameLength = name.split('_').pop();
+                        var i = name.substr(name.length-nameLength.length);
+                        var prefix1 = name.substr(0, (name.length-nameLength.length));
+                        el.attr('name', prefix1+(+i+1));
+                      }
+                    });
+
+                        $clone.find('.remove').removeAttr('disabled'); 
+                        $clone.find('[id*="popupITEMID"]').val(texdesc);
+                        $clone.find('[id*="ITEMID_REF"]').val(txtval);
+                        $clone.find('[id*="SEQID_REF"]').val(txtenqid);
+                        $clone.find('[id*="ItemName"]').val(txtname);
+                        $clone.find('[id*="Itemspec"]').val(txtspec);
+                        $clone.find('[id*="Alpspartno"]').val(apartno);
+                        $clone.find('[id*="Custpartno"]').val(cpartno);
+                        $clone.find('[id*="OEMpartno"]').val(opartno);
+                        $clone.find('[id*="SQMUOM"]').val(txtmuom);
+                        $clone.find('[id*="SQMUOMQTY"]').val(txtmuomqty);
+                        $clone.find('[id*="SQAUOM"]').val(txtauom);
+                        $clone.find('[id*="SQAUOMQTY"]').val(txtauomqty);
+                        $clone.find('[id*="popupMUOM"]').val(txtmuom);
+                        $clone.find('[id*="MAIN_UOMID_REF"]').val(txtmuomid);
+                        $clone.find('[id*="SO_QTY"]').val(txtmuomqty);
+                        $clone.find('[id*="SO_FQTY"]').val(txtmuomqty);
+                        $clone.find('[id*="popupAUOM"]').val(txtauom);
+                        $clone.find('[id*="ALT_UOMID_REF"]').val(txtauomid);
+                        $clone.find('[id*="ALT_UOMID_QTY"]').val(txtauomqty);
+                        $clone.find('[id*="RATEPUOM"]').val(txtruom);
+                        $clone.find('[id*="DISAFTT_AMT"]').val(txtamt);
+                        $clone.find('[id*="TOT_AMT"]').val(txttotamtatax);
+                        $clone.find('[id*="TGST_AMT"]').val(txttottaxamt);
+                        if($.trim($('#Tax_State').val()) == 'OutofState')
+                        {
+                          $clone.find('[id*="IGST"]').val(txttax1);
+                          $clone.find('[id*="IGSTAMT"]').val(txttaxamt1);
+                          $clone.find('[id*="SGST"]').prop('disabled',true); 
+                          $clone.find('[id*="CGST"]').prop('disabled',true); 
+                          $clone.find('[id*="SGSTAMT"]').prop('disabled',true); 
+                          $clone.find('[id*="CGSTAMT"]').prop('disabled',true); 
+                        }
+                        else
+                        {
+                          $clone.find('[id*="CGST"]').val(txttax1);
+                          $clone.find('[id*="IGST"]').prop('disabled',true); 
+                          $clone.find('[id*="SGST"]').val(txttax2);
+                          $clone.find('[id*="CGSTAMT"]').val(txttaxamt1);
+                          $clone.find('[id*="SGSTAMT"]').val(txttaxamt2);
+                          $clone.find('[id*="IGSTAMT"]').prop('disabled',true); 
+                        }
+                        
+                        $tr.closest('table').append($clone);   
+                        var rowCount = $('#Row_Count1').val();
+                        rowCount = parseInt(rowCount)+1;
+                        $('#Row_Count1').val(rowCount);
+
+                        var tvalue = parseFloat(txttotamtatax).toFixed(2);
+                        totalvalue = $('#TotalValue').val();
+                        totalvalue =  parseFloat(totalvalue) + parseFloat(tvalue);
+                        totalvalue = parseFloat(totalvalue).toFixed(2);
+                        $('#TotalValue').val(totalvalue);
+                        MultiCurrency_Conversion('TotalValue'); 
+                        
+                      if($clone.find('[id*="txtSQ_popup"]').val() == '')
+                      {
+                        $clone.find('[id*="SQMUOM"]').val('');
+                        $clone.find('[id*="SQMUOMQTY"]').val('');
+                        $clone.find('[id*="SQAUOM"]').val('');
+                        $clone.find('[id*="SQAUOMQTY"]').val('');
+                      }
+                      
+                      $clone.find('[id*="DISCPER"]').val(texdescountPer);
+                      $clone.find('[id*="DISCOUNT_AMT"]').val(texdescountAmount);
+                      
+
+                      $(".blurRate").blur();
+                      
+                  event.preventDefault();
                   }
-                  var name = el.attr('name') || null;
-                if(name){
-                  var nameLength = name.split('_').pop();
-                  var i = name.substr(name.length-nameLength.length);
-                  var prefix1 = name.substr(0, (name.length-nameLength.length));
-                  el.attr('name', prefix1+(+i+1));
+                  else
+                  {
+                      var txtid= $('#hdn_ItemID').val();
+                      var txt_id2= $('#hdn_ItemID2').val();
+                      var txt_id3= $('#hdn_ItemID3').val();
+                      var txt_id4= $('#hdn_ItemID4').val();
+                      var txt_id5= $('#hdn_ItemID5').val();
+                      var txt_id6= $('#hdn_ItemID6').val();
+                      var txt_id7= $('#hdn_ItemID7').val();
+                      var txt_id8= $('#hdn_ItemID8').val();
+                      var txt_id9= $('#hdn_ItemID9').val();
+                      var txt_id10= $('#hdn_ItemID10').val();
+                      var txt_id11= $('#hdn_ItemID11').val();
+                      var txt_id12= $('#hdn_ItemID12').val();
+                      var txt_id13= $('#hdn_ItemID13').val();
+                      var txt_id14= $('#hdn_ItemID14').val();
+                      var txt_id15= $('#hdn_ItemID15').val();
+                      var txt_id16= $('#hdn_ItemID16').val();
+                      $('#'+txtid).val(texdesc);
+                      $('#'+txt_id2).val(txtval);
+                      $('#'+txt_id3).val(txtname);
+                      $('#'+txt_id4).val(txtspec);
+                      $('#'+txt_id5).val(txtmuom);
+                      $('#'+txt_id6).val(txtmuomqty);
+                      $('#'+txt_id7).val(txtauom);
+                      $('#'+txt_id8).val(txtauomqty);
+                      $('#'+txt_id9).val(txtmuom);
+                      $('#'+txt_id10).val(txtmuomid);
+                      $('#'+txt_id11).val(txtmuomqty);
+                      $('#'+txt_id12).val(txtauom);
+                      $('#'+txt_id13).val(txtauomid);
+                      $('#'+txt_id14).val(txtauomqty);
+                      $('#'+txt_id15).val(txtruom);
+                      $('#'+txt_id16).val(txtmuomqty);
+                      $('#'+txtid).parent().parent().find('[id*="SEQID_REF"]').val(txtenqid);
+                      $('#'+txtid).parent().parent().find('[id*="DISAFTT_AMT"]').val(txtamt);
+                      $('#'+txtid).parent().parent().find('[id*="TOT_AMT"]').val(txttotamtatax);
+                      $('#'+txtid).parent().parent().find('[id*="TGST_AMT"]').val(txttottaxamt);
+                      $('#'+txtid).parent().parent().find('[id*="Alpspartno"]').val(apartno);
+                      $('#'+txtid).parent().parent().find('[id*="Custpartno"]').val(cpartno);
+                      $('#'+txtid).parent().parent().find('[id*="OEMpartno"]').val(opartno);
+                      if($.trim($('#Tax_State').val()) == 'OutofState')
+                        {
+                          $('#'+txtid).parent().parent().find('[id*="IGST"]').val(txttax1);
+                          $('#'+txtid).parent().parent().find('[id*="IGSTAMT"]').val(txttaxamt1);
+                          $('#'+txtid).parent().parent().find('[id*="SGST"]').prop('disabled',true); 
+                          $('#'+txtid).parent().parent().find('[id*="CGST"]').prop('disabled',true);
+                          $('#'+txtid).parent().parent().find('[id*="SGSTAMT"]').prop('disabled',true); 
+                          $('#'+txtid).parent().parent().find('[id*="CGSTAMT"]').prop('disabled',true); 
+                        }
+                        else
+                        {
+                          $('#'+txtid).parent().parent().find('[id*="CGST"]').val(txttax1);
+                          $('#'+txtid).parent().parent().find('[id*="IGST"]').prop('disabled',true); 
+                          $('#'+txtid).parent().parent().find('[id*="IGSTAMT"]').prop('disabled',true); 
+                          $('#'+txtid).parent().parent().find('[id*="SGST"]').val(txttax2);
+                          $('#'+txtid).parent().parent().find('[id*="SGSTAMT"]').val(txttaxamt2);
+                          $('#'+txtid).parent().parent().find('[id*="CGSTAMT"]').val(txttaxamt1);
+                        }
+
+
+
+                        var tvalue = parseFloat(txttotamtatax).toFixed(2);
+                        totalvalue = $('#TotalValue').val();
+                        totalvalue =  parseFloat(totalvalue) + parseFloat(tvalue);
+                        totalvalue = parseFloat(totalvalue).toFixed(2);
+                        $('#TotalValue').val(totalvalue);
+                        MultiCurrency_Conversion('TotalValue'); 
+
+                     
+
+
+                        if($('#'+txtid).parent().parent().find('[id*="txtSQ_popup"]').val() == '')
+                        {
+                          $('#'+txtid).parent().parent().find('[id*="SQMUOM"]').val('');
+                          $('#'+txtid).parent().parent().find('[id*="SQMUOMQTY"]').val('');
+                          $('#'+txtid).parent().parent().find('[id*="SQAUOM"]').val('');
+                          $('#'+txtid).parent().parent().find('[id*="SQAUOMQTY"]').val('');
+                        }
+
+
+                      $('#'+txtid).parent().parent().find('[id*="DISCPER"]').val(texdescountPer);
+                      $('#'+txtid).parent().parent().find('[id*="DISCOUNT_AMT"]').val(texdescountAmount);
+
+
+                      // $("#ITEMIDpopup").hide();
+                      $('#hdn_ItemID').val('');
+                      $('#hdn_ItemID2').val('');
+                      $('#hdn_ItemID3').val('');
+                      $('#hdn_ItemID4').val('');
+                      $('#hdn_ItemID5').val('');
+                      $('#hdn_ItemID6').val('');
+                      $('#hdn_ItemID7').val('');
+                      $('#hdn_ItemID8').val('');
+                      $('#hdn_ItemID9').val('');
+                      $('#hdn_ItemID10').val('');
+                      $('#hdn_ItemID11').val('');
+                      $('#hdn_ItemID12').val('');
+                      $('#hdn_ItemID13').val('');
+                      $('#hdn_ItemID14').val('');
+                      $('#hdn_ItemID15').val('');
+                      $('#hdn_ItemID16').val('');
+
+                      $(".blurRate").blur();
+                      
+                      event.preventDefault();
+                  }
+                  
+            }
+            else if($(this).is(":checked") == false) 
+            {
+              var id = txtval;
+              var enqid = txtenqid;
+              var sqno = txtenqno;
+              var r_count = $('#Row_Count1').val();
+              $('#Material').find('.participantRow').each(function()
+              {
+                var itemid = $(this).find('[id*="ITEMID_REF"]').val();
+                var enquiryid = $(this).find('[id*="SEQID_REF"]').val();
+                var quotationno = $(this).find('[id*="txtSQ_popup"]').val();
+                if(id == itemid && enqid == enquiryid && sqno == quotationno )
+                {
+                    var rowCount = $('#Row_Count1').val();
+                    if (rowCount > 1) {
+                      var totalvalue = $('#TotalValue').val();
+                      totalvalue = parseFloat(totalvalue - $(this).closest('.participantRow').find('[id*="TOT_AMT_"]').val()).toFixed(2);
+                      $('#TotalValue').val(totalvalue);
+                      MultiCurrency_Conversion('TotalValue'); 
+                      $(this).closest('.participantRow').remove(); 
+                      rowCount = parseInt(rowCount)-1;
+                    $('#Row_Count1').val(rowCount);
+                    }
+                    else 
+                    {
+                      $(document).find('.dmaterial').prop('disabled', true);  
+                      $("#ITEMIDpopup").hide();
+                      $("#YesBtn").hide();
+                      $("#NoBtn").hide();
+                      $("#OkBtn").hide();
+                      $("#OkBtn1").show();
+                      $("#AlertMessage").text('There is only 1 row. So cannot be remove.');
+                      $("#alert").modal('show');
+                      $("#OkBtn1").focus();
+                      highlighFocusBtn('activeOk1');
+                      return false;
+
+                    }
+                      event.preventDefault(); 
                 }
               });
 
-                  $clone.find('.remove').removeAttr('disabled'); 
-                  $clone.find('[id*="popupITEMID"]').val(texdesc);
-                  $clone.find('[id*="ITEMID_REF"]').val(txtval);
-                  $clone.find('[id*="SEQID_REF"]').val(txtenqid);
-                  $clone.find('[id*="ItemName"]').val(txtname);
-                  $clone.find('[id*="Itemspec"]').val(txtspec);
-                  $clone.find('[id*="Alpspartno"]').val(apartno);
-                  $clone.find('[id*="Custpartno"]').val(cpartno);
-                  $clone.find('[id*="OEMpartno"]').val(opartno);
-                  $clone.find('[id*="SQMUOM"]').val(txtmuom);
-                  $clone.find('[id*="SQMUOMQTY"]').val(txtmuomqty);
-                  $clone.find('[id*="SQAUOM"]').val(txtauom);
-                  $clone.find('[id*="SQAUOMQTY"]').val(txtauomqty);
-                  $clone.find('[id*="popupMUOM"]').val(txtmuom);
-                  $clone.find('[id*="MAIN_UOMID_REF"]').val(txtmuomid);
-                  $clone.find('[id*="SO_QTY"]').val(txtmuomqty);
-                  $clone.find('[id*="SO_FQTY"]').val(txtmuomqty);
-                  $clone.find('[id*="popupAUOM"]').val(txtauom);
-                  $clone.find('[id*="ALT_UOMID_REF"]').val(txtauomid);
-                  $clone.find('[id*="ALT_UOMID_QTY"]').val(txtauomqty);
-                  $clone.find('[id*="RATEPUOM"]').val(txtruom);
-                  $clone.find('[id*="DISAFTT_AMT"]').val(txtamt);
-                  $clone.find('[id*="TOT_AMT"]').val(txttotamtatax);
-                  $clone.find('[id*="TGST_AMT"]').val(txttottaxamt);
-                  if($.trim($('#Tax_State').val()) == 'OutofState')
-                  {
-                    $clone.find('[id*="IGST"]').val(txttax1);
-                    $clone.find('[id*="IGSTAMT"]').val(txttaxamt1);
-                    $clone.find('[id*="SGST"]').prop('disabled',true); 
-                    $clone.find('[id*="CGST"]').prop('disabled',true); 
-                    $clone.find('[id*="SGSTAMT"]').prop('disabled',true); 
-                    $clone.find('[id*="CGSTAMT"]').prop('disabled',true); 
-                  }
-                  else
-                  {
-                    $clone.find('[id*="CGST"]').val(txttax1);
-                    $clone.find('[id*="IGST"]').prop('disabled',true); 
-                    $clone.find('[id*="SGST"]').val(txttax2);
-                    $clone.find('[id*="CGSTAMT"]').val(txttaxamt1);
-                    $clone.find('[id*="SGSTAMT"]').val(txttaxamt2);
-                    $clone.find('[id*="IGSTAMT"]').prop('disabled',true); 
-                  }
-                  
-                  $tr.closest('table').append($clone);   
-                  var rowCount = $('#Row_Count1').val();
-                  rowCount = parseInt(rowCount)+1;
-                  $('#Row_Count1').val(rowCount);
-
-                  var tvalue = parseFloat(txttotamtatax).toFixed(2);
-                  totalvalue = $('#TotalValue').val();
-                  totalvalue =  parseFloat(totalvalue) + parseFloat(tvalue);
-                  totalvalue = parseFloat(totalvalue).toFixed(2);
-                  $('#TotalValue').val(totalvalue);
-                  MultiCurrency_Conversion('TotalValue'); 
-                  
-                if($clone.find('[id*="txtSQ_popup"]').val() == '')
-                {
-                  $clone.find('[id*="SQMUOM"]').val('');
-                  $clone.find('[id*="SQMUOMQTY"]').val('');
-                  $clone.find('[id*="SQAUOM"]').val('');
-                  $clone.find('[id*="SQAUOMQTY"]').val('');
-                }
-                
-                $clone.find('[id*="DISCPER"]').val(texdescountPer);
-                $clone.find('[id*="DISCOUNT_AMT"]').val(texdescountAmount);
-                
-
-                $(".blurRate").blur();
-                
-            event.preventDefault();
+              $(".blurRate").blur();
+              event.preventDefault();
             }
-            else
-            {
-                var txtid= $('#hdn_ItemID').val();
-                var txt_id2= $('#hdn_ItemID2').val();
-                var txt_id3= $('#hdn_ItemID3').val();
-                var txt_id4= $('#hdn_ItemID4').val();
-                var txt_id5= $('#hdn_ItemID5').val();
-                var txt_id6= $('#hdn_ItemID6').val();
-                var txt_id7= $('#hdn_ItemID7').val();
-                var txt_id8= $('#hdn_ItemID8').val();
-                var txt_id9= $('#hdn_ItemID9').val();
-                var txt_id10= $('#hdn_ItemID10').val();
-                var txt_id11= $('#hdn_ItemID11').val();
-                var txt_id12= $('#hdn_ItemID12').val();
-                var txt_id13= $('#hdn_ItemID13').val();
-                var txt_id14= $('#hdn_ItemID14').val();
-                var txt_id15= $('#hdn_ItemID15').val();
-                var txt_id16= $('#hdn_ItemID16').val();
-                $('#'+txtid).val(texdesc);
-                $('#'+txt_id2).val(txtval);
-                $('#'+txt_id3).val(txtname);
-                $('#'+txt_id4).val(txtspec);
-                $('#'+txt_id5).val(txtmuom);
-                $('#'+txt_id6).val(txtmuomqty);
-                $('#'+txt_id7).val(txtauom);
-                $('#'+txt_id8).val(txtauomqty);
-                $('#'+txt_id9).val(txtmuom);
-                $('#'+txt_id10).val(txtmuomid);
-                $('#'+txt_id11).val(txtmuomqty);
-                $('#'+txt_id12).val(txtauom);
-                $('#'+txt_id13).val(txtauomid);
-                $('#'+txt_id14).val(txtauomqty);
-                $('#'+txt_id15).val(txtruom);
-                $('#'+txt_id16).val(txtmuomqty);
-                $('#'+txtid).parent().parent().find('[id*="SEQID_REF"]').val(txtenqid);
-                $('#'+txtid).parent().parent().find('[id*="DISAFTT_AMT"]').val(txtamt);
-                $('#'+txtid).parent().parent().find('[id*="TOT_AMT"]').val(txttotamtatax);
-                $('#'+txtid).parent().parent().find('[id*="TGST_AMT"]').val(txttottaxamt);
-                $('#'+txtid).parent().parent().find('[id*="Alpspartno"]').val(apartno);
-                $('#'+txtid).parent().parent().find('[id*="Custpartno"]').val(cpartno);
-                $('#'+txtid).parent().parent().find('[id*="OEMpartno"]').val(opartno);
-                if($.trim($('#Tax_State').val()) == 'OutofState')
-                  {
-                    $('#'+txtid).parent().parent().find('[id*="IGST"]').val(txttax1);
-                    $('#'+txtid).parent().parent().find('[id*="IGSTAMT"]').val(txttaxamt1);
-                    $('#'+txtid).parent().parent().find('[id*="SGST"]').prop('disabled',true); 
-                    $('#'+txtid).parent().parent().find('[id*="CGST"]').prop('disabled',true);
-                    $('#'+txtid).parent().parent().find('[id*="SGSTAMT"]').prop('disabled',true); 
-                    $('#'+txtid).parent().parent().find('[id*="CGSTAMT"]').prop('disabled',true); 
-                  }
-                  else
-                  {
-                    $('#'+txtid).parent().parent().find('[id*="CGST"]').val(txttax1);
-                    $('#'+txtid).parent().parent().find('[id*="IGST"]').prop('disabled',true); 
-                    $('#'+txtid).parent().parent().find('[id*="IGSTAMT"]').prop('disabled',true); 
-                    $('#'+txtid).parent().parent().find('[id*="SGST"]').val(txttax2);
-                    $('#'+txtid).parent().parent().find('[id*="SGSTAMT"]').val(txttaxamt2);
-                    $('#'+txtid).parent().parent().find('[id*="CGSTAMT"]').val(txttaxamt1);
-                  }
+            get_delear_customer_price('','direct');
+          $("#Itemcodesearch").val(''); 
+          $("#Itemnamesearch").val(''); 
+          $("#ItemUOMsearch").val(''); 
+          $("#ItemGroupsearch").val(''); 
+          $("#ItemCategorysearch").val(''); 
+          $("#ItemStatussearch").val(''); 
+          $('.remove').removeAttr('disabled'); 
+          $("#ITEMIDpopup").hide();
+          $('.js-selectall').prop("checked", false);
+         
+          event.preventDefault();
+        });
+        getActionEvent();        
+      });
+
+      $('[id*="chkId"]').change(function(){
+        var fieldid = $(this).parent().parent().attr('id');
+        var txtval =   $("#txt"+fieldid+"").val();
+        var texdesc =  $("#txt"+fieldid+"").data("desc");
+        var offer_status  =  $("#txt"+fieldid+"").data("desc10");
+        var fieldid2 = $(this).parent().parent().children('[id*="itemname"]').attr('id');
+        var txtname =  $("#txt"+fieldid2+"").val();
+        var txtspec =  $("#txt"+fieldid2+"").data("desc");
+        var fieldid3 = $(this).parent().parent().children('[id*="itemuom"]').attr('id');
+        var txtmuomid =  $("#txt"+fieldid3+"").val();
+        var txtauom =  $("#txt"+fieldid3+"").data("desc");
+        var apartno =  $("#txt"+fieldid3+"").data("desc2");
+        var cpartno =  $("#txt"+fieldid3+"").data("desc3");
+        var opartno =  $("#txt"+fieldid3+"").data("desc4");
+        var txtmuom =  $(this).parent().parent().children('[id*="itemuom"]').text();
+        var fieldid4 = $(this).parent().parent().children('[id*="uomqty"]').attr('id');
+        var txtauomid =  $("#txt"+fieldid4+"").val();
+        var txtauomqty =  $("#txt"+fieldid4+"").data("desc");
+        var txtmuomqty =  $(this).parent().parent().children('[id*="uomqty"]').text();
+        var fieldid5 = $(this).parent().parent().children('[id*="irate"]').attr('id');
+        var txtruom =  $("#txt"+fieldid5+"").val();
+        var txtmqtyf = $("#txt"+fieldid5+"").data("desc");
+        var fieldid6 = $(this).parent().parent().children('[id*="itax"]').attr('id');
+        var txttax2 =  $("#txt"+fieldid6+"").val();
+        var txttax1 = $("#txt"+fieldid6+"").data("desc");
+        var fieldid7 = $(this).parent().parent().children('[id*="ise"]').attr('id');
+        var txtenqno = $("#txt"+fieldid7+"").val();
+        var txtenqid = $("#txt"+fieldid7+"").data("desc");
+
+        var texdescountPer    =  $("#txt"+fieldid+"").data("desc1");
+        var texdescountAmount =  $("#txt"+fieldid+"").data("desc2");
 
 
-
-                  var tvalue = parseFloat(txttotamtatax).toFixed(2);
-                  totalvalue = $('#TotalValue').val();
-                  totalvalue =  parseFloat(totalvalue) + parseFloat(tvalue);
-                  totalvalue = parseFloat(totalvalue).toFixed(2);
-                  $('#TotalValue').val(totalvalue);
-                  MultiCurrency_Conversion('TotalValue'); 
-
-               
-
-
-                  if($('#'+txtid).parent().parent().find('[id*="txtSQ_popup"]').val() == '')
-                  {
-                    $('#'+txtid).parent().parent().find('[id*="SQMUOM"]').val('');
-                    $('#'+txtid).parent().parent().find('[id*="SQMUOMQTY"]').val('');
-                    $('#'+txtid).parent().parent().find('[id*="SQAUOM"]').val('');
-                    $('#'+txtid).parent().parent().find('[id*="SQAUOMQTY"]').val('');
-                  }
-
-
-                $('#'+txtid).parent().parent().find('[id*="DISCPER"]').val(texdescountPer);
-                $('#'+txtid).parent().parent().find('[id*="DISCOUNT_AMT"]').val(texdescountAmount);
-
-
-                // $("#ITEMIDpopup").hide();
-                $('#hdn_ItemID').val('');
-                $('#hdn_ItemID2').val('');
-                $('#hdn_ItemID3').val('');
-                $('#hdn_ItemID4').val('');
-                $('#hdn_ItemID5').val('');
-                $('#hdn_ItemID6').val('');
-                $('#hdn_ItemID7').val('');
-                $('#hdn_ItemID8').val('');
-                $('#hdn_ItemID9').val('');
-                $('#hdn_ItemID10').val('');
-                $('#hdn_ItemID11').val('');
-                $('#hdn_ItemID12').val('');
-                $('#hdn_ItemID13').val('');
-                $('#hdn_ItemID14').val('');
-                $('#hdn_ItemID15').val('');
-                $('#hdn_ItemID16').val('');
-
-                $(".blurRate").blur();
-                
-                event.preventDefault();
-            }
-            
-      }
-      else if($(this).is(":checked") == false) 
-      {
-        var id = txtval;
-        var enqid = txtenqid;
-        var sqno = txtenqno;
-        var r_count = $('#Row_Count1').val();
-        $('#Material').find('.participantRow').each(function()
-        {
-          var itemid = $(this).find('[id*="ITEMID_REF"]').val();
-          var enquiryid = $(this).find('[id*="SEQID_REF"]').val();
-          var quotationno = $(this).find('[id*="txtSQ_popup"]').val();
-          if(id == itemid && enqid == enquiryid && sqno == quotationno )
+        if(txtenqno == undefined)
           {
-              var rowCount = $('#Row_Count1').val();
-              if (rowCount > 1) {
-                var totalvalue = $('#TotalValue').val();
-                totalvalue = parseFloat(totalvalue - $(this).closest('.participantRow').find('[id*="TOT_AMT_"]').val()).toFixed(2);
-                $('#TotalValue').val(totalvalue);
-                MultiCurrency_Conversion('TotalValue'); 
-                $(this).closest('.participantRow').remove(); 
-                rowCount = parseInt(rowCount)-1;
-              $('#Row_Count1').val(rowCount);
-              }
-              else 
-              {
-                $(document).find('.dmaterial').prop('disabled', true);  
-                $("#ITEMIDpopup").hide();
-                $("#YesBtn").hide();
-                $("#NoBtn").hide();
-                $("#OkBtn").hide();
-                $("#OkBtn1").show();
-                $("#AlertMessage").text('There is only 1 row. So cannot be remove.');
-                $("#alert").modal('show');
-                $("#OkBtn1").focus();
-                highlighFocusBtn('activeOk1');
-                return false;
+            txtenqno = '';
+          }
+          if(txtenqid == undefined)
+          {
+            txtenqid = '';
+          }
+        var totalvalue = 0.00;
+        var txttaxamt1 = 0.00;
+        var txttaxamt2 = 0.00;
+        var txttottaxamt = 0.00;
+        var txttotamtatax =0.00;
+        
+        txtruom = parseFloat(txtruom).toFixed(5); 
+        txtauomqty = (parseFloat(txtmuomqty)/parseFloat(txtmqtyf))*parseFloat(txtauomqty);
+        
+        var txtamt = parseFloat((parseFloat(txtmuomqty)*parseFloat(txtruom))).toFixed(2);
+        if(txttax1 == undefined || txttax1 == '')
+          {
+            txttax1 = 0.0000;
+             txttaxamt1 = 0;
+          }
+          else
+          {
+             txttaxamt1 = parseFloat((parseFloat(txtamt)*parseFloat(txttax1))/100).toFixed(2);
+          }
+          if(txttax2 == undefined || txttax2 == '')
+          {
+            txttax2 = 0.0000;
+             txttaxamt2 = 0;
+          }
+          else
+          {
+             txttaxamt2 = parseFloat((parseFloat(txtamt)*parseFloat(txttax2))/100).toFixed(2);
+          }
+        var txttottaxamt = parseFloat((parseFloat(txttaxamt1)+parseFloat(txttaxamt2))).toFixed(2);
+        var txttotamtatax = parseFloat((parseFloat(txtamt)+parseFloat(txttottaxamt))).toFixed(2);
+        // var intRegex = /^\d+$/;
+        if(intRegex.test(txtauomqty)){
+            txtauomqty = (txtauomqty +'.000');
+        }
 
-              }
-                event.preventDefault(); 
+        if(intRegex.test(txtmuomqty)){
+          txtmuomqty = (txtmuomqty +'.000');
+        }
+        if(intRegex.test(txtruom)){
+          txtruom = (txtruom +'.00000');
+        }
+        if(intRegex.test(txtamt)){
+          txtamt = (txtamt +'.00');
+        }
+        if(intRegex.test(txttax1)){
+          txttax1 = (txttax1 +'.0000');
+        }
+        if(intRegex.test(txttax2)){
+          txttax2 = (txttax2 +'.0000');
+        }
+        if(intRegex.test(txttaxamt1)){
+          txttaxamt1 = (txttaxamt1 +'.00');
+        }
+        if(intRegex.test(txttaxamt2)){
+          txttaxamt2 = (txttaxamt2 +'.00');
+        }
+        if(intRegex.test(txttottaxamt)){
+          txttottaxamt = (txttottaxamt +'.00');
+        }
+        if(intRegex.test(txttotamtatax)){
+          txttotamtatax = (txttotamtatax +'.00');
+        }
+        var SalesEnq2 = [];
+        $('#Material').find('.participantRow').each(function(){
+          if($(this).find('[id*="ITEMID_REF"]').val() != '')
+          {
+            var seitem = $(this).find('[id*="txtSQ_popup"]').val()+'-'+$(this).find('[id*="SEQID_REF"]').val()+'-'+$(this).find('[id*="ITEMID_REF"]').val();
+            SalesEnq2.push(seitem);
           }
         });
-
-        $(".blurRate").blur();
-        event.preventDefault();
-      }
-
-      get_delear_customer_price('','direct');
-
-    $("#Itemcodesearch").val(''); 
-    $("#Itemnamesearch").val(''); 
-    $("#ItemUOMsearch").val(''); 
-    $("#ItemGroupsearch").val(''); 
-    $("#ItemCategorysearch").val(''); 
-    $("#ItemStatussearch").val(''); 
-    $('.remove').removeAttr('disabled'); 
-    $("#ITEMIDpopup").hide();
-    $('.js-selectall').prop("checked", false);
-   
-    event.preventDefault();
-  });
-  getActionEvent();        
-});
-
-$('[id*="chkId"]').change(function(){
-  var fieldid = $(this).parent().parent().attr('id');
-  var txtval =   $("#txt"+fieldid+"").val();
-  var texdesc =  $("#txt"+fieldid+"").data("desc");
-  var offer_status  =  $("#txt"+fieldid+"").data("desc10");
-  var fieldid2 = $(this).parent().parent().children('[id*="itemname"]').attr('id');
-  var txtname =  $("#txt"+fieldid2+"").val();
-  var txtspec =  $("#txt"+fieldid2+"").data("desc");
-  var fieldid3 = $(this).parent().parent().children('[id*="itemuom"]').attr('id');
-  var txtmuomid =  $("#txt"+fieldid3+"").val();
-  var txtauom =  $("#txt"+fieldid3+"").data("desc");
-  var apartno =  $("#txt"+fieldid3+"").data("desc2");
-  var cpartno =  $("#txt"+fieldid3+"").data("desc3");
-  var opartno =  $("#txt"+fieldid3+"").data("desc4");
-  var txtmuom =  $(this).parent().parent().children('[id*="itemuom"]').text();
-  var fieldid4 = $(this).parent().parent().children('[id*="uomqty"]').attr('id');
-  var txtauomid =  $("#txt"+fieldid4+"").val();
-  var txtauomqty =  $("#txt"+fieldid4+"").data("desc");
-  var txtmuomqty =  $(this).parent().parent().children('[id*="uomqty"]').text();
-  var fieldid5 = $(this).parent().parent().children('[id*="irate"]').attr('id');
-  var txtruom =  $("#txt"+fieldid5+"").val();
-  var txtmqtyf = $("#txt"+fieldid5+"").data("desc");
-  var fieldid6 = $(this).parent().parent().children('[id*="itax"]').attr('id');
-  var txttax2 =  $("#txt"+fieldid6+"").val();
-  var txttax1 = $("#txt"+fieldid6+"").data("desc");
-  var fieldid7 = $(this).parent().parent().children('[id*="ise"]').attr('id');
-  var txtenqno = $("#txt"+fieldid7+"").val();
-  var txtenqid = $("#txt"+fieldid7+"").data("desc");
-
-  var texdescountPer    =  $("#txt"+fieldid+"").data("desc1");
-  var texdescountAmount =  $("#txt"+fieldid+"").data("desc2");
-
-
-  if(txtenqno == undefined)
-    {
-      txtenqno = '';
-    }
-    if(txtenqid == undefined)
-    {
-      txtenqid = '';
-    }
-  var totalvalue = 0.00;
-  var txttaxamt1 = 0.00;
-  var txttaxamt2 = 0.00;
-  var txttottaxamt = 0.00;
-  var txttotamtatax =0.00;
-  
-  txtruom = parseFloat(txtruom).toFixed(5); 
-  txtauomqty = (parseFloat(txtmuomqty)/parseFloat(txtmqtyf))*parseFloat(txtauomqty);
-  
-  var txtamt = parseFloat((parseFloat(txtmuomqty)*parseFloat(txtruom))).toFixed(2);
-  if(txttax1 == undefined || txttax1 == '')
-    {
-      txttax1 = 0.0000;
-       txttaxamt1 = 0;
-    }
-    else
-    {
-       txttaxamt1 = parseFloat((parseFloat(txtamt)*parseFloat(txttax1))/100).toFixed(2);
-    }
-    if(txttax2 == undefined || txttax2 == '')
-    {
-      txttax2 = 0.0000;
-       txttaxamt2 = 0;
-    }
-    else
-    {
-       txttaxamt2 = parseFloat((parseFloat(txtamt)*parseFloat(txttax2))/100).toFixed(2);
-    }
-  var txttottaxamt = parseFloat((parseFloat(txttaxamt1)+parseFloat(txttaxamt2))).toFixed(2);
-  var txttotamtatax = parseFloat((parseFloat(txtamt)+parseFloat(txttottaxamt))).toFixed(2);
-  // var intRegex = /^\d+$/;
-  if(intRegex.test(txtauomqty)){
-      txtauomqty = (txtauomqty +'.000');
-  }
-
-  if(intRegex.test(txtmuomqty)){
-    txtmuomqty = (txtmuomqty +'.000');
-  }
-  if(intRegex.test(txtruom)){
-    txtruom = (txtruom +'.00000');
-  }
-  if(intRegex.test(txtamt)){
-    txtamt = (txtamt +'.00');
-  }
-  if(intRegex.test(txttax1)){
-    txttax1 = (txttax1 +'.0000');
-  }
-  if(intRegex.test(txttax2)){
-    txttax2 = (txttax2 +'.0000');
-  }
-  if(intRegex.test(txttaxamt1)){
-    txttaxamt1 = (txttaxamt1 +'.00');
-  }
-  if(intRegex.test(txttaxamt2)){
-    txttaxamt2 = (txttaxamt2 +'.00');
-  }
-  if(intRegex.test(txttottaxamt)){
-    txttottaxamt = (txttottaxamt +'.00');
-  }
-  if(intRegex.test(txttotamtatax)){
-    txttotamtatax = (txttotamtatax +'.00');
-  }
-  var SalesEnq2 = [];
-  $('#Material').find('.participantRow').each(function(){
-    if($(this).find('[id*="ITEMID_REF"]').val() != '')
-    {
-      var seitem = $(this).find('[id*="txtSQ_popup"]').val()+'-'+$(this).find('[id*="SEQID_REF"]').val()+'-'+$(this).find('[id*="ITEMID_REF"]').val();
-      SalesEnq2.push(seitem);
-    }
-  });
-  
-  var salesenquiry =  $('#hdn_ItemID18').val();
-  var itemids =  $('#hdn_ItemID19').val();
-  var enquiryids =  $('#hdn_ItemID20').val();
-
-      if($(this).is(":checked") == true) 
-      {
-
+        
+        var salesenquiry =  $('#hdn_ItemID18').val();
+        var itemids =  $('#hdn_ItemID19').val();
+        var enquiryids =  $('#hdn_ItemID20').val();
     
-        var txtenqitem = txtenqno+'-'+txtenqid+'-'+txtval;
-        if($.trim($("#SCHEMEID_REF").val()) ==='' && jQuery.inArray(txtenqitem, SalesEnq2) !== -1 && parseFloat(offer_status) == 0){
-              $("#ITEMIDpopup").hide();
-              $("#YesBtn").hide();
-              $("#NoBtn").hide();
-              $("#OkBtn").hide();
-              $("#OkBtn1").show();
-              $("#AlertMessage").text('Item already exists.');
-              $("#alert").modal('show');
-              $("#OkBtn1").focus();
-              highlighFocusBtn('activeOk1');
-              $('#hdn_ItemID').val('');
-              $('#hdn_ItemID2').val('');
-              $('#hdn_ItemID3').val('');
-              $('#hdn_ItemID4').val('');
-              $('#hdn_ItemID5').val('');
-              $('#hdn_ItemID6').val('');
-              $('#hdn_ItemID7').val('');
-              $('#hdn_ItemID8').val('');
-              $('#hdn_ItemID9').val('');
-              $('#hdn_ItemID10').val('');
-              $('#hdn_ItemID11').val('');
-              $('#hdn_ItemID12').val('');
-              $('#hdn_ItemID13').val('');
-              $('#hdn_ItemID14').val('');
-              $('#hdn_ItemID15').val('');
-              $('#hdn_ItemID16').val('');
-              $('#hdn_ItemID17').val('');
-              $('#hdn_ItemID18').val('');
-              $('#hdn_ItemID19').val('');
-              $('#hdn_ItemID20').val('');
-              txtval = '';
-              texdesc = '';
-              txtname = '';
-              txtmuom = '';
-              txtauom = '';
-              txtmuomid = '';
-              txtauomid = '';
-              txtauomqty='';
-              txtmuomqty='';
-              txtruom = '';
-              txtamt = '';
-              txttax1 = '';
-              txttax2 = '';
-              txtenqno = '';
-              txtenqid = '';
-              $(".blurRate").blur();
-              return false;
-        } 
-                     
-                if($('#hdn_ItemID').val() == "" && txtval != '')
-                {
-                  var txtid= $('#hdn_ItemID').val();
-                  var txt_id2= $('#hdn_ItemID2').val();
-                  var txt_id3= $('#hdn_ItemID3').val();
-                  var txt_id4= $('#hdn_ItemID4').val();
-                  var txt_id5= $('#hdn_ItemID5').val();
-                  var txt_id6= $('#hdn_ItemID6').val();
-                  var txt_id7= $('#hdn_ItemID7').val();
-                  var txt_id8= $('#hdn_ItemID8').val();
-                  var txt_id9= $('#hdn_ItemID9').val();
-                  var txt_id10= $('#hdn_ItemID10').val();
-                  var txt_id11= $('#hdn_ItemID11').val();
-                  var txt_id12= $('#hdn_ItemID12').val();
-                  var txt_id13= $('#hdn_ItemID13').val();
-                  var txt_id14= $('#hdn_ItemID14').val();
-                  var txt_id15= $('#hdn_ItemID15').val();
-                  var txt_id16= $('#hdn_ItemID16').val();
+            if($(this).is(":checked") == true) 
+            {
 
-                  var $tr = $('.material').closest('table');
-                  var allTrs = $tr.find('.participantRow').last();
-                  var lastTr = allTrs[allTrs.length-1];
-                  var $clone = $(lastTr).clone();
+          
+              var txtenqitem = txtenqno+'-'+txtenqid+'-'+txtval;
+              if($.trim($("#SCHEMEID_REF").val()) ==='' && jQuery.inArray(txtenqitem, SalesEnq2) !== -1 && parseFloat(offer_status) == 0){
+                    $("#ITEMIDpopup").hide();
+                    $("#YesBtn").hide();
+                    $("#NoBtn").hide();
+                    $("#OkBtn").hide();
+                    $("#OkBtn1").show();
+                    $("#AlertMessage").text('Item already exists.');
+                    $("#alert").modal('show');
+                    $("#OkBtn1").focus();
+                    highlighFocusBtn('activeOk1');
+                    $('#hdn_ItemID').val('');
+                    $('#hdn_ItemID2').val('');
+                    $('#hdn_ItemID3').val('');
+                    $('#hdn_ItemID4').val('');
+                    $('#hdn_ItemID5').val('');
+                    $('#hdn_ItemID6').val('');
+                    $('#hdn_ItemID7').val('');
+                    $('#hdn_ItemID8').val('');
+                    $('#hdn_ItemID9').val('');
+                    $('#hdn_ItemID10').val('');
+                    $('#hdn_ItemID11').val('');
+                    $('#hdn_ItemID12').val('');
+                    $('#hdn_ItemID13').val('');
+                    $('#hdn_ItemID14').val('');
+                    $('#hdn_ItemID15').val('');
+                    $('#hdn_ItemID16').val('');
+                    $('#hdn_ItemID17').val('');
+                    $('#hdn_ItemID18').val('');
+                    $('#hdn_ItemID19').val('');
+                    $('#hdn_ItemID20').val('');
+                    txtval = '';
+                    texdesc = '';
+                    txtname = '';
+                    txtmuom = '';
+                    txtauom = '';
+                    txtmuomid = '';
+                    txtauomid = '';
+                    txtauomqty='';
+                    txtmuomqty='';
+                    txtruom = '';
+                    txtamt = '';
+                    txttax1 = '';
+                    txttax2 = '';
+                    txtenqno = '';
+                    txtenqid = '';
+                    $(".blurRate").blur();
+                    return false;
+              } 
+                           
+                      if($('#hdn_ItemID').val() == "" && txtval != '')
+                      {
+                        var txtid= $('#hdn_ItemID').val();
+                        var txt_id2= $('#hdn_ItemID2').val();
+                        var txt_id3= $('#hdn_ItemID3').val();
+                        var txt_id4= $('#hdn_ItemID4').val();
+                        var txt_id5= $('#hdn_ItemID5').val();
+                        var txt_id6= $('#hdn_ItemID6').val();
+                        var txt_id7= $('#hdn_ItemID7').val();
+                        var txt_id8= $('#hdn_ItemID8').val();
+                        var txt_id9= $('#hdn_ItemID9').val();
+                        var txt_id10= $('#hdn_ItemID10').val();
+                        var txt_id11= $('#hdn_ItemID11').val();
+                        var txt_id12= $('#hdn_ItemID12').val();
+                        var txt_id13= $('#hdn_ItemID13').val();
+                        var txt_id14= $('#hdn_ItemID14').val();
+                        var txt_id15= $('#hdn_ItemID15').val();
+                        var txt_id16= $('#hdn_ItemID16').val();
 
-                  $clone.find('td').each(function(){
-                    var el = $(this).find(':first-child');
-                    var id = el.attr('id') || null;
-                      if(id){
-                          var idLength = id.split('_').pop();
-                          var i = id.substr(id.length-idLength.length);
-                          var prefix = id.substr(0, (id.length-idLength.length));
-                          el.attr('id', prefix+(+i+1));
+                        var $tr = $('.material').closest('table');
+                        var allTrs = $tr.find('.participantRow').last();
+                        var lastTr = allTrs[allTrs.length-1];
+                        var $clone = $(lastTr).clone();
+
+                        $clone.find('td').each(function(){
+                          var el = $(this).find(':first-child');
+                          var id = el.attr('id') || null;
+                            if(id){
+                                var idLength = id.split('_').pop();
+                                var i = id.substr(id.length-idLength.length);
+                                var prefix = id.substr(0, (id.length-idLength.length));
+                                el.attr('id', prefix+(+i+1));
+                            }
+                            var name = el.attr('name') || null;
+                          if(name){
+                            var nameLength = name.split('_').pop();
+                            var i = name.substr(name.length-nameLength.length);
+                            var prefix1 = name.substr(0, (name.length-nameLength.length));
+                            el.attr('name', prefix1+(+i+1));
+                          }
+                        });
+
+                        $clone.find('.remove').removeAttr('disabled'); 
+                        $clone.find('[id*="popupITEMID"]').val(texdesc);
+                        $clone.find('[id*="SEQID_REF"]').val(txtenqid);
+                        $clone.find('[id*="ITEMID_REF"]').val(txtval);
+                        $clone.find('[id*="ItemName"]').val(txtname);
+                        $clone.find('[id*="Itemspec"]').val(txtspec);
+                        $clone.find('[id*="Alpspartno"]').val(apartno);
+                        $clone.find('[id*="Custpartno"]').val(cpartno);
+                        $clone.find('[id*="OEMpartno"]').val(opartno);
+                        $clone.find('[id*="SQMUOM"]').val(txtmuom);
+                        $clone.find('[id*="SQMUOMQTY"]').val(txtmuomqty);
+                        $clone.find('[id*="SQAUOM"]').val(txtauom);
+                        $clone.find('[id*="SQAUOMQTY"]').val(txtauomqty);
+                        $clone.find('[id*="popupMUOM"]').val(txtmuom);
+                        $clone.find('[id*="MAIN_UOMID_REF"]').val(txtmuomid);
+                        $clone.find('[id*="SO_QTY"]').val(txtmuomqty);
+                        $clone.find('[id*="SO_FQTY"]').val(txtmuomqty);
+                        $clone.find('[id*="popupAUOM"]').val(txtauom);
+                        $clone.find('[id*="ALT_UOMID_REF"]').val(txtauomid);
+                        $clone.find('[id*="ALT_UOMID_QTY"]').val(txtauomqty);
+                        $clone.find('[id*="RATEPUOM"]').val(txtruom);
+                        $clone.find('[id*="DISAFTT_AMT"]').val(txtamt);
+                        $clone.find('[id*="TOT_AMT"]').val(txttotamtatax);
+                        $clone.find('[id*="TGST_AMT"]').val(txttottaxamt);
+                        if($.trim($('#Tax_State').val()) == 'OutofState')
+                        {
+                          $clone.find('[id*="IGST"]').val(txttax1);
+                          $clone.find('[id*="SGST"]').prop('disabled',true); 
+                          $clone.find('[id*="CGST"]').prop('disabled',true); 
+                          $clone.find('[id*="SGSTAMT"]').prop('disabled',true); 
+                          $clone.find('[id*="CGSTAMT"]').prop('disabled',true);
+                          $clone.find('[id*="IGSTAMT"]').val(txttaxamt1);
+                        }
+                        else
+                        {
+                          $clone.find('[id*="CGST"]').val(txttax1);
+                          $clone.find('[id*="IGST"]').prop('disabled',true); 
+                          $clone.find('[id*="SGST"]').val(txttax2);
+                          $clone.find('[id*="SGSTAMT"]').val(txttaxamt2);; 
+                          $clone.find('[id*="CGSTAMT"]').val(txttaxamt1);;
+                          $clone.find('[id*="IGSTAMT"]').prop('disabled',true);
+                        }
+                        $tr.closest('table').append($clone);   
+                        var rowCount = $('#Row_Count1').val();
+                          rowCount = parseInt(rowCount)+1;
+                          $('#Row_Count1').val(rowCount);
+                          var tvalue = parseFloat(txttotamtatax).toFixed(2);
+                        totalvalue = $('#TotalValue').val();
+                        totalvalue =  parseFloat(totalvalue) + parseFloat(tvalue);
+                        totalvalue = parseFloat(totalvalue).toFixed(2);
+                        $('#TotalValue').val(totalvalue);
+                        MultiCurrency_Conversion('TotalValue'); 
+
+                        if($clone.find('[id*="txtSQ_popup"]').val() == '')
+                        {
+                          $clone.find('[id*="SQMUOM"]').val('');
+                          $clone.find('[id*="SQMUOMQTY"]').val('');
+                          $clone.find('[id*="SQAUOM"]').val('');
+                          $clone.find('[id*="SQAUOMQTY"]').val('');
+                        } 
+
+                        $clone.find('[id*="DISCPER"]').val(texdescountPer);
+                        $clone.find('[id*="DISCOUNT_AMT"]').val(texdescountAmount);
+                        
+
+                        $(".blurRate").blur();
+                        $("#ITEMIDpopup").hide();
+                        event.preventDefault();
                       }
-                      var name = el.attr('name') || null;
-                    if(name){
-                      var nameLength = name.split('_').pop();
-                      var i = name.substr(name.length-nameLength.length);
-                      var prefix1 = name.substr(0, (name.length-nameLength.length));
-                      el.attr('name', prefix1+(+i+1));
-                    }
-                  });
+                      else
+                      {
+                      var txtid= $('#hdn_ItemID').val();
+                      var txt_id2= $('#hdn_ItemID2').val();
+                      var txt_id3= $('#hdn_ItemID3').val();
+                      var txt_id4= $('#hdn_ItemID4').val();
+                      var txt_id5= $('#hdn_ItemID5').val();
+                      var txt_id6= $('#hdn_ItemID6').val();
+                      var txt_id7= $('#hdn_ItemID7').val();
+                      var txt_id8= $('#hdn_ItemID8').val();
+                      var txt_id9= $('#hdn_ItemID9').val();
+                      var txt_id10= $('#hdn_ItemID10').val();
+                      var txt_id11= $('#hdn_ItemID11').val();
+                      var txt_id12= $('#hdn_ItemID12').val();
+                      var txt_id13= $('#hdn_ItemID13').val();
+                      var txt_id14= $('#hdn_ItemID14').val();
+                      var txt_id15= $('#hdn_ItemID15').val();
+                      var txt_id16= $('#hdn_ItemID16').val();
+                      $('#'+txtid).val(texdesc);
+                      $('#'+txt_id2).val(txtval);
+                      $('#'+txt_id3).val(txtname);
+                      $('#'+txt_id4).val(txtspec);
+                      $('#'+txt_id5).val(txtmuom);
+                      $('#'+txt_id6).val(txtmuomqty);
+                      $('#'+txt_id7).val(txtauom);
+                      $('#'+txt_id8).val(txtauomqty);
+                      $('#'+txt_id9).val(txtmuom);
+                      $('#'+txt_id10).val(txtmuomid);
+                      $('#'+txt_id11).val(txtmuomqty);
+                      $('#'+txt_id12).val(txtauom);
+                      $('#'+txt_id13).val(txtauomid);
+                      $('#'+txt_id14).val(txtauomqty);
+                      $('#'+txt_id15).val(txtruom);
+                      $('#'+txt_id16).val(txtmuomqty);
+                      $('#'+txtid).parent().parent().find('[id*="SEQID_REF"]').val(txtenqid);
+                      $('#'+txtid).parent().parent().find('[id*="DISAFTT_AMT"]').val(txtamt);
+                      $('#'+txtid).parent().parent().find('[id*="TOT_AMT"]').val(txttotamtatax);
+                      $('#'+txtid).parent().parent().find('[id*="TGST_AMT"]').val(txttottaxamt);
+                      $('#'+txtid).parent().parent().find('[id*="Alpspartno"]').val(apartno);
+                      $('#'+txtid).parent().parent().find('[id*="Custpartno"]').val(cpartno);
+                      $('#'+txtid).parent().parent().find('[id*="OEMpartno"]').val(opartno);
+                      if($.trim($('#Tax_State').val()) == 'OutofState')
+                        {
+                          $('#'+txtid).parent().parent().find('[id*="IGST"]').val(txttax1);
+                          $('#'+txtid).parent().parent().find('[id*="IGSTAMT"]').val(txttaxamt1);
+                          $('#'+txtid).parent().parent().find('[id*="SGST"]').prop('disabled',true); 
+                          $('#'+txtid).parent().parent().find('[id*="CGST"]').prop('disabled',true); 
+                          $('#'+txtid).parent().parent().find('[id*="CGSTAMT"]').prop('disabled',true);
+                          $('#'+txtid).parent().parent().find('[id*="SGSTAMT"]').prop('disabled',true);
+                        }
+                        else
+                        {
+                          $('#'+txtid).parent().parent().find('[id*="CGST"]').val(txttax1);
+                          $('#'+txtid).parent().parent().find('[id*="IGST"]').prop('disabled',true); 
+                          $('#'+txtid).parent().parent().find('[id*="IGSTAMT"]').prop('disabled',true); 
+                          $('#'+txtid).parent().parent().find('[id*="SGST"]').val(txttax2);
+                          $('#'+txtid).parent().parent().find('[id*="CGSTAMT"]').val(txttaxamt1);
+                          $('#'+txtid).parent().parent().find('[id*="SGSTAMT"]').val(txttaxamt1);
+                        }
+                        var tvalue = parseFloat(txttotamtatax).toFixed(2);
+                        totalvalue = $('#TotalValue').val();
+                        totalvalue =  parseFloat(totalvalue) + parseFloat(tvalue);
+                        totalvalue = parseFloat(totalvalue).toFixed(2);
+                        $('#TotalValue').val(totalvalue);
+                        MultiCurrency_Conversion('TotalValue'); 
 
-                  $clone.find('.remove').removeAttr('disabled'); 
-                  $clone.find('[id*="popupITEMID"]').val(texdesc);
-                  $clone.find('[id*="SEQID_REF"]').val(txtenqid);
-                  $clone.find('[id*="ITEMID_REF"]').val(txtval);
-                  $clone.find('[id*="ItemName"]').val(txtname);
-                  $clone.find('[id*="Itemspec"]').val(txtspec);
-                  $clone.find('[id*="Alpspartno"]').val(apartno);
-                  $clone.find('[id*="Custpartno"]').val(cpartno);
-                  $clone.find('[id*="OEMpartno"]').val(opartno);
-                  $clone.find('[id*="SQMUOM"]').val(txtmuom);
-                  $clone.find('[id*="SQMUOMQTY"]').val(txtmuomqty);
-                  $clone.find('[id*="SQAUOM"]').val(txtauom);
-                  $clone.find('[id*="SQAUOMQTY"]').val(txtauomqty);
-                  $clone.find('[id*="popupMUOM"]').val(txtmuom);
-                  $clone.find('[id*="MAIN_UOMID_REF"]').val(txtmuomid);
-                  $clone.find('[id*="SO_QTY"]').val(txtmuomqty);
-                  $clone.find('[id*="SO_FQTY"]').val(txtmuomqty);
-                  $clone.find('[id*="popupAUOM"]').val(txtauom);
-                  $clone.find('[id*="ALT_UOMID_REF"]').val(txtauomid);
-                  $clone.find('[id*="ALT_UOMID_QTY"]').val(txtauomqty);
-                  $clone.find('[id*="RATEPUOM"]').val(txtruom);
-                  $clone.find('[id*="DISAFTT_AMT"]').val(txtamt);
-                  $clone.find('[id*="TOT_AMT"]').val(txttotamtatax);
-                  $clone.find('[id*="TGST_AMT"]').val(txttottaxamt);
-                  if($.trim($('#Tax_State').val()) == 'OutofState')
-                  {
-                    $clone.find('[id*="IGST"]').val(txttax1);
-                    $clone.find('[id*="SGST"]').prop('disabled',true); 
-                    $clone.find('[id*="CGST"]').prop('disabled',true); 
-                    $clone.find('[id*="SGSTAMT"]').prop('disabled',true); 
-                    $clone.find('[id*="CGSTAMT"]').prop('disabled',true);
-                    $clone.find('[id*="IGSTAMT"]').val(txttaxamt1);
-                  }
-                  else
-                  {
-                    $clone.find('[id*="CGST"]').val(txttax1);
-                    $clone.find('[id*="IGST"]').prop('disabled',true); 
-                    $clone.find('[id*="SGST"]').val(txttax2);
-                    $clone.find('[id*="SGSTAMT"]').val(txttaxamt2);; 
-                    $clone.find('[id*="CGSTAMT"]').val(txttaxamt1);;
-                    $clone.find('[id*="IGSTAMT"]').prop('disabled',true);
-                  }
-                  $tr.closest('table').append($clone);   
-                  var rowCount = $('#Row_Count1').val();
-                    rowCount = parseInt(rowCount)+1;
-                    $('#Row_Count1').val(rowCount);
-                    var tvalue = parseFloat(txttotamtatax).toFixed(2);
-                  totalvalue = $('#TotalValue').val();
-                  totalvalue =  parseFloat(totalvalue) + parseFloat(tvalue);
-                  totalvalue = parseFloat(totalvalue).toFixed(2);
-                  $('#TotalValue').val(totalvalue);
-                  MultiCurrency_Conversion('TotalValue'); 
+                      // $("#ITEMIDpopup").hide();
+                      $('#hdn_ItemID').val('');
+                      $('#hdn_ItemID2').val('');
+                      $('#hdn_ItemID3').val('');
+                      $('#hdn_ItemID4').val('');
+                      $('#hdn_ItemID5').val('');
+                      $('#hdn_ItemID6').val('');
+                      $('#hdn_ItemID7').val('');
+                      $('#hdn_ItemID8').val('');
+                      $('#hdn_ItemID9').val('');
+                      $('#hdn_ItemID10').val('');
+                      $('#hdn_ItemID11').val('');
+                      $('#hdn_ItemID12').val('');
+                      $('#hdn_ItemID13').val('');
+                      $('#hdn_ItemID14').val('');
+                      $('#hdn_ItemID15').val('');
+                      $('#hdn_ItemID16').val('');
+                      if($('#'+txtid).parent().parent().find('[id*="txtSQ_popup"]').val() == '')
+                        {
+                          $('#'+txtid).parent().parent().find('[id*="SQMUOM"]').val('');
+                          $('#'+txtid).parent().parent().find('[id*="SQMUOMQTY"]').val('');
+                          $('#'+txtid).parent().parent().find('[id*="SQAUOM"]').val('');
+                          $('#'+txtid).parent().parent().find('[id*="SQAUOMQTY"]').val('');
+                        }
+                      }
 
-                  if($clone.find('[id*="txtSQ_popup"]').val() == '')
-                  {
-                    $clone.find('[id*="SQMUOM"]').val('');
-                    $clone.find('[id*="SQMUOMQTY"]').val('');
-                    $clone.find('[id*="SQAUOM"]').val('');
-                    $clone.find('[id*="SQAUOMQTY"]').val('');
-                  } 
+                     
+                      $('#'+txtid).parent().parent().find('[id*="DISCPER"]').val(texdescountPer);
+                      $('#'+txtid).parent().parent().find('[id*="DISCOUNT_AMT"]').val(texdescountAmount);
 
-                  $clone.find('[id*="DISCPER"]').val(texdescountPer);
-                  $clone.find('[id*="DISCOUNT_AMT"]').val(texdescountAmount);
-                  
-
-                  $(".blurRate").blur();
-                  $("#ITEMIDpopup").hide();
-                  event.preventDefault();
-                }
-                else
-                {
-                var txtid= $('#hdn_ItemID').val();
-                var txt_id2= $('#hdn_ItemID2').val();
-                var txt_id3= $('#hdn_ItemID3').val();
-                var txt_id4= $('#hdn_ItemID4').val();
-                var txt_id5= $('#hdn_ItemID5').val();
-                var txt_id6= $('#hdn_ItemID6').val();
-                var txt_id7= $('#hdn_ItemID7').val();
-                var txt_id8= $('#hdn_ItemID8').val();
-                var txt_id9= $('#hdn_ItemID9').val();
-                var txt_id10= $('#hdn_ItemID10').val();
-                var txt_id11= $('#hdn_ItemID11').val();
-                var txt_id12= $('#hdn_ItemID12').val();
-                var txt_id13= $('#hdn_ItemID13').val();
-                var txt_id14= $('#hdn_ItemID14').val();
-                var txt_id15= $('#hdn_ItemID15').val();
-                var txt_id16= $('#hdn_ItemID16').val();
-                $('#'+txtid).val(texdesc);
-                $('#'+txt_id2).val(txtval);
-                $('#'+txt_id3).val(txtname);
-                $('#'+txt_id4).val(txtspec);
-                $('#'+txt_id5).val(txtmuom);
-                $('#'+txt_id6).val(txtmuomqty);
-                $('#'+txt_id7).val(txtauom);
-                $('#'+txt_id8).val(txtauomqty);
-                $('#'+txt_id9).val(txtmuom);
-                $('#'+txt_id10).val(txtmuomid);
-                $('#'+txt_id11).val(txtmuomqty);
-                $('#'+txt_id12).val(txtauom);
-                $('#'+txt_id13).val(txtauomid);
-                $('#'+txt_id14).val(txtauomqty);
-                $('#'+txt_id15).val(txtruom);
-                $('#'+txt_id16).val(txtmuomqty);
-                $('#'+txtid).parent().parent().find('[id*="SEQID_REF"]').val(txtenqid);
-                $('#'+txtid).parent().parent().find('[id*="DISAFTT_AMT"]').val(txtamt);
-                $('#'+txtid).parent().parent().find('[id*="TOT_AMT"]').val(txttotamtatax);
-                $('#'+txtid).parent().parent().find('[id*="TGST_AMT"]').val(txttottaxamt);
-                $('#'+txtid).parent().parent().find('[id*="Alpspartno"]').val(apartno);
-                $('#'+txtid).parent().parent().find('[id*="Custpartno"]').val(cpartno);
-                $('#'+txtid).parent().parent().find('[id*="OEMpartno"]').val(opartno);
-                if($.trim($('#Tax_State').val()) == 'OutofState')
-                  {
-                    $('#'+txtid).parent().parent().find('[id*="IGST"]').val(txttax1);
-                    $('#'+txtid).parent().parent().find('[id*="IGSTAMT"]').val(txttaxamt1);
-                    $('#'+txtid).parent().parent().find('[id*="SGST"]').prop('disabled',true); 
-                    $('#'+txtid).parent().parent().find('[id*="CGST"]').prop('disabled',true); 
-                    $('#'+txtid).parent().parent().find('[id*="CGSTAMT"]').prop('disabled',true);
-                    $('#'+txtid).parent().parent().find('[id*="SGSTAMT"]').prop('disabled',true);
-                  }
-                  else
-                  {
-                    $('#'+txtid).parent().parent().find('[id*="CGST"]').val(txttax1);
-                    $('#'+txtid).parent().parent().find('[id*="IGST"]').prop('disabled',true); 
-                    $('#'+txtid).parent().parent().find('[id*="IGSTAMT"]').prop('disabled',true); 
-                    $('#'+txtid).parent().parent().find('[id*="SGST"]').val(txttax2);
-                    $('#'+txtid).parent().parent().find('[id*="CGSTAMT"]').val(txttaxamt1);
-                    $('#'+txtid).parent().parent().find('[id*="SGSTAMT"]').val(txttaxamt1);
-                  }
-                  var tvalue = parseFloat(txttotamtatax).toFixed(2);
-                  totalvalue = $('#TotalValue').val();
-                  totalvalue =  parseFloat(totalvalue) + parseFloat(tvalue);
-                  totalvalue = parseFloat(totalvalue).toFixed(2);
-                  $('#TotalValue').val(totalvalue);
-                  MultiCurrency_Conversion('TotalValue'); 
-
-                // $("#ITEMIDpopup").hide();
-                $('#hdn_ItemID').val('');
-                $('#hdn_ItemID2').val('');
-                $('#hdn_ItemID3').val('');
-                $('#hdn_ItemID4').val('');
-                $('#hdn_ItemID5').val('');
-                $('#hdn_ItemID6').val('');
-                $('#hdn_ItemID7').val('');
-                $('#hdn_ItemID8').val('');
-                $('#hdn_ItemID9').val('');
-                $('#hdn_ItemID10').val('');
-                $('#hdn_ItemID11').val('');
-                $('#hdn_ItemID12').val('');
-                $('#hdn_ItemID13').val('');
-                $('#hdn_ItemID14').val('');
-                $('#hdn_ItemID15').val('');
-                $('#hdn_ItemID16').val('');
-                if($('#'+txtid).parent().parent().find('[id*="txtSQ_popup"]').val() == '')
-                  {
-                    $('#'+txtid).parent().parent().find('[id*="SQMUOM"]').val('');
-                    $('#'+txtid).parent().parent().find('[id*="SQMUOMQTY"]').val('');
-                    $('#'+txtid).parent().parent().find('[id*="SQAUOM"]').val('');
-                    $('#'+txtid).parent().parent().find('[id*="SQAUOMQTY"]').val('');
-                  }
-                }
-
-               
-                $('#'+txtid).parent().parent().find('[id*="DISCPER"]').val(texdescountPer);
-                $('#'+txtid).parent().parent().find('[id*="DISCOUNT_AMT"]').val(texdescountAmount);
-
-                $(".blurRate").blur();
-                get_delear_customer_price('','direct');
-
-                $("#ITEMIDpopup").hide();
-                event.preventDefault();
-      }
-      else if($(this).is(":checked") == false) 
-      {
-        var id = txtval;
-        var enqid = txtenqid;
-        var sqno = txtenqno;
-        var r_count = $('#Row_Count1').val();
-        $('#Material').find('.participantRow').each(function()
-        {
-          var itemid = $(this).find('[id*="ITEMID_REF"]').val();
-          var enquiryid = $(this).find('[id*="SEQID_REF"]').val();
-          var quotationno = $(this).find('[id*="txtSQ_popup"]').val();
-          if(id == itemid && enqid == enquiryid && sqno == quotationno )
-          {
-              var rowCount = $('#Row_Count1').val();
-              if (rowCount > 1) {
-                var totalvalue = $('#TotalValue').val();
-                totalvalue = parseFloat(totalvalue - $(this).closest('.participantRow').find('[id*="TOT_AMT_"]').val()).toFixed(2);
-                $('#TotalValue').val(totalvalue);
-                MultiCurrency_Conversion('TotalValue'); 
-                $(this).closest('.participantRow').remove(); 
-                rowCount = parseInt(rowCount)-1;
-              $('#Row_Count1').val(rowCount);
-              }
-              else 
+                      $(".blurRate").blur();
+                      get_delear_customer_price('','direct');
+                      $("#ITEMIDpopup").hide();
+                      event.preventDefault();
+            }
+            else if($(this).is(":checked") == false) 
+            {
+              var id = txtval;
+              var enqid = txtenqid;
+              var sqno = txtenqno;
+              var r_count = $('#Row_Count1').val();
+              $('#Material').find('.participantRow').each(function()
               {
-                $(document).find('.dmaterial').prop('disabled', true);  
-                $("#ITEMIDpopup").hide();
-                $("#YesBtn").hide();
-                $("#NoBtn").hide();
-                $("#OkBtn").hide();
-                $("#OkBtn1").show();
-                $("#AlertMessage").text('There is only 1 row. So cannot be remove.');
-                $("#alert").modal('show');
-                $("#OkBtn1").focus();
-                highlighFocusBtn('activeOk1');
-                return false;
+                var itemid = $(this).find('[id*="ITEMID_REF"]').val();
+                var enquiryid = $(this).find('[id*="SEQID_REF"]').val();
+                var quotationno = $(this).find('[id*="txtSQ_popup"]').val();
+                if(id == itemid && enqid == enquiryid && sqno == quotationno )
+                {
+                    var rowCount = $('#Row_Count1').val();
+                    if (rowCount > 1) {
+                      var totalvalue = $('#TotalValue').val();
+                      totalvalue = parseFloat(totalvalue - $(this).closest('.participantRow').find('[id*="TOT_AMT_"]').val()).toFixed(2);
+                      $('#TotalValue').val(totalvalue);
+                      MultiCurrency_Conversion('TotalValue'); 
+                      $(this).closest('.participantRow').remove(); 
+                      rowCount = parseInt(rowCount)-1;
+                    $('#Row_Count1').val(rowCount);
+                    }
+                    else 
+                    {
+                      $(document).find('.dmaterial').prop('disabled', true);  
+                      $("#ITEMIDpopup").hide();
+                      $("#YesBtn").hide();
+                      $("#NoBtn").hide();
+                      $("#OkBtn").hide();
+                      $("#OkBtn1").show();
+                      $("#AlertMessage").text('There is only 1 row. So cannot be remove.');
+                      $("#alert").modal('show');
+                      $("#OkBtn1").focus();
+                      highlighFocusBtn('activeOk1');
+                      return false;
 
-              }
+                    }
 
-              $(".blurRate").blur();
-                event.preventDefault(); 
-          }
-        });
-      }
-  $("#Itemcodesearch").val(''); 
-  $("#Itemnamesearch").val(''); 
-  $("#ItemUOMsearch").val(''); 
-  $("#ItemGroupsearch").val(''); 
-  $("#ItemCategorysearch").val(''); 
-  $("#ItemStatussearch").val(''); 
-  $('.remove').removeAttr('disabled'); 
-  $("#ITEMIDpopup").hide();
-  $('.js-selectall').prop("checked", false);
-  getActionEvent();
-  event.preventDefault();
-});
-}
-
-
+                    $(".blurRate").blur();
+                      event.preventDefault(); 
+                }
+              });
+            }
+        $("#Itemcodesearch").val(''); 
+        $("#Itemnamesearch").val(''); 
+        $("#ItemUOMsearch").val(''); 
+        $("#ItemGroupsearch").val(''); 
+        $("#ItemCategorysearch").val(''); 
+        $("#ItemStatussearch").val(''); 
+        $('.remove').removeAttr('disabled'); 
+        $("#ITEMIDpopup").hide();
+        $('.js-selectall').prop("checked", false);
+        getActionEvent();
+        event.preventDefault();
+      });
+    }
 
       
 
@@ -5361,7 +5329,7 @@ $('[id*="chkId"]').change(function(){
                       }
                   });
                   $.ajax({
-                      url:'{{route("transaction",[38,"getAltUOM"])}}',
+                      url:'<?php echo e(route("transaction",[38,"getAltUOM"])); ?>',
                       type:'POST',
                       data:{'id':ItemID},
                       success:function(data) {
@@ -5406,11 +5374,11 @@ $('[id*="chkId"]').change(function(){
         $("#altuompopup").hide();
       });
 
-      function bindAltUOM(){
+    function bindAltUOM(){
 
-        $('#altuomTable2').off(); 
+      $('#altuomTable2').off(); 
 
-        $(".clsaltuom").click(function(){
+      $(".clsaltuom").click(function(){
         var fieldid = $(this).attr('id');
         var txtval =   $("#txt"+fieldid+"").val();
         var texdesc =  $("#txt"+fieldid+"").data("desc");
@@ -5433,7 +5401,7 @@ $('[id*="chkId"]').change(function(){
                       }
                   });
                   $.ajax({
-                      url:'{{route("transaction",[38,"getaltuomqty"])}}',
+                      url:'<?php echo e(route("transaction",[38,"getaltuomqty"])); ?>',
                       type:'POST',
                       data:{'id':altuomid, 'itemid':itemid, 'mqty':mqty},
                       success:function(data) {
@@ -5463,6 +5431,7 @@ $('[id*="chkId"]').change(function(){
 
   //Alt UOM Dropdown Ends
 //------------------------
+
 $("#Material").on('click','.add', function() {
         var $tr = $(this).closest('table');
         var allTrs = $tr.find('.participantRow').last();
@@ -5502,6 +5471,8 @@ $("#Material").on('click','.add', function() {
         event.preventDefault();
     });
 
+
+  
   //   $("#Material").on('click', '.remove', function() {
   //       var rowCount = $(this).closest('table').find('.participantRow').length;
   //       if (rowCount > 1) {
@@ -5513,7 +5484,6 @@ $("#Material").on('click','.add', function() {
   //     var rowid=(this.id).split('_').pop();
   //     var ITEM_TYPE=$("#ITEM_TYPE_"+rowid).val(); 
   //     var SCHEMEID_REF=$("#SCHEMEID_REF_"+rowid).val();
-     
   //     if(ITEM_TYPE=="MAIN"){
   //       $('#Material').find('.participantRow').each(function(){       
           
@@ -5524,17 +5494,10 @@ $("#Material").on('click','.add', function() {
   //       });
 
   //       var rowCount =  $('#example2 >tbody >tr').length;
-  //       var existing_records='<?php echo count($objSOMAT)?>';
-  //       var current_record=rowCount-existing_records; 
-  //       if (current_record <= 1) {
-  //         var MaterialClone = $('#hdnmaterial').val();
-  //         $('#Material').html(MaterialClone); 
-  //         $('#Material').find('.participantRow').each(function(){
-  //         $(this).find('input:text').val('');
-  //         $(this).find('input:hidden').val('');
-  //       });
-
-      
+  //       if (rowCount <= 1) { 
+  //       var MaterialClone = $('#hdnmaterial').val();
+  //       $('#Material').html(MaterialClone);
+  //       $('#Row_Count1').val('1');
   //       }
   // //----------Scheme Delete code ends here--------------
 
@@ -5566,7 +5529,10 @@ $("#Material").on('click','.add', function() {
 
 
 
-  $("#Material").on('click', '.remove', function() {
+
+
+
+    $("#Material").on('click', '.remove', function() {
         var rowCount = $(this).closest('table').find('.participantRow').length;
         if (rowCount > 1) {
         var totalvalue = $('#TotalValue').val();
@@ -5648,6 +5614,8 @@ $("#Material").on('click','.add', function() {
 		    rowCount2 = parseInt(rowCount2)+1;
         $('#Row_Count2').val(rowCount2);
         // $clone.find('.remove').removeAttr('disabled'); 
+
+        
         
         event.preventDefault();
     });
@@ -5833,7 +5801,7 @@ $("#Material").on('click','.add', function() {
 		    rowCount5 = parseInt(rowCount5)+1;
         $('#Row_Count5').val(rowCount5);
         $clone.find('.remove').removeAttr('disabled'); 
-       
+        
         event.preventDefault();
     });
     $("#PaymentSlabs").on('click', '.remove', function() {
@@ -5856,255 +5824,84 @@ $("#Material").on('click','.add', function() {
         event.preventDefault();
     });
 
-
 $(document).ready(function(e) {
-  var Material = $("#Material").html(); 
+    var Material = $("#Material").html(); 
     $('#hdnmaterial').val(Material);
-    var count1 = <?php echo json_encode($objCount1); ?>;
-    var count2 = <?php echo json_encode($objCount2); ?>;
-    var count3 = <?php echo json_encode($objCount3); ?>;
-    var count4 = <?php echo json_encode($objCount4); ?>;
-    var count5 = <?php echo json_encode($objCount5); ?>;
-    $('#Row_Count1').val(count1);
-    $('#Row_Count2').val(count2);
-    $('#Row_Count3').val(count3);
-    $('#Row_Count4').val(count4);
-    $('#Row_Count5').val(count5);
-    var obj = <?php echo json_encode($objSOMAT); ?>;
-    var objtnc = <?php echo json_encode($objSOTNC); ?>;
-    var objSO = <?php echo json_encode($objSO); ?>;
-    
-    var tncheader = <?php echo json_encode($objTNCHeader); ?>;
-    var tncdetails = <?php echo json_encode($objTNCDetails); ?>;
-    var soudf = <?php echo json_encode($objSOUDF); ?>;
-    var udfforso = <?php echo json_encode($objUdfSOData2); ?>;
-    var calheader = <?php echo json_encode($objCalHeader); ?>;
-    var caldetails = <?php echo json_encode($objCalDetails); ?>;
-    var SOCal = <?php echo json_encode($objSOCAL); ?>;
-    var taxstate = <?php echo json_encode($TAXSTATE); ?>;
+    var Material_Scheme = $("#GetSchemeMaterialItems").html(); 
+    $('#hdnmaterial_Scheme').val(Material_Scheme);
 
-    if(obj[0].SQNO == null)
-    {
-      $('#DirectSO').prop('checked','true');
-      $('#Material').find('[id*="txtSQ_popup"]').prop('disabled','true');
-    }
+    var TC = $("#TC").html(); 
+    $('#hdnTC').val(TC);
+    var CT = $("#CT").html(); 
+    $('#hdnCT').val(CT);
+    var PaymentSlabs = $("#PaymentSlabs").html(); 
+    $('#hdnPaymentSlabs').val(PaymentSlabs);
+    var soudf = <?php echo json_encode($objUdfSOData); ?>;
+    var count3 = <?php echo json_encode($objCountUDF); ?>;
+    $("#Row_Count1").val(1);
+    $("#Row_Count3").val(count3);
+    $("#Row_Count5").val(1);
+    $('#udf').find('.participantRow4').each(function(){
+      var txt_id4 = $(this).find('[id*="udfinputid"]').attr('id');
+      var udfid = $(this).find('[id*="UDFSOID_REF"]').val();
+      $.each( soudf, function( soukey, souvalue ) {
+        if(souvalue.UDFID == udfid)
+        {
+          var txtvaltype2 =   souvalue.VALUETYPE;
+          var strdyn2 = txt_id4.split('_');
+          var lastele2 =   strdyn2[strdyn2.length-1];
+          var dynamicid2 = "udfvalue_"+lastele2;
+          
+          var chkvaltype2 =  txtvaltype2.toLowerCase();
+          var strinp2 = '';
 
-    if(objSO.CUSTOMERPONO != null)
-    {
-      $('#CUSTOMERDT').val(objSO.CUSTOMERDT);
-      $('#CUSTOMERDT').prop('disabled',false);
-    }
-    else
-    {
-      $('#CUSTOMERDT').val('');
-      $('#CUSTOMERDT').prop('disabled',true);
-    }
-
-    var totalvalue = 0.00;
-    $.each(SOCal, function( sockey, socvalue ) {
-        $.each( calheader, function( calkey, calvalue ){ 
-            if(socvalue.CTID_REF == calvalue.CTID)
-            {
-                //$('#txtCTID_popup').val(calvalue.CTCODE);
-            }
-        });
-        $.each( caldetails, function( caldkey, caldvalue ){ 
-            if(socvalue.TID_REF == caldvalue.TID)
-            {
-                $('#popupTID_'+sockey).val(caldvalue.COMPONENT);
-                $('#BASIS_'+sockey).val(caldvalue.BASIS);
-                $('#SQNO_'+sockey).val(caldvalue.SQNO);
-                $('#FORMULA_'+sockey).val(caldvalue.FORMULA);
-                
-            }
-        });
-        if(taxstate =="OutofState")
-            { 
-              $('#calIGST_'+sockey).removeAttr('readonly');
-              var gstamt = parseFloat((socvalue.IGST*socvalue.VALUE)/100).toFixed(2);
-              var totgst = parseFloat(gstamt).toFixed(2);
-              $('#AMTIGST_'+sockey).val(gstamt);
-              $('#TOTGSTAMT_'+sockey).val(totgst);
-              var tvalue = 0.00;
-              tvalue = parseFloat(tvalue) + parseFloat(socvalue.VALUE);
-              tvalue = parseFloat(tvalue) + parseFloat(totgst);
-              tvalue = parseFloat(tvalue).toFixed(2);
-            }
-            else
-            {
-              $('#calCGST_'+sockey).removeAttr('readonly');
-              $('#calSGST_'+sockey).removeAttr('readonly');
-              var gstamt2 = parseFloat((socvalue.CGST*socvalue.VALUE)/100).toFixed(2);
-              var gstamt3 = parseFloat((socvalue.SGST*socvalue.VALUE)/100).toFixed(2);
-              var totgst2 = parseFloat(parseFloat(gstamt2)+parseFloat(gstamt3)).toFixed(2);
-              $('#AMTCGST_'+sockey).val(gstamt2);
-              $('#AMTSGST_'+sockey).val(gstamt3);
-              $('#TOTGSTAMT_'+sockey).val(totgst2);
-              var tvalue = 0.00;
-              tvalue = parseFloat(tvalue) + parseFloat(socvalue.VALUE);
-              tvalue = parseFloat(tvalue) + parseFloat(totgst2);
-              tvalue = parseFloat(tvalue).toFixed(2);
-            }
-            totalvalue += + tvalue;
+          if(chkvaltype2=='date'){
+          strinp2 = '<input type="date" placeholder="dd/mm/yyyy" name="'+dynamicid2+ '" id="'+dynamicid2+'" autocomplete="off" class="form-control"  > ';       
+          }
+          else if(chkvaltype2=='time'){
+          strinp2= '<input type="time" placeholder="h:i" name="'+dynamicid2+ '" id="'+dynamicid2+'" autocomplete="off" class="form-control"  > ';
+          }
+          else if(chkvaltype2=='numeric'){
+          strinp2 = '<input type="text" name="'+dynamicid2+ '" id="'+dynamicid2+'" autocomplete="off" class="form-control"   > ';
+          }
+          else if(chkvaltype2=='text'){
+          strinp2 = '<input type="text" name="'+dynamicid2+ '" id="'+dynamicid2+'" autocomplete="off" class="form-control"  > ';          
+          }
+          else if(chkvaltype2=='boolean'){            
+              strinp2 = '<input type="checkbox" name="'+dynamicid2+ '" id="'+dynamicid2+'" class="" > ';
+          }
+          else if(chkvaltype2=='combobox'){
+          var txtoptscombo2 =   souvalue.DESCRIPTIONS;
+          var strarray2 = txtoptscombo2.split(',');
+          var opts2 = '';
+          for (var i = 0; i < strarray2.length; i++) {
+              opts2 = opts2 + '<option value="'+strarray2[i]+'">'+strarray2[i]+'</option> ';
+          }
+          strinp2 = '<select name="'+dynamicid2+ '" id="'+dynamicid2+'" class="form-control" required>'+opts2+'</select>' ;          
+          }
+          $('#'+txt_id4).html('');  
+          $('#'+txt_id4).html(strinp2);
+        }
+      });
     });
-    // totalvalue = parseFloat(totalvalue).toFixed(2);
 
-    $('#TotalValue').val(totalvalue);
-    MultiCurrency_Conversion('TotalValue'); 
-
-    $.each( soudf, function( soukey, souvalue ) {
-        $.each( udfforso, function( usokey, usovalue ) { 
-            if(souvalue.UDFSOID_REF == usovalue.UDFID)
-            {
-                $('#popupUDFSOID_'+soukey).val(usovalue.LABEL);
-            }
-        
-            if(souvalue.UDFSOID_REF == usovalue.UDFID)
-            {        
-                    var txtvaltype2 =   usovalue.VALUETYPE;
-                    var txt_id41 = $('#udfinputid_'+soukey).attr('id');
-                    var strdyn2 = txt_id41.split('_');
-                    var lastele2 =   strdyn2[strdyn2.length-1];
-                    var dynamicid2 = "udfvalue_"+lastele2;
-                    
-                    var chkvaltype2 =  txtvaltype2.toLowerCase();
-                    var strinp2 = '';
-
-                    if(chkvaltype2=='date'){
-
-                    strinp2 = '<input type="date" placeholder="dd/mm/yyyy" name="'+dynamicid2+ '" id="'+dynamicid2+'" autocomplete="off" class="form-control"  > ';       
-
-                    }
-                    else if(chkvaltype2=='time'){
-                    strinp2= '<input type="time" placeholder="h:i" name="'+dynamicid2+ '" id="'+dynamicid2+'" autocomplete="off" class="form-control"  > ';
-
-                    }
-                    else if(chkvaltype2=='numeric'){
-                    strinp2 = '<input type="text" name="'+dynamicid2+ '" id="'+dynamicid2+'" autocomplete="off" class="form-control"   > ';
-
-                    }
-                    else if(chkvaltype2=='text'){
-
-                    strinp2 = '<input type="text" name="'+dynamicid2+ '" id="'+dynamicid2+'" autocomplete="off" class="form-control"  > ';
-                    
-                    }
-                    else if(chkvaltype2=='boolean'){
-                      if(souvalue.SOUVALUE == "1")
-                      {
-                        strinp2 = '<input type="checkbox" name="'+dynamicid2+ '" id="'+dynamicid2+'" class="" checked> ';
-                      }
-                      else{
-                        strinp2 = '<input type="checkbox" name="'+dynamicid2+ '" id="'+dynamicid2+'" class="" > ';
-                      }
-                    }
-                    else if(chkvaltype2=='combobox'){
-
-                    var txtoptscombo2 =   usovalue.DESCRIPTIONS;
-                    var strarray2 = txtoptscombo2.split(',');
-                    var opts2 = '';
-
-                    for (var i = 0; i < strarray2.length; i++) {
-                        opts2 = opts2 + '<option value="'+strarray2[i]+'">'+strarray2[i]+'</option> ';
-                    }
-
-                    strinp2 = '<select name="'+dynamicid2+ '" id="'+dynamicid2+'" class="form-control" required>'+opts2+'</select>' ;
-                   
-                    }
-                   
-                    
-                    $('#'+txt_id41).html('');  
-                    $('#'+txt_id41).html(strinp2);   //set dynamic input
-                    $('#'+dynamicid2).val(souvalue.SOUVALUE);
-                    $('#UDFismandatory_'+soukey).val(usovalue.ISMANDATORY); // mandatory
-                
-            }
-        });
-    });
-    $.each( objtnc, function( tnckey, tncvalue ) {
-        $.each( tncheader, function( tnchkey, tnchvalue ) { 
-            if(tncvalue.TNCID_REF == tnchvalue.TNCID)
-            {
-                $('#txtTNCID_popup').val(tnchvalue.TNC_CODE);
-            }
-        });
-        $.each( tncdetails, function( tncdkey, tncdvalue ) { 
-            if(tncvalue.TNCDID_REF == tncdvalue.TNCDID)
-            {
-                $('#popupTNCDID_'+tnckey).val(tncdvalue.TNC_NAME);
-            }
-            if(tncvalue.TNCDID_REF == tncdvalue.TNCDID)
-            {        
-                    var txtvaltype =   tncdvalue.VALUE_TYPE;
-                    var txt_id4 = $('#tdinputid_'+tnckey).attr('id');
-                    var strdyn = txt_id4.split('_');
-                    var lastele =   strdyn[strdyn.length-1];
-                    var dynamicid = "tncdetvalue_"+lastele;
-                    
-                    var chkvaltype =  txtvaltype.toLowerCase();
-                    var strinp = '';
-
-                    if(chkvaltype=='date'){
-
-                    strinp = '<input type="date" placeholder="dd/mm/yyyy" name="'+dynamicid+ '" id="'+dynamicid+'" autocomplete="off" class="form-control"  > ';       
-
-                    }
-                    else if(chkvaltype=='time'){
-                    strinp= '<input type="time" placeholder="h:i" name="'+dynamicid+ '" id="'+dynamicid+'" autocomplete="off" class="form-control"  > ';
-
-                    }
-                    else if(chkvaltype=='numeric'){
-                    strinp = '<input type="text" name="'+dynamicid+ '" id="'+dynamicid+'" autocomplete="off" class="form-control"   > ';
-
-                    }
-                    else if(chkvaltype=='text'){
-
-                    strinp = '<input type="text" name="'+dynamicid+ '" id="'+dynamicid+'" autocomplete="off" class="form-control"  > ';
-                    
-                    }
-                    else if(chkvaltype=='boolean'){
-                      if(tncvalue.VALUE == "1")
-                      {
-                        strinp = '<input type="checkbox" name="'+dynamicid+ '" id="'+dynamicid+'" class="" checked> ';
-                      }
-                      else{
-                        strinp = '<input type="checkbox" name="'+dynamicid+ '" id="'+dynamicid+'" class="" > ';
-                      }                    
-                    }
-                    else if(chkvaltype=='combobox'){
-
-                    var txtoptscombo =   tncdvalue.DESCRIPTIONS;
-                    var strarray = txtoptscombo.split(',');
-                    var opts = '';
-
-                    for (var i = 0; i < strarray.length; i++) {
-                        opts = opts + '<option value="'+strarray[i]+'">'+strarray[i]+'</option> ';
-                    }
-
-                    strinp = '<select name="'+dynamicid+ '" id="'+dynamicid+'" class="form-control" required>'+opts+'</select>' ;
-                   
-                    }
-                   
-                    
-                    $('#'+txt_id4).html('');  
-                    $('#'+txt_id4).html(strinp);   //set dynamic input
-                    $('#'+dynamicid).val(tncvalue.VALUE);
-                    $('#TNCismandatory_'+tnckey).val(tncdvalue.IS_MANDATORY); // mandatory
-                
-            }
-        });
-    });
     
-    
-    // totalvalue = parseFloat(totalvalue).toFixed(2);
-    // $('#TotalValue').val(totalvalue);
-
     var d = new Date(); 
     var today = d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ('0' + d.getDate()).slice(-2) ;
     d.setDate(d.getDate() + 29);
-    var todate = d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ('0' + d.getDate()).slice(-2) ;
+    var todate = d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ('0' + d.getDate()).slice(-2) ; 
+
+    $('#SODT').val(today);
+    $('#OVFDT').val(today);
+    $('#OVTDT').val(todate);
+
+    var lastdt = <?php echo json_encode($objlastdt[0]->SODT); ?>;   
+    $('#SODT').attr('min',lastdt);
+    $('#SODT').attr('max',today);
+
+
     
-    
-    
+
     $('#CUSTOMERPONO').change(function(){
       if($(this).val() != '')
       {
@@ -6120,7 +5917,50 @@ $(document).ready(function(e) {
       }
     });
 
-    $('#Material').on('keyup',"[id*='ALT_UOMID_QTY']",function()
+    $('#DirectSO').change(function(){
+      if ($(this).is(":checked") == true){          
+          var MaterialClone = $('#hdnmaterial').val();
+          var TCClone = $('#hdnTC').val();
+          var CTClone = $('#hdnCT').val();
+          var PaymentSlabsClone = $('#hdnPaymentSlabs').val();
+          $('#Material').html(MaterialClone);
+          $('#TC').html(TCClone);
+          $('#CT').html(CTClone);
+          $('#PaymentSlabs').html(PaymentSlabsClone);
+          $('#TotalValue').val('0.00');
+          MultiCurrency_Conversion('TotalValue'); 
+          $('#Row_Count1').val('1');
+          $('#Row_Count2').val('1');
+          $('#Row_Count4').val('1');
+          $('#Row_Count5').val('1');
+          
+          $('#Material').find('[id*="txtSQ_popup"]').prop('disabled','true')
+          event.preventDefault();
+      }
+      else
+      {          
+          var MaterialClone = $('#hdnmaterial').val();
+          var TCClone = $('#hdnTC').val();
+          var CTClone = $('#hdnCT').val();
+          var PaymentSlabsClone = $('#hdnPaymentSlabs').val();
+          $('#Material').html(MaterialClone);
+          $('#TC').html(TCClone);
+          $('#CT').html(CTClone);
+          $('#PaymentSlabs').html(PaymentSlabsClone);
+          $('#TotalValue').val('0.00');
+          MultiCurrency_Conversion('TotalValue'); 
+          $('#Row_Count1').val('1');
+          $('#Row_Count2').val('1');
+          $('#Row_Count4').val('1');
+          $('#Row_Count5').val('1');
+          
+          $('#Material').find('[id*="txtSQ_popup"]').removeAttr('disabled');
+          event.preventDefault();
+      }
+    });
+
+
+    $('#Material').on('focusout',"[id*='ALT_UOMID_QTY']",function()
     {
       if(intRegex.test($(this).val())){
         $(this).val($(this).val()+'.000')
@@ -6128,10 +5968,12 @@ $(document).ready(function(e) {
       event.preventDefault();
     });
 
-      
+
+    
 //GST Reverse Section 
 $('#GST_Reverse').on('change', function() 
 {
+    
     if($('#CTID_REF').val()!='')
     {
       bindGSTCalTemplate();
@@ -6141,7 +5983,8 @@ $('#GST_Reverse').on('change', function()
 });
 
 
-    /*
+    
+  /*
     $('#Material').on('focusout',"[id*='SO_QTY']",function()
     {
       var totalvalue = 0.00;
@@ -6150,9 +5993,9 @@ $('#GST_Reverse').on('change', function()
         var altuomid = $(this).parent().parent().find('[id*="ALT_UOMID_REF"]').val();
         var txtid = $(this).parent().parent().find('[id*="ALT_UOMID_QTY"]').attr('id');
         var irate = $(this).parent().parent().find('[id*="RATEPUOM"]').val();
-        $(this).parent().parent().find('[id*="IGSTAMT"]').val('0.00');
-        $(this).parent().parent().find('[id*="CGSTAMT"]').val('0.00');
-        $(this).parent().parent().find('[id*="SGSTAMT"]').val('0.00');
+        $(this).parent().parent().find('[id*="IGSTAMT"]').val('0');
+        $(this).parent().parent().find('[id*="CGSTAMT"]').val('0');
+        $(this).parent().parent().find('[id*="SGSTAMT"]').val('0');
         var tamt = parseFloat(parseFloat(mqty)*parseFloat(irate)).toFixed(2);
         var dispercnt = $(this).parent().parent().find('[id*="DISCPER"]').val();
         var disamt = 0 ;      
@@ -6181,7 +6024,7 @@ $('#GST_Reverse').on('change', function()
                       }
                   });
                   $.ajax({
-                      url:'{{route("transaction",[36,"getaltuomqty"])}}',
+                      url:'<?php echo e(route("transaction",[36,"getaltuomqty"])); ?>',
                       type:'POST',
                       data:{'id':altuomid, 'itemid':itemid, 'mqty':mqty},
                       success:function(data) {
@@ -6233,7 +6076,6 @@ $('#GST_Reverse').on('change', function()
       bindTotalValue();
       event.preventDefault();
     });
-    
 
     $('#Material').on('focusout',"[id*='RATEPUOM']",function()
     {
@@ -6298,8 +6140,7 @@ $('#GST_Reverse').on('change', function()
       }
       bindTotalValue();
       event.preventDefault();
-    }); 
-    
+    });   
 
     $('#Material').on('focusout',"[id*='DISCPER']",function()
     { 
@@ -6307,7 +6148,7 @@ $('#GST_Reverse').on('change', function()
       var irate = $(this).parent().parent().find('[id*="RATEPUOM"]').val();
       var totamt = parseFloat(parseFloat(mqty)*parseFloat(irate)).toFixed(2);
       var dpert = $(this).val();
-      var disamt = $(this).parent().parent().find('[id*="DISCOUNT_AMT"]').val();
+     
       if (dpert != '' && dpert != '.0000')
       {
         var amtfd = parseFloat(parseFloat(totamt) - (parseFloat(totamt)*parseFloat(dpert))/100).toFixed(2);
@@ -6352,50 +6193,6 @@ $('#GST_Reverse').on('change', function()
       $(this).parent().parent().find('[id*="CGSTAMT"]').val(tp2amt);
       $(this).parent().parent().find('[id*="SGSTAMT"]').val(tp3amt);
       }
-      else if (disamt != '' && disamt != '.00')
-      {
-        var amtfd = parseFloat(parseFloat(totamt) - parseFloat(disamt)).toFixed(2);
-        if(intRegex.test($(this).val())){
-          $(this).val($(this).val()+'.00')
-        }
-      var tp1 = $(this).parent().parent().find('[id*="IGST_"]').val();
-      var tp2 = $(this).parent().parent().find('[id*="CGST_"]').val();
-      var tp3 = $(this).parent().parent().find('[id*="SGST_"]').val();
-      $(this).parent().parent().find('[id*="IGSTAMT"]').val('0');
-      $(this).parent().parent().find('[id*="CGSTAMT"]').val('0');
-      $(this).parent().parent().find('[id*="SGSTAMT"]').val('0');
-      var tp1amt = parseFloat((amtfd * tp1)/100).toFixed(2);
-      var tp2amt = parseFloat((amtfd * tp2)/100).toFixed(2);
-      var tp3amt = parseFloat((amtfd * tp3)/100).toFixed(2);
-     
-      var taxamt = parseFloat(parseFloat(tp1amt) + parseFloat(tp2amt) + parseFloat(tp3amt)).toFixed(2);      
-      var netamt = parseFloat(parseFloat(amtfd) + parseFloat(taxamt)).toFixed(2);
-      if(intRegex.test(amtfd)){
-        amtfd = amtfd +'.00';
-      }
-      if(intRegex.test(taxamt)){
-      taxamt = taxamt +'.00';
-      }
-      if(intRegex.test(tp1amt)){
-        tp1amt = tp1amt +'.00';
-      }
-      if(intRegex.test(tp2amt)){
-        tp2amt = tp2amt +'.00';
-      }
-      if(intRegex.test(tp3amt)){
-        tp3amt = tp3amt +'.00';
-      }
-      if(intRegex.test(netamt)){
-        netamt = netamt +'.00';
-      }
-      $(this).parent().parent().find('[id*="DISCPER"]').prop('readonly',true);
-      $(this).parent().parent().find('[id*="DISAFTT_AMT"]').val(amtfd);
-      $(this).parent().parent().find('[id*="TOT_AMT"]').val(netamt);
-      $(this).parent().parent().find('[id*="TGST_AMT"]').val(taxamt);
-      $(this).parent().parent().find('[id*="IGSTAMT"]').val(tp1amt);
-      $(this).parent().parent().find('[id*="CGSTAMT"]').val(tp2amt);
-      $(this).parent().parent().find('[id*="SGSTAMT"]').val(tp3amt);
-      }
       else{
         var amtfd = parseFloat(totamt).toFixed(2);
         var tp1 = $(this).parent().parent().find('[id*="IGST_"]').val();
@@ -6408,7 +6205,7 @@ $('#GST_Reverse').on('change', function()
         var tp2amt = parseFloat((amtfd * tp2)/100).toFixed(2);
         var tp3amt = parseFloat((amtfd * tp3)/100).toFixed(2);
         var taxamt = parseFloat(parseFloat(tp1amt) + parseFloat(tp2amt) + parseFloat(tp3amt)).toFixed(2);      
-      var netamt = parseFloat(parseFloat(amtfd) + parseFloat(taxamt)).toFixed(2);
+        var netamt = parseFloat(parseFloat(amtfd) + parseFloat(taxamt)).toFixed(2);
         if(intRegex.test($(this).val())){
           $(this).val($(this).val()+'.00')
         }
@@ -6654,38 +6451,146 @@ $('#GST_Reverse').on('change', function()
     $('#CT').on('focusout',"[id*='calSGST_']",function()
     {
       if(intRegex.test($(this).val())){
-        $(this).val($(this).val()+'.0000')
+        $(this).val($(this).val()+'.00')
       }
+      bindTotalValue();
     });
 
     $('#CT').on('focusout',"[id*='calCGST_']",function()
     {
       if(intRegex.test($(this).val())){
-        $(this).val($(this).val()+'.0000')
+        $(this).val($(this).val()+'.00')
       }
+      bindTotalValue();
     });
 
     $('#CT').on('focusout',"[id*='calIGST_']",function()
     {
       if(intRegex.test($(this).val())){
-        $(this).val($(this).val()+'.0000')
+        $(this).val($(this).val()+'.00')
       }
+      bindTotalValue();
     });
 
-
     $('#btnAdd').on('click', function() {
-        var viewURL = '{{route("transaction",[38,"add"])}}';
+        var viewURL = '<?php echo e(route("transaction",[38,"add"])); ?>';
                   window.location.href=viewURL;
     });
     $('#btnExit').on('click', function() {
-      var viewURL = '{{route('home')}}';
+      var viewURL = '<?php echo e(route('home')); ?>';
                   window.location.href=viewURL;
     });
-     
-var objhdr = <?php echo json_encode($objSO); ?>;
+
+
+    //to check the label duplicacy
+     $('#SONO').focusout(function(){
+      var SONO   =   $.trim($(this).val());
+      if(SONO ===""){
+                $("#FocusId").val('SONO');
+                // $("[id*=txtlabel]").blur(); 
+                $("#ProceedBtn").focus();
+                $("#YesBtn").hide();
+                $("#NoBtn").hide();
+                $("#OkBtn1").show();
+                $("#AlertMessage").text('Please enter value in SONO.');
+                $("#alert").modal('show');
+                $("#OkBtn1").focus();
+                highlighFocusBtn('activeOk1');
+                // return false;
+            } 
+        else{ 
+        var trnsoForm = $("#frm_trn_so");
+        var formData = trnsoForm.serialize();
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            url:'<?php echo e(route("transaction",[38,"checkso"])); ?>',
+            type:'POST',
+            data:formData,
+            success:function(data) {
+               if(data.exists) {
+                    $(".text-danger").hide();
+                    if(data.exists) {                   
+                        console.log("cancel MSG="+data.msg);
+                                      $("#YesBtn").hide();
+                                      $("#NoBtn").hide();
+                                      $("#OkBtn1").show();
+                                      $("#AlertMessage").text(data.msg);
+                                      $(".text-danger").hide();
+                                      $("#SONO").val('');
+                                      $("#alert").modal('show');
+                                      $("#OkBtn1").focus();
+                                      highlighFocusBtn('activeOk1');
+                    }                 
+                }                
+            },
+            error:function(data){
+              console.log("Error: Something went wrong.");
+            },
+        });
+    }
+});
+
+
+//Check duplicacy of Customer PO No
+// $('#CUSTOMERPONO').focusout(function(){
+//       var CUSTOMERPONO   =   $.trim($(this).val());
+//       if(CUSTOMERPONO ===""){
+//                 $("#FocusId").val('CUSTOMERPONO');
+//                 // $("[id*=txtlabel]").blur(); 
+//                 $("#ProceedBtn").focus();
+//                 $("#YesBtn").hide();
+//                 $("#NoBtn").hide();
+//                 $("#OkBtn1").show();
+//                 $("#AlertMessage").text('Please Enter Customer PO No.');
+//                 $("#alert").modal('show');
+//                 $("#OkBtn1").focus();
+//                 highlighFocusBtn('activeOk1');
+//                 // return false;
+//             } 
+//         else{ 
+//         var trnsoForm = $("#frm_trn_so");
+//         var formData = trnsoForm.serialize();
+//         $.ajaxSetup({
+//             headers: {
+//                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+//             }
+//         });
+//         $.ajax({
+//             url:'<?php echo e(route("transaction",[38,"checkcustomerpono"])); ?>',
+//             type:'POST',
+//             data:formData,
+//             success:function(data) {
+//                if(data.exists) {
+//                     $(".text-danger").hide();
+//                     if(data.exists) {                   
+//                         console.log("cancel MSG="+data.msg);
+//                                       $("#YesBtn").hide();
+//                                       $("#NoBtn").hide();
+//                                       $("#OkBtn1").show();
+//                                       $("#AlertMessage").text(data.msg);
+//                                       $(".text-danger").hide();
+//                                       $("#CUSTOMERPONO").val('');
+//                                       $("#alert").modal('show');
+//                                       $("#OkBtn1").focus();
+//                                       highlighFocusBtn('activeOk1');
+//                     }                 
+//                 }                
+//             },
+//             error:function(data){
+//               console.log("Error: Something went wrong.");
+//             },
+//         });
+//     }
+// });
+
 //SO Date Check
 // $('#SODT').change(function( event ) {
-//             var today = new Date(objhdr.SODT);     
+//   var objlastdt = <?php// echo json_encode($objlastdt[0]->ENQDT); ?>;
+//             var today = new Date();     
 //             var d = new Date($(this).val()); 
 //             today.setHours(0, 0, 0, 0) ;
 //             d.setHours(0, 0, 0, 0) ;
@@ -6693,7 +6598,7 @@ var objhdr = <?php echo json_encode($objSO); ?>;
 //             if (d < today) {
 //                 $(this).val(sodate);
 //                 $("#alert").modal('show');
-//                 $("#AlertMessage").text('SO Date cannot be less than '+ objhdr.SODT);
+//                 $("#AlertMessage").text('SO Date cannot be less than Current date');
 //                 $("#YesBtn").hide(); 
 //                 $("#NoBtn").hide();  
 //                 $("#OkBtn1").show();
@@ -6721,20 +6626,35 @@ $('#OVFDT').change(function( event ) {
             
         });
 
+//SO Validity to Date Check
 $('#PaymentSlabs').on('change','[id*="PAY_DAYS"]',function( event ) {
-    var d = $(this).val(); 
-    d = parseInt(d) - 1;
-    var sdate =$('#SODT').val();
-    var ddate = new Date(sdate);
-    var newddate = new Date(ddate);
-    newddate.setDate(newddate.getDate() + d);
-    var soddate = newddate.getFullYear() + "-" + ("0" + (newddate.getMonth() + 1)).slice(-2) + "-" + ('0' + newddate.getDate()).slice(-2) ;
-    $(this).parent().parent().find('[id*="DUE_DATE"]').val(soddate);
-    
-});
+            var d = $(this).val(); 
+            var totdays = $('#CREDITDAYS').val();
+            if(parseInt(d) > parseInt(totdays))
+            {
+              $(this).val('');
+              $("#ProceedBtn").focus();
+              $("#YesBtn").hide();
+              $("#NoBtn").hide();
+              $("#OkBtn1").show();
+              $("#AlertMessage").text('Pay Days cannot be greater than Credit days.');
+              $("#alert").modal('show');
+              $("#OkBtn1").focus();
+              return false;
+            }
+            d = parseInt(d) - 1;
+            var sdate =$('#SODT').val();
+            var ddate = new Date(sdate);
+            var newddate = new Date(ddate);
+            newddate.setDate(newddate.getDate() + d);
+            var soddate = newddate.getFullYear() + "-" + ("0" + (newddate.getMonth() + 1)).slice(-2) + "-" + ('0' + newddate.getDate()).slice(-2) ;
+            $(this).parent().parent().find('[id*="DUE_DATE"]').val(soddate);
+            
+        });
 //SO Date Check
         
     
+
 
 
 
@@ -6755,13 +6675,17 @@ $('#PaymentSlabs').on('change','[id*="PAY_DAYS"]',function( event ) {
     
 
     window.fnUndoYes = function (){
+      
       //reload form
-      window.location.reload();
+      window.location.href = "<?php echo e(route('transaction',[38,'add'])); ?>";
+
    }//fnUndoYes
 
 
    window.fnUndoNo = function (){
+
     
+
    }//fnUndoNo
 
 
@@ -6783,23 +6707,22 @@ $('#PaymentSlabs').on('change','[id*="PAY_DAYS"]',function( event ) {
           event.preventDefault();
       }
       MultiCurrency_Conversion('TotalValue'); 
-
   });
 
   $("#CT").on('change',"[id*='calGST']",function() {
       if ($(this).is(":checked") == true){
-          if($.trim($('#Tax_State').val()) == 'OutofState')
+        if($.trim($('#Tax_State').val()) == 'OutofState')
           {
             $(this).parent().parent().find('[id*="calIGST"]').removeAttr('disabled');
             $(this).parent().parent().find('[id*="calIGST"]').removeAttr('readonly');
-            $(this).parent().parent().find('[id*="calCGST"]').prop('readonly','true');
-            $(this).parent().parent().find('[id*="calSGST"]').prop('readonly','true');
-            $(this).parent().parent().find('[id*="AMTIGST"]').removeAttr('readonly');
-            $(this).parent().parent().find('[id*="AMTIGST"]').removeAttr('readonly');
-            $(this).parent().parent().find('[id*="AMTCGST"]').prop('readonly','true');
-            $(this).parent().parent().find('[id*="AMTSGST"]').prop('readonly','true');
+            $(this).parent().parent().find('[id*="calCGST"]').prop('disabled','true');
             $(this).parent().parent().find('[id*="calCGST"]').val('0');
+            $(this).parent().parent().find('[id*="calSGST"]').prop('disabled','true');
             $(this).parent().parent().find('[id*="calSGST"]').val('0');
+            $(this).parent().parent().find('[id*="AMTIGST"]').removeAttr('disabled');
+            $(this).parent().parent().find('[id*="AMTIGST"]').removeAttr('readonly');
+            $(this).parent().parent().find('[id*="AMTCGST"]').prop('disabled','true');
+            $(this).parent().parent().find('[id*="AMTSGST"]').prop('disabled','true');
             $(this).parent().parent().find('[id*="AMTCGST"]').val('0');
             $(this).parent().parent().find('[id*="AMTSGST"]').val('0');
             $(this).parent().parent().find('[id*="TOTGSTAMT"]').val('0');
@@ -6808,15 +6731,15 @@ $('#PaymentSlabs').on('change','[id*="PAY_DAYS"]',function( event ) {
           }
           else
           {
-            $(this).parent().parent().find('[id*="calIGST"]').prop('readonly','true');
-            $(this).parent().parent().find('[id*="calCGST"]').removeAttr('readonly');
-            $(this).parent().parent().find('[id*="calSGST"]').removeAttr('disabled');
+            $(this).parent().parent().find('[id*="calIGST"]').prop('disabled','true');
             $(this).parent().parent().find('[id*="calCGST"]').removeAttr('disabled');
+            $(this).parent().parent().find('[id*="calSGST"]').removeAttr('disabled');
+            $(this).parent().parent().find('[id*="calCGST"]').removeAttr('readonly');
             $(this).parent().parent().find('[id*="calSGST"]').removeAttr('readonly');
-            $(this).parent().parent().find('[id*="AMTIGST"]').prop('readonly','true');
-            $(this).parent().parent().find('[id*="AMTCGST"]').removeAttr('readonly');
-            $(this).parent().parent().find('[id*="AMTSGST"]').removeAttr('disabled');
+            $(this).parent().parent().find('[id*="AMTIGST"]').prop('disabled','true');
             $(this).parent().parent().find('[id*="AMTCGST"]').removeAttr('disabled');
+            $(this).parent().parent().find('[id*="AMTSGST"]').removeAttr('disabled');
+            $(this).parent().parent().find('[id*="AMTCGST"]').removeAttr('readonly');
             $(this).parent().parent().find('[id*="AMTSGST"]').removeAttr('readonly');
             $(this).parent().parent().find('[id*="calIGST"]').val('0');
             $(this).parent().parent().find('[id*="AMTIGST"]').val('0');
@@ -6878,39 +6801,30 @@ $('#PaymentSlabs').on('change','[id*="PAY_DAYS"]',function( event ) {
       $(this).parent().parent().find('[id*="TOTGSTAMT_"]').val(totgst3);
       bindTotalValue();
       event.preventDefault();
-  });
+  }); 
 
 
-// growTextarea function: use for testing that the the javascript
-// is also copied when row is cloned.  to confirm, 
-// type several lines into Location, add a row, & repeat
-
-    function growTextarea (i,elem) {
-    var elem = $(elem);
-    var resizeTextarea = function( elem ) {
-        var scrollLeft = window.pageXOffset || (document.documentElement || document.body.parentNode || document.body).scrollLeft;
-        var scrollTop  = window.pageYOffset || (document.documentElement || document.body.parentNode || document.body).scrollTop;  
-        elem.css('height', 'auto').css('height', elem.prop('scrollHeight') );
-        window.scrollTo(scrollLeft, scrollTop);
-    };
-
-    elem.on('input', function() {
-        resizeTextarea( $(this) );
-    });
-
-    resizeTextarea( $(elem) );
-    }
-
-    $('.growTextarea').each(growTextarea);
 });
 </script>
 
-@endpush
+<?php $__env->stopPush(); ?>
 
-@push('bottom-scripts')
+<?php $__env->startPush('bottom-scripts'); ?>
 <script>
 
 $(document).ready(function() {
+
+  var TDS = $("#TDS").html(); 
+    $('#hdnTDS').val(TDS);
+
+  $("#btnSaveSO").on("submit", function( event ) {
+    if ($("#frm_trn_so").valid()) {
+        // Do something
+        alert( "Handler for .submit() called." );
+        event.preventDefault();
+    }
+});
+
 
     $('#frm_trn_so1').bootstrapValidator({
        
@@ -6930,12 +6844,15 @@ $(document).ready(function() {
         }
     });
 });
-$( "#btnSaveSO" ).click(function() {
-  var formSalesOrder = $("#frm_trn_so");
-  if(formSalesOrder.valid()){
-    
+function validateForm(){
+
+  
+
+  /* for ( instance in CKEDITOR.instances ) {
+            CKEDITOR.instances.Template_Description.updateElement();
+        } */
  
-    $("#FocusId").val('');
+ $("#FocusId").val('');
  var SONO           =   $.trim($("#SONO").val());
  var SODT           =   $.trim($("#SODT").val());
  var SLID_REF       =   $.trim($("#SLID_REF").val());
@@ -6945,492 +6862,22 @@ $( "#btnSaveSO" ).click(function() {
  var CUSTOMERDT     =   $.trim($("#CUSTOMERDT").val());
  var SPID_REF       =   $.trim($("#SPID_REF").val());
  var REFNO          =   $.trim($("#REFNO").val());
- /* for ( instance in CKEDITOR.instances ) {
-            CKEDITOR.instances.Template_Description.updateElement();
-    }
- */
- if(SONO ===""){
-     $("#FocusId").val('SONO');
-     $("#ProceedBtn").focus();
-     $("#YesBtn").hide();
-     $("#NoBtn").hide();
-     $("#OkBtn1").show();
-     $("#AlertMessage").text('Please enter value in SONO.');
-     $("#alert").modal('show');
-     $("#OkBtn1").focus();
-     return false;
- }
- else if(SODT ===""){
-     $("#FocusId").val('SODT');
-     $("#ProceedBtn").focus();
-     $("#YesBtn").hide();
-     $("#NoBtn").hide();
-     $("#OkBtn1").show();
-     $("#AlertMessage").text('Please select SO Date.');
-     $("#alert").modal('show');
-     $("#OkBtn1").focus();
-     return false;
- } 
- else if(OVFDT ===""){
-     $("#FocusId").val('OVFDT');
-     $("#ProceedBtn").focus();
-     $("#YesBtn").hide();
-     $("#NoBtn").hide();
-     $("#OkBtn1").show();
-     $("#AlertMessage").text('Please select SO From Date.');
-     $("#alert").modal('show');
-     $("#OkBtn1").focus();
-     return false;
- } 
- else if(OVTDT ===""){
-     $("#FocusId").val('OVTDT');
-     $("#ProceedBtn").focus();
-     $("#YesBtn").hide();
-     $("#NoBtn").hide();
-     $("#OkBtn1").show();
-     $("#AlertMessage").text('Please select SO To Date.');
-     $("#alert").modal('show');
-     $("#OkBtn1").focus();
-     return false;
- } 
- else if(SLID_REF ===""){
-     $("#FocusId").val('txtsubgl_popup');
-     $("#SLID_REF").val('');  
-     $("#ProceedBtn").focus();
-     $("#YesBtn").hide();
-     $("#NoBtn").hide();
-     $("#OkBtn1").show();
-     $("#AlertMessage").text('Please select Customer.');
-     $("#alert").modal('show');
-     $("#OkBtn1").focus();
-     return false;
- }
- else if(check_pancard(SLID_REF) == 0){
-     $("#FocusId").val('txtsubgl_popup');
-     $("#ProceedBtn").focus();
-     $("#YesBtn").hide();
-     $("#NoBtn").hide();
-     $("#OkBtn1").show();
-     $("#AlertMessage").text('Please update pancard no for this customer.');
-     $("#alert").modal('show');
-     $("#OkBtn1").focus();
-     return false;
- }
- else if(CUSTOMERPONO ===""){
-     $("#FocusId").val('CUSTOMERPONO');
-     $("#ProceedBtn").focus();
-     $("#YesBtn").hide();
-     $("#NoBtn").hide();
-     $("#OkBtn1").show();
-     $("#AlertMessage").text('Please Enter Customer PO No.');
-     $("#alert").modal('show');
-     $("#OkBtn1").focus();
-     return false;
- } 
- else if(CUSTOMERDT ===""){
-     $("#FocusId").val('CUSTOMERDT');
-     $("#ProceedBtn").focus();
-     $("#YesBtn").hide();
-     $("#NoBtn").hide();
-     $("#OkBtn1").show();
-     $("#AlertMessage").text('Please select Customer PO Date.');
-     $("#alert").modal('show');
-     $("#OkBtn1").focus();
-     return false;
- } 
- else if(SPID_REF ===""){
-     $("#FocusId").val('txtSPID_popup');
-     $("#SPID_REF").val('');  
-     $("#ProceedBtn").focus();
-     $("#YesBtn").hide();
-     $("#NoBtn").hide();
-     $("#OkBtn1").show();
-     $("#AlertMessage").text('Please select Sales Person.');
-     $("#alert").modal('show');
-     $("#OkBtn1").focus();
-     return false;
- } 
- else if(REFNO ===""){
-     $("#FocusId").val('REFNO');
-     $("#REFNO").val('');  
-     $("#ProceedBtn").focus();
-     $("#YesBtn").hide();
-     $("#NoBtn").hide();
-     $("#OkBtn1").show();
-     $("#AlertMessage").text('Please Enter Ref No.');
-     $("#alert").modal('show');
-     $("#OkBtn1").focus();
-     return false;
- } 
- else{
-    event.preventDefault();
-    var allblank = [];
-    var allblank2 = [];
-    var allblank3 = [];
-    var allblank4 = [];
-    var allblank5 = [];
-    var allblank6 = [];
-    var allblank7 = [];
-    var allblank8 = [];
-    var allblank9 = [];
-    var allblank10 = [];
-    var allblank11 = [];
-    var allblank12 = [];
 
-    var focustext1= "";
-    var focustext2= "";
-    var focustext3= "";
-    var focustext4= "";
-    var focustext5= "";
-    var focustext6= "";
-    var focustext7= "";
-    var focustext8= "";
-    var focustext9= "";
-    var focustext10= "";
-    var focustext11= "";
-    var focustext12= "";
-
-
-        // $('#udfforsebody').find('.form-control').each(function () {
-        $('#Material').find('.participantRow').each(function(){
-            if($.trim($(this).find("[id*=ITEMID_REF]").val())!="")
-            {
-                allblank.push('true');
-                    if($.trim($(this).find("[id*=popupMUOM]").val())!=""){
-                        allblank2.push('true');
-                          if($.trim($(this).find('[id*="SO_QTY"]').val()) != "")
-                          {
-                            allblank3.push('true');
-                          }
-                          else
-                          {
-                            allblank3.push('false');
-                            focustext3 = $(this).find("[id*=SO_QTY]").attr('id');
-                          }  
-                    }
-                    else{
-                        allblank2.push('false');
-                        focustext2 = $(this).find("[id*=popupMUOM]").attr('id');
-                    } 
-            }
-            else
-            {
-                allblank.push('false');
-                focustext1 = $(this).find("[id*=popupITEMID]").attr('id');
-            } 
-            if($.trim($(this).find("[id*=RATEPUOM]").val())!="")
-            {
-              allblank4.push('true');
-            }
-            else
-            {
-              allblank4.push('true');
-            }
-            if($.trim($('#Tax_State').val())=="WithinState")
-            {
-              if($.trim($(this).find("[id*=IGST]").val())!="")
-              {
-                allblank5.push('true');
-              }
-              else
-              {
-                allblank5.push('true');
-              }
-            }
-            else
-            {
-              if($.trim($(this).find("[id*=CGST]").val())!="")
-              {
-                allblank5.push('true');
-              }
-              else
-              {
-                allblank5.push('true');
-              }
-              if($.trim($(this).find("[id*=SGST]").val())!="")
-              {
-                allblank5.push('true');
-              }
-              else
-              {
-                allblank5.push('true');
-              }
-            }
-        });
-        if($('#TNCID_REF').val() !="")
-        {
-            $('#TC').find('.participantRow3').each(function(){
-              if($.trim($(this).find("[id*=TNCDID_REF]").val())!="")
-                {
-                    allblank6.push('true');
-                        if($.trim($(this).find("[id*=TNCismandatory]").val())=="1"){
-                              if($.trim($(this).find('[id*="tncdetvalue"]').val()) != "")
-                              {
-                                allblank7.push('true');
-                              }
-                              else
-                              {
-                                allblank7.push('false');
-                                focustext7 = $(this).find("[id*=tncdetvalue]").attr('id');
-                              } 
-                        } 
-                }
-                else
-                {
-                    allblank6.push('false');
-                    focustext6 = $(this).find("[id*=txtTNCID_popup]").attr('id');
-                } 
-            });
-        }
-        $('#udf').find('.participantRow4').each(function(){
-              if($.trim($(this).find("[id*=UDFSOID_REF]").val())!="")
-                {
-                    allblank8.push('true');
-                        if($.trim($(this).find("[id*=UDFismandatory]").val())=="1"){
-                              if($.trim($(this).find('[id*="udfvalue"]').val()) != "")
-                              {
-                                allblank9.push('true');
-                              }
-                              else
-                              {
-                                allblank9.push('false');
-                                focustext9 = $(this).find("[id*=udfvalue]").attr('id');
-                              }
-                        }  
-                }                
-        });
-        if($('#CTID_REF').val() !="")
-        {
-            $('#CT').find('.participantRow5').each(function(){
-              if($.trim($(this).find("[id*=TID_REF]").val())!="")
-                {
-                    
-                        if($(this).find("[id*=calGST]").is(":checked") == true)
-                        {
-                          if($.trim($('#Tax_State').val())!="WithinState")
-                          {
-                            if($.trim($(this).find("[id*=calIGST]").val())!="0")
-                            {
-                              allblank11.push('true');
-                            }
-                            else
-                            {
-                              allblank11.push('false');
-                              focustext11 = $(this).find("[id*=calIGST]").attr('id');
-                            }
-                          }
-                          else
-                          {
-                            if($.trim($(this).find("[id*=calCGST]").val())!="0")
-                            {
-                              allblank11.push('true');
-                            }
-                            else
-                            {
-                              allblank11.push('false');
-                              focustext11 = $(this).find("[id*=calCGST]").attr('id');
-                            }
-                            if($.trim($(this).find("[id*=calSGST]").val())!="0")
-                            {
-                              allblank11.push('true');
-                            }
-                            else
-                            {
-                              allblank11.push('false');
-                              focustext11 = $(this).find("[id*=calSGST]").attr('id');
-                            }
-                          }
-                        } 
-                }
-                else
-                {
-                    allblank10.push('false');
-                } 
-            });
-        }
-        $('#PaymentSlabs').find('.participantRow6').each(function(){
-              if($.trim($(this).find("[id*=PAY_DAYS]").val())!="")
-                {
-                  if($.trim($(this).find('[id*="DUE"]').val()) != "")
-                  {
-                    allblank12.push('true');
-                  }
-                  else
-                  {
-                    allblank12.push('false');
-                    focustext12 = $(this).find("[id*=DUE]").attr('id');
-                  }       
-                }                
-        });
-        if(jQuery.inArray("false", allblank) !== -1){
-                $("#MAT_TAB").click();
-                $("#FocusId").val(focustext1);
-                $("#alert").modal('show');
-                $("#AlertMessage").text('Please select item in Material Tab.');
-                $("#YesBtn").hide(); 
-                $("#NoBtn").hide();  
-                $("#OkBtn1").show();
-                $("#OkBtn1").focus();
-                highlighFocusBtn('activeOk');
-            }
-            else if(jQuery.inArray("false", allblank2) !== -1){
-            $("#MAT_TAB").click();
-            $("#FocusId").val(focustext2);
-            $("#alert").modal('show');
-            $("#AlertMessage").text('Main UOM under Sales Order section is missing in Material Tab.');
-            $("#YesBtn").hide(); 
-            $("#NoBtn").hide();  
-            $("#OkBtn1").show();
-            $("#OkBtn1").focus();
-            highlighFocusBtn('activeOk');
-            }
-            else if(jQuery.inArray("false", allblank3) !== -1){
-            $("#MAT_TAB").click();
-            $("#FocusId").val(focustext3);
-            $("#alert").modal('show');
-            $("#AlertMessage").text('Main UOM Quantity under Sales Order section is missing in Material Tab.');
-            $("#YesBtn").hide(); 
-            $("#NoBtn").hide();  
-            $("#OkBtn1").show();
-            $("#OkBtn1").focus();
-            highlighFocusBtn('activeOk');
-            }
-            else if(jQuery.inArray("false", allblank4) !== -1){
-            $("#MAT_TAB").click();
-            $("#FocusId").val(focustext4);
-            $("#alert").modal('show');
-            $("#AlertMessage").text('Please enter Rate per UOM in Material Tab.');
-            $("#YesBtn").hide(); 
-            $("#NoBtn").hide();  
-            $("#OkBtn1").show();
-            $("#OkBtn1").focus();
-            highlighFocusBtn('activeOk');
-            }
-            else if(jQuery.inArray("false", allblank5) !== -1){
-            $("#MAT_TAB").click();
-            $("#FocusId").val(focustext5);
-            $("#alert").modal('show');
-            $("#AlertMessage").text('Please enter GST Rate / Value in Material Tab.');
-            $("#YesBtn").hide(); 
-            $("#NoBtn").hide();  
-            $("#OkBtn1").show();
-            $("#OkBtn1").focus();
-            highlighFocusBtn('activeOk');
-            }
-            else if(jQuery.inArray("false", allblank6) !== -1){
-            $("#TC_TAB").click();
-            $("#FocusId").val(focustext6);
-            $("#alert").modal('show');
-            $("#AlertMessage").text('Please select Terms & Condition Description in T&C Tab.');
-            $("#YesBtn").hide(); 
-            $("#NoBtn").hide();  
-            $("#OkBtn1").show();
-            $("#OkBtn1").focus();
-            highlighFocusBtn('activeOk');
-            }
-            else if(jQuery.inArray("false", allblank7) !== -1){
-            $("#TC_TAB").click();
-            $("#FocusId").val(focustext7);
-            $("#alert").modal('show');
-            $("#AlertMessage").text('Please enter Value / Comment in T&C Tab.');
-            $("#YesBtn").hide(); 
-            $("#NoBtn").hide();  
-            $("#OkBtn1").show();
-            $("#OkBtn1").focus();
-            highlighFocusBtn('activeOk');
-            }
-            else if(jQuery.inArray("false", allblank9) !== -1){
-            $("#UDF_TAB").click();
-            $("#FocusId").val(focustext9);
-            $("#alert").modal('show');
-            $("#AlertMessage").text('Please enter  Value / Comment in UDF Tab.');
-            $("#YesBtn").hide(); 
-            $("#NoBtn").hide();  
-            $("#OkBtn1").show();
-            $("#OkBtn1").focus();
-            highlighFocusBtn('activeOk');
-            }
-            else if(jQuery.inArray("false", allblank10) !== -1){
-            $("#CT_TAB").click();
-            $("#FocusId").val(focustext10);
-            $("#alert").modal('show');
-            $("#AlertMessage").text('Please select Calculation Component in Calculation Template Tab.');
-            $("#YesBtn").hide(); 
-            $("#NoBtn").hide();  
-            $("#OkBtn1").show();
-            $("#OkBtn1").focus();
-            highlighFocusBtn('activeOk');
-            }
-            else if(jQuery.inArray("false", allblank11) !== -1){
-            $("#CT_TAB").click();
-            $("#FocusId").val(focustext11);
-            $("#alert").modal('show');
-            $("#AlertMessage").text('Please Enter GST Rate / Value in Calculation Template Tab.');
-            $("#YesBtn").hide(); 
-            $("#NoBtn").hide();  
-            $("#OkBtn1").show();
-            $("#OkBtn1").focus();
-            highlighFocusBtn('activeOk');
-            }
-            else if(jQuery.inArray("false", allblank12) !== -1){
-            $("#PAYMENT_TAB").click();
-            $("#FocusId").val(focustext12);
-            $("#alert").modal('show');
-            $("#AlertMessage").text('Please Enter Due % in Payment Slabs Tab.');
-            $("#YesBtn").hide(); 
-            $("#NoBtn").hide();  
-            $("#OkBtn1").show();
-            $("#OkBtn1").focus();
-            highlighFocusBtn('activeOk');
-            }
-            else if(checkPeriodClosing(38,$("#SODT").val(),0) ==0){
-              $("#YesBtn").hide();
-              $("#NoBtn").hide();
-              $("#OkBtn").hide();
-              $("#OkBtn1").show();
-              $("#AlertMessage").text(period_closing_msg);
-              $("#alert").modal('show');
-              $("#OkBtn1").focus();
-            }
-                else{
-
-                    $("#alert").modal('show');
-                    $("#AlertMessage").text('Do you want to save the record.');
-                    $("#YesBtn").data("funcname","fnSaveData");  //set dynamic fucntion name
-                    $("#YesBtn").focus();
-
-                    $("#OkBtn").hide();
-                    highlighFocusBtn('activeYes');
-
-                }
-            
-
-        }
-
-    }
-});
-var AlpsStatus = <?php echo json_encode($AlpsStatus); ?>;
-$( "#btnApprove" ).click(function() {
-  var formSalesOrder = $("#frm_trn_so");
-  if(formSalesOrder.valid()){
-
-    for ( instance in CKEDITOR.instances ) {
-            CKEDITOR.instances.Template_Description.updateElement();
-        }
  
-    $("#FocusId").val('');
-    var SONO           =   $.trim($("#SONO").val());
-    var SODT           =   $.trim($("#SODT").val());
-    var SLID_REF       =   $.trim($("#SLID_REF").val());
-    var OVFDT          =   $.trim($("#OVFDT").val());
-    var OVTDT          =   $.trim($("#OVTDT").val());
-    var CUSTOMERPONO   =   $.trim($("#CUSTOMERPONO").val());
-    var CUSTOMERDT     =   $.trim($("#CUSTOMERDT").val());
-    var SPID_REF       =   $.trim($("#SPID_REF").val());
-    var REFNO          =   $.trim($("#REFNO").val());
-    var attachcount    =   $.trim($("#hdnattachment").val());
 
-     if(SONO ===""){
+ if($('#TotalValue').val() < '0.00'){
+    $("#YesBtn").hide();
+    $("#NoBtn").hide();
+    $("#OkBtn").hide();
+    $("#OkBtn1").show();
+    $("#AlertMessage").text('Total Amount must be greater than Zero. Kindly check values in Material, Calculation Template & TDS Tab.');
+    $("#alert").modal('show');
+    $("#OkBtn1").focus();
+    highlighFocusBtn('activeOk1');
+    return false;
+  }
+
+ else if(SONO ===""){
      $("#FocusId").val('SONO');
      $("#ProceedBtn").focus();
      $("#YesBtn").hide();
@@ -7873,23 +7320,22 @@ $( "#btnApprove" ).click(function() {
               $("#alert").modal('show');
               $("#OkBtn1").focus();
             }
-                else{
+            else{
 
-                    $("#alert").modal('show');
-                    $("#AlertMessage").text('Do you want to Approve the record.');
-                    $("#YesBtn").data("funcname","fnApproveData");  //set dynamic fucntion name
-                    $("#YesBtn").focus();
+                $("#alert").modal('show');
+                $("#AlertMessage").text('Do you want to save to record.');
+                $("#YesBtn").data("funcname","fnSaveData");  //set dynamic fucntion name
+                $("#YesBtn").focus();
 
-                    $("#OkBtn").hide();
-                    highlighFocusBtn('activeYes');
+                $("#OkBtn").hide();
+                highlighFocusBtn('activeYes');
 
-                }
-            
+            }
+        
 
-        }
+ }
 
-    }
-});
+}
 
 $("#YesBtn").click(function(){
 
@@ -7898,6 +7344,13 @@ var customFnName = $("#YesBtn").data("funcname");
     window[customFnName]();
 
 }); //yes button
+
+$("#btnSaveSO" ).click(function() {
+    var formReqData = $("#frm_trn_so");
+    if(formReqData.valid()){
+      validateForm();
+    }
+});
 
 window.fnSaveData = function (){
 
@@ -7913,15 +7366,13 @@ $.ajaxSetup({
 });
 $("#btnSaveSO").hide(); 
 $(".buttonload").show(); 
-$("#btnApprove").prop("disabled", true);
 $.ajax({
-    url:'{{ route("transactionmodify",[38,"update"])}}',
+    url:'<?php echo e(route("transaction",[38,"save"])); ?>',
     type:'POST',
     data:formData,
     success:function(data) {
       $(".buttonload").hide(); 
       $("#btnSaveSO").show();   
-      $("#btnApprove").prop("disabled", false);
        
         if(data.errors) {
             $(".text-danger").hide();
@@ -7997,119 +7448,6 @@ $.ajax({
     error:function(data){
       $(".buttonload").hide(); 
       $("#btnSaveSO").show();   
-      $("#btnApprove").prop("disabled", false);
-        console.log("Error: Something went wrong.");
-        $("#YesBtn").hide();
-        $("#NoBtn").hide();
-        $("#OkBtn1").show();
-        $("#AlertMessage").text('Error: Something went wrong.');
-        $("#alert").modal('show');
-        $("#OkBtn1").focus();
-        highlighFocusBtn('activeOk1');
-    },
-});
-
-}
-
-window.fnApproveData = function (){
-
-//validate and save data
-event.preventDefault();
-
-     var trnsoForm = $("#frm_trn_so");
-    var formData = trnsoForm.serialize();
-$.ajaxSetup({
-    headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    }
-});
-$("#btnApprove").hide(); 
-$(".buttonload_approve").show();  
-$("#btnSaveSO").prop("disabled", true);
-$.ajax({
-    url:'{{ route("transactionmodify",[38,"Approve"])}}',
-    type:'POST',
-    data:formData,
-    success:function(data) {
-      $("#btnApprove").show();  
-      $(".buttonload_approve").hide();  
-      $("#btnSaveSO").prop("disabled", false);
-       
-        if(data.errors) {
-            $(".text-danger").hide();
-
-            if(data.errors.SONO){
-                showError('ERROR_SONO',data.errors.SONO);
-                        $("#YesBtn").hide();
-                        $("#NoBtn").hide();
-                        $("#OkBtn1").show();
-                        $("#AlertMessage").text('Please enter correct value in SONO.');
-                        $("#alert").modal('show');
-                        $("#OkBtn1").focus();
-            }
-           if(data.country=='norecord') {
-
-            $("#YesBtn").hide();
-              $("#NoBtn").hide();
-              $("#OkBtn").show();
-
-              $("#AlertMessage").text(data.msg);
-
-              $("#alert").modal('show');
-              $("#OkBtn").focus();
-
-           }
-           if(data.save=='invalid') {
-
-              $("#YesBtn").hide();
-              $("#NoBtn").hide();
-              $("#OkBtn").show();
-
-              $("#AlertMessage").text(data.msg);
-
-              $("#alert").modal('show');
-              $("#OkBtn").focus();
-
-           }
-        }
-        if(data.success) {                   
-            console.log("succes MSG="+data.msg);
-            
-            $("#YesBtn").hide();
-            $("#NoBtn").hide();
-            $("#OkBtn").show();
-            $("#AlertMessage").text(data.msg);
-            $(".text-danger").hide();
-            $("#alert").modal('show');
-            $("#OkBtn").focus();
-        }
-        else if(data.cancel) {                   
-            console.log("cancel MSG="+data.msg);
-            $("#YesBtn").hide();
-            $("#NoBtn").hide();
-            $("#OkBtn1").show();
-            $("#AlertMessage").text(data.msg);
-            $(".text-danger").hide();
-            $("#alert").modal('show');
-            $("#OkBtn1").focus();
-        }
-        else 
-        {                   
-            console.log("succes MSG="+data.msg);
-            $("#YesBtn").hide();
-            $("#NoBtn").hide();
-            $("#OkBtn1").show();
-            $("#AlertMessage").text(data.msg);
-            $(".text-danger").hide();
-            $("#alert").modal('show');
-            $("#OkBtn1").focus();
-        }
-        
-    },
-    error:function(data){
-      $("#btnApprove").show();  
-      $(".buttonload_approve").hide();  
-      $("#btnSaveSO").prop("disabled", false);
         console.log("Error: Something went wrong.");
         $("#YesBtn").hide();
         $("#NoBtn").hide();
@@ -8136,7 +7474,7 @@ $("#OkBtn").click(function(){
     $("#NoBtn").show();
     $("#OkBtn").hide();
     $(".text-danger").hide();
-    window.location.href = '{{route("transaction",[38,"index"]) }}';
+    window.location.href = '<?php echo e(route("transaction",[38,"index"])); ?>';
 });
 
 $("#OkBtn1").click(function(){
@@ -8146,7 +7484,7 @@ $("#OkBtn1").click(function(){
     $("#OkBtn").hide();
     $("#OkBtn1").hide();
     $("#"+$(this).data('focusname')).focus();
-    // $("[id*=txtlabel]").focus();
+   
     $(".text-danger").hide();
 });
 
@@ -8166,429 +7504,45 @@ function highlighFocusBtn(pclass){
        
        $("."+pclass+"").show();
     }
-
-
-
-
-    $(document).ready(function(){
-  CalculationOnloadTime();
-  getActionEvent();
-});
-
-function CalculationOnloadTime(){
-  $('#Material').find('.participantRow').each(function(){
-
-      var totalvalue = 0.00;
-        var itemid = $(this).find('[id*="ITEMID_REF"]').val();
-        var mqty = $(this).find('[id*="SO_QTY"]').val();
-        var altuomid = $(this).find('[id*="ALT_UOMID_REF"]').val();
-        var txtid = $(this).find('[id*="ALT_UOMID_QTY"]').attr('id');
-        var irate = $(this).find('[id*="RATEPUOM"]').val();
-        $(this).find('[id*="IGSTAMT"]').val('0.00');
-        $(this).find('[id*="CGSTAMT"]').val('0.00');
-        $(this).find('[id*="SGSTAMT"]').val('0.00');
-        var tamt = parseFloat(parseFloat(mqty)*parseFloat(irate)).toFixed(2);
-        var dispercnt = $(this).find('[id*="DISCPER"]').val();
-        var disamt = 0 ;      
-        if (dispercnt != '' && dispercnt != '.0000')
-        {
-           disamt =  parseFloat((parseFloat(tamt)*parseFloat(dispercnt))/100).toFixed(2);
-        }
-        else if ($(this).find('[id*="DISCOUNT_AMT"]').val() != '' && $(this).find('[id*="DISCOUNT_AMT"]').val() != '0.00')
-        {
-           disamt = $(this).find('[id*="DISCOUNT_AMT"]').val();
-        }
-        tamt = parseFloat(parseFloat(tamt) - parseFloat(disamt)).toFixed(2);   
-        var tp1 = $(this).find('[id*="IGST_"]').val();
-        var tp2 = $(this).find('[id*="CGST_"]').val();
-        var tp3 = $(this).find('[id*="SGST_"]').val();
-        var tp1amt = parseFloat((tamt * tp1)/100).toFixed(2);
-        var tp2amt = parseFloat((tamt * tp2)/100).toFixed(2);
-        var tp3amt = parseFloat((tamt * tp3)/100).toFixed(2);
-        var taxamt = parseFloat(parseFloat(tp1amt) + parseFloat(tp2amt) + parseFloat(tp3amt)).toFixed(2); 
-        var totamt = parseFloat(parseFloat(tamt) + parseFloat(taxamt)).toFixed(2);
-        /* if(altuomid!=''){
-              
-                  $.ajaxSetup({
-                      headers: {
-                          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                      }
-                  });
-                  $.ajax({
-                      url:'{{route("transaction",[36,"getaltuomqty"])}}',
-                      type:'POST',
-                      data:{'id':altuomid, 'itemid':itemid, 'mqty':mqty},
-                      success:function(data) {
-                        if(intRegex.test(data)){
-                            data = (data +'.000');
-                        }
-                        $("#"+txtid).val(data);                        
-                      },
-                      error:function(data){
-                        console.log("Error: Something went wrong.");
-                        $("#"+txtid).val('');                        
-                      },
-                  }); 
-                      
-              } */
-      
-      if(intRegex.test($(this).find('[id*="SO_QTY"]').val())){
-        $(this).find('[id*="SO_QTY"]').val($(this).find('[id*="SO_QTY"]').val()+'.000');
-      }
-      if(intRegex.test(tamt)){
-        tamt = tamt +'.00';
-      }
-      if(intRegex.test(totamt)){
-        totamt = totamt +'.00';
-      }
-      if(intRegex.test(taxamt)){
-        taxamt = taxamt +'.00';
-      }
-      if(intRegex.test(tp1amt)){
-        tp1amt = tp1amt +'.00';
-      }
-      if(intRegex.test(tp2amt)){
-        tp2amt = tp2amt +'.00';
-      }
-      if(intRegex.test(tp3amt)){
-        tp3amt = tp3amt +'.00';
-      }
-      $(this).find('[id*="DISAFTT_AMT"]').val(tamt);
-      $(this).find('[id*="TOT_AMT"]').val(totamt);
-      $(this).find('[id*="TGST_AMT"]').val(taxamt);
-      $(this).find('[id*="IGSTAMT"]').val(tp1amt);
-      $(this).find('[id*="CGSTAMT"]').val(tp2amt);
-      $(this).find('[id*="SGSTAMT"]').val(tp3amt);
-      bindTotalValueOnload();
-      if($('#CTID_REF').val()!=''){
-        bindGSTCalTemplateOnload();
-      }
-      bindTotalValueOnload();
-     
-    });
-
-}
-
-function bindTotalValueOnload(){
-    var totalvalue = 0.00;
-    var tvalue = 0.00;
-    var ctvalue = 0.00;
-    var ctgstvalue = 0.00;
-    $('#Material').find('.participantRow').each(function()
-    {
-      tvalue = $(this).find('[id*="TOT_AMT"]').val() !=''?$(this).find('[id*="TOT_AMT"]').val():0;
-      totalvalue = parseFloat(totalvalue) + parseFloat(tvalue);
-      totalvalue = parseFloat(totalvalue).toFixed(2);
-    });
-    if($('#CTID_REF').val() != '')
-    {
-      $('#CT').find('.participantRow5').each(function()
-      {
-        ctvalue = $(this).find('[id*="VALUE"]').val() !=''?$(this).find('[id*="VALUE"]').val():0;
-        ctgstvalue = $(this).find('[id*="TOTGSTAMT"]').val() !=''?$(this).find('[id*="TOTGSTAMT"]').val():0;
-
-
-        if($(this).find('[id*="CT_TYPE"]').val() ==="DISCOUNT"){
-          totalvalue  = parseFloat(totalvalue) - parseFloat(ctvalue);
-          totalvalue  = totalvalue > 0?totalvalue:0;
-        }
-        else{
-          totalvalue = parseFloat(totalvalue) + parseFloat(ctvalue);
-        }
-        totalvalue = parseFloat(totalvalue) + parseFloat(ctgstvalue);
-        totalvalue = parseFloat(totalvalue).toFixed(2);
-
-   
-
-      });
-    }
-    $('#TotalValue').val(totalvalue);
-    MultiCurrency_Conversion('TotalValue'); 
-
-    
-    return true;
-}
-
-function bindGSTCalTemplate(){ 
-          $('#CT').find('.participantRow5').each(function()
-            { 
-                var basis = $(this).find('[id*="BASIS"]').val();
-                var sqno = $(this).find('[id*="SQNO"]').val();
-                var formula = $(this).find('[id*="FORMULA"]').val();
-                var rate = $(this).find('[id*="RATE"]').val();
-                var amountnet = $(this).find('[id*="VALUE"]').val();
-                var netTaxableAmount = 0.00;
-                var netGSTAmount = 0.00;
-                var netTotalAmount = 0.00;
-                var totamount = 0.00;
-                var tamt = 0.00;
-                var IGSTamt = 0.00;
-                var CGSTamt = 0.00;
-                var SGSTamt = 0.00;
-                var TotGSTamt = 0.00;
-
-                $('#Material').find('.participantRow').each(function()
-                {                       
-                  var TaxableAmount = $(this).find('[id*="DISAFTT_AMT"]').val();
-                  if (!isNaN(TaxableAmount) && TaxableAmount.length !== 0) {
-                    netTaxableAmount += parseFloat(TaxableAmount);
-                    }                      
-                  
-                  var GSTAmount = $(this).find('[id*="TGST_AMT"]').val();
-                  if (!isNaN(GSTAmount) && GSTAmount.length !== 0) {
-                    netGSTAmount += parseFloat(GSTAmount);
-                    }
-                  
-                  var TotalAmount = $(this).find('[id*="TOT_AMT"]').val();
-                  if (!isNaN(TotalAmount) && TotalAmount.length !== 0) {
-                    netTotalAmount += parseFloat(TotalAmount);
-                    }
-                })
-                var IGST = $('#IGST_0').val();
-                var CGST = $('#CGST_0').val();
-                var SGST = $('#SGST_0').val();
-                
-                  if(formula == '')
-                  {
-                    if(rate > 0)
-                    { 
-                      if(basis == 'Item Taxable Amount')
-                      {
-                        totamount = parseFloat((rate * netTaxableAmount)/100).toFixed(2);
-                      }
-                      if(basis == 'Item GST Amount')
-                      {
-                        totamount = parseFloat((rate * netGSTAmount)/100).toFixed(2);
-                      }
-                      if(basis == 'Amount After GST Item')
-                      {
-                        totamount = parseFloat((rate * netTotalAmount)/100).toFixed(2);
-                      }
-                    }
-                    else
-                    {
-                      totamount = amountnet;
-                    }
-                  }
-                  else
-                  {
-                    if(basis == 'Item Taxable Amount')
-                    {
-                      var basis1 = '( '+netTaxableAmount+' * '+rate+' ) / 100';
-                      var basis2 = netTaxableAmount;
-                      var rate1 = rate +' ) / 100';
-                      if(formula.indexOf("BASIS*RATE") != -1){
-                        var formula1 = formula.replace ("BASIS*RATE", basis1);
-                        tamt = eval(formula1);
-                        totamount = parseFloat((tamt * rate)/100).toFixed(2);
-                      }
-                      else if(formula.indexOf("BASIS") != -1){
-                        var formula1 = formula.replace ("BASIS", basis2);
-                        tamt = eval(formula1);
-                        totamount = parseFloat((tamt * rate)/100).toFixed(2);
-                      }
-                      else if(formula.indexOf("RATE") != -1){
-                        var formula1 = formula.replace ("RATE", rate1);
-                        tamt = eval(formula1);
-                        totamount = parseFloat(( tamt * rate)/100).toFixed(2);
-                      }
-                    }
-                    if(basis == 'Item GST Amount')
-                    {
-                      var basis1 = '('+netGSTAmount+'*'+rate+')/100';
-                      var basis2 = netGSTAmount;
-                      var rate1 = rate+')/100';
-                      if(formula.indexOf("BASIS*RATE") != -1){
-                        var formula1 = formula.replace ("BASIS*RATE", basis1);
-                        tamt = eval(formula1);
-                        totamount = parseFloat((tamt * rate)/100).toFixed(2);
-                      }
-                      else if(formula.indexOf("BASIS") != -1){
-                        var formula1 = formula.replace ("BASIS", basis2);
-                        tamt = eval(formula1);
-                        totamount = parseFloat((tamt * rate)/100).toFixed(2);
-                      }
-                      else if(formula.indexOf("RATE") != -1){
-                        var formula1 = formula.replace ("RATE", rate1);
-                        tamt = eval(formula1);
-                        totamount = parseFloat(( tamt * rate)/100).toFixed(2);
-                      }
-                    }
-                    if(basis == 'Amount After GST Item')
-                    {
-                      var basis1 = '( '+netTotalAmount+' * '+rate+' ) / 100';
-                      var basis2 = netTotalAmount;
-                      var rate1 = rate+' ) / 100';
-                      if(formula.indexOf("BASIS*RATE") != -1){
-                        var formula1 = formula.replace ("BASIS*RATE", basis1);
-                        tamt = eval(formula1);
-                        totamount = parseFloat((tamt * rate)/100).toFixed(2);
-                      }
-                      else if(formula.indexOf("BASIS") != -1){
-                        var formula1 = formula.replace ("BASIS", basis2);
-                        tamt = eval(formula1);
-                        totamount = parseFloat((tamt * rate)/100).toFixed(2);
-                      }
-                      else if(formula.indexOf("RATE") != -1){
-                        var formula1 = formula.replace ("RATE", rate1);
-                        tamt = eval(formula1);
-                        totamount = parseFloat(( tamt * rate)/100).toFixed(2);
-                      }
-                    }
-                    
-                  }
-                  $(this).find('[id*="VALUE_"]').val(totamount);
-                    IGSTamt = parseFloat((IGST * totamount)/100).toFixed(2);
-                    CGSTamt = parseFloat((CGST * totamount)/100).toFixed(2);
-                    SGSTamt = parseFloat((SGST * totamount)/100).toFixed(2);
-                    TotGSTamt = parseFloat(parseFloat(IGSTamt)+parseFloat(CGSTamt)+parseFloat(SGSTamt)).toFixed(2);
-                if($(this).find('[id*="calGST"]').is(":checked") != false)
-                {
-                  if (IGST != '')
-                  {
-                  $(this).find('[id*="calIGST_"]').val(IGST);
-                  $(this).find('[id*="AMTIGST_"]').val(IGSTamt);
-                  $(this).find('[id*="calIGST_"]').removeAttr('readonly');
-                  }
-                  else
-                  {
-                    $(this).find('[id*="calIGST_"]').val('0');
-                    $(this).find('[id*="AMTIGST_"]').val('0');
-                    $(this).find('[id*="calIGST_"]').prop('readonly',true);
-                    
-                  }
-                  if (CGST != '')
-                  {
-                  $(this).find('[id*="calCGST_"]').val(CGST);
-                  $(this).find('[id*="AMTCGST_"]').val(CGSTamt);
-                  $(this).find('[id*="calCGST_"]').removeAttr('readonly');
-                  }
-                  else
-                  {
-                    $(this).find('[id*="calCGST_"]').val('0');
-                    $(this).find('[id*="AMTCGST_"]').val('0');
-                    $(this).find('[id*="calCGST_"]').prop('readonly',true);
-                  }
-                  if (SGST != '')
-                  {
-                  $(this).find('[id*="calSGST_"]').val(SGST);
-                  $(this).find('[id*="AMTSGST_"]').val(SGSTamt);
-                  $(this).find('[id*="calSGST_"]').removeAttr('readonly');
-                  }
-                  else
-                  {
-                    $(this).find('[id*="calSGST_"]').val('0');
-                    $(this).find('[id*="AMTSGST_"]').val('0');
-                    $(this).find('[id*="calSGST_"]').prop('readonly',true);
-                  }
-                  $(this).find('[id*="TOTGSTAMT_"]').val(TotGSTamt);
-                }
-                else
-                {
-                  $(this).find('[id*="calSGST_"]').val('0');
-                  $(this).find('[id*="AMTSGST_"]').val('0');
-                  $(this).find('[id*="calCGST_"]').val('0');
-                  $(this).find('[id*="AMTCGST_"]').val('0');
-                  $(this).find('[id*="calIGST_"]').val('0');
-                  $(this).find('[id*="AMTIGST_"]').val('0');
-                  $(this).find('[id*="TOTGSTAMT_"]').val('0');
-                  $(this).find('[id*="calIGST_"]').prop('readonly',true);
-                  $(this).find('[id*="calCGST_"]').prop('readonly',true);
-                  $(this).find('[id*="calSGST_"]').prop('readonly',true);
-                }
-            });
-            var totalvalue = 0.00;
-            var tvalue = 0.00;
-            var ctvalue = 0.00;
-            var ctgstvalue = 0.00;
-            $('#Material').find('.participantRow').each(function()
-            {
-              tvalue = $(this).find('[id*="TOT_AMT"]').val();
-              totalvalue = parseFloat(totalvalue) + parseFloat(tvalue);
-              totalvalue = parseFloat(totalvalue).toFixed(2);
-            });
-            if($('#CTID_REF').val() != '')
-            {
-              $('#CT').find('.participantRow5').each(function()
-              {
-                ctvalue = $(this).find('[id*="VALUE"]').val();
-                ctgstvalue = $(this).find('[id*="TOTGSTAMT"]').val();
-
-                if($(this).find('[id*="CT_TYPE"]').val() ==="DISCOUNT"){
-                  totalvalue  = parseFloat(totalvalue) - parseFloat(ctvalue);
-                  totalvalue  = totalvalue > 0?totalvalue:0;
-                }
-                else{
-                  totalvalue = parseFloat(totalvalue) + parseFloat(ctvalue);
-                }
-                totalvalue = parseFloat(totalvalue) + parseFloat(ctgstvalue);
-                totalvalue = parseFloat(totalvalue).toFixed(2);   
-
-
-              });
-            }
-            $('#TotalValue').val(totalvalue);
-            MultiCurrency_Conversion('TotalValue'); 
   
-            event.preventDefault();
+    function showSelectedCheck(hidden_value,selectAll){
+
+var divid ="";
+
+if(hidden_value !=""){
+
+    var all_location_id = document.querySelectorAll('input[name="'+selectAll+'[]"]');
+    
+    for(var x = 0, l = all_location_id.length; x < l;  x++){
+    
+        var checkid=all_location_id[x].id;
+        var checkval=all_location_id[x].value;
+    
+        if(hidden_value == checkval){
+        divid = checkid;
         }
+
+        $("#"+checkid).prop('checked', false);
+        
+    }
+}
+
+if(divid !=""){
+    $("#"+divid).prop('checked', true);
+}
+}
+
+
+
+
 
 
 
 //=================================================
 
 $(document).ready(function() {
-  MultiCurrency_Conversion('TotalValue'); 
-  if ($("#SOFC").is(":checked") == true){
-          $('#txtCRID_popup').removeAttr('disabled');          
-          $('#CONVFACT').prop('readonly',false);
-          $('#txtCRID_popup').prop('readonly',true);
-          event.preventDefault();
-      }
-      else
-      {
-        $('#txtCRID_popup').prop('disabled',true);
-          $('#txtCRID_popup').val('');
-          $('#CRID_REF').val('');
-          $('#CONVFACT').val('');
-          $('#CONVFACT').prop('readonly',true);
-          event.preventDefault();
-      }
-
-      
-
-  var lastdt = <?php echo json_encode($objlastdt[0]->SODT); ?>;
-  var so = <?php echo json_encode($objSO); ?>;
-//alert(so.SODT); 
-  var today = new Date(); 
-  var sodate = today.getFullYear() + "-" + ("0" + (today.getMonth() + 1)).slice(-2) + "-" + ('0' + today.getDate()).slice(-2);
-  if(lastdt < so.SODT)
-  {
-	$('#SODT').attr('min',lastdt);
-  }
-  else
-  {
-	  $('#SODT').attr('min',so.SODT);
-  }
-  $('#SODT').attr('max',sodate);
-
-
-
-
   CKEDITOR.replace( 'Template_Description' );
-
-  <?php if(isset($objSO->EXE_GST) && $objSO->EXE_GST =='1'){?>
-    taxStatusWiseTaxCalculation();
-    $(".ExceptionalGST").show();
-    $("#EXE_GST").prop('checked', true);
-  <?php } ?>
 });
-
-
-
-
-
-
 
 //Template Master 
 let tempid = "#TemplateIDTable2";
@@ -8641,7 +7595,6 @@ function TemplateDateFunction() {
 }
 
 $('#ADDITIONAL').on('click','#txtTemplate_popup',function(event){
-
 var hidden_value=$('#TEMPID_REF').val();
 showSelectedCheck(hidden_value,'SELECT_TEMPLATE'); 
       $("#Templatepopup").show();
@@ -8665,7 +7618,7 @@ showSelectedCheck(hidden_value,'SELECT_TEMPLATE');
     
     $('#txtTemplate_popup').val(texdesc);
     $('#TEMPID_REF').val(txtval);
-    CKEDITOR.instances.Template_Description.setData(template_desc)
+    CKEDITOR.instances.Template_Description.setData(template_desc);
     $("#Templatepopup").hide();
     $("#Templatecodesearch").val(''); 
     $("#Templatenamesearch").val('');         
@@ -9018,7 +7971,7 @@ function getTotalRowValue(){
 
 function getTaxStatus(customid){
 
-  var TaxStatus = $.ajax({type: 'POST',url:'{{route("transaction",[38,"getTaxStatus"])}}',async: false,dataType: 'json',data: {id:customid},done: function(response) {return response;}}).responseText;
+  var TaxStatus = $.ajax({type: 'POST',url:'<?php echo e(route("transaction",[38,"getTaxStatus"])); ?>',async: false,dataType: 'json',data: {id:customid},done: function(response) {return response;}}).responseText;
     
   if(TaxStatus =="1"){
     $(".ExceptionalGST").show();
@@ -9033,7 +7986,7 @@ function getTaxStatus(customid){
 
 
 function taxStatusWiseTaxCalculation(){
-
+  
   if($("#EXE_GST").is(":checked") == true){
     $('#Material').find('.participantRow').each(function(){
 
@@ -9155,46 +8108,6 @@ function getExceptionalGst(){
 
 
 
-// function bindTotalValue(){
-//   var totalvalue = 0.00;
-//   var tvalue = 0.00;
-//   var ctvalue = 0.00;
-//   var ctgstvalue = 0.00;
-//   var tttdsamt21=0.00;
-//   $('#Material').find('.participantRow').each(function()
-//   {
-//     tvalue = $(this).find('[id*="TOT_AMT"]').val();
-//     totalvalue = parseFloat(totalvalue) + parseFloat(tvalue);
-//     totalvalue = parseFloat(totalvalue).toFixed(2);
-//   });
-//   if($('#CTID_REF').val() != '')
-//   {
-//     $('#CT').find('.participantRow5').each(function()
-//     {
-//       ctvalue = $(this).find('[id*="VALUE"]').val();
-//       ctgstvalue = $(this).find('[id*="TOTGSTAMT"]').val();
-//       totalvalue = parseFloat(totalvalue) + parseFloat(ctvalue);
-//       totalvalue = parseFloat(totalvalue) + parseFloat(ctgstvalue);
-//       totalvalue = parseFloat(totalvalue).toFixed(2);
-//     });
-//   }
-
-//   if($('#drpTDS').val() == 'Yes'){
-//     $('#TDS').find('.participantRow7').each(function(){
-//       if($(this).find('[id*="TOT_TD_AMT"]').val() != '' && $(this).find('[id*="TOT_TD_AMT"]').val() != '.00')
-//       {
-
-//         tttdsamt21 = $(this).find('[id*="TOT_TD_AMT"]').val();
-//         totalvalue = parseFloat(parseFloat(totalvalue)-parseFloat(tttdsamt21)).toFixed(2);
-//       }
-//     });
-//   }
-
-//   $('#TotalValue').val(totalvalue);
-
-//   getActionEvent();
-// }
-
 
 function reverse_gst(){     
   var totalvalue  = 0.00;
@@ -9223,23 +8136,23 @@ function reverse_gst(){
 
       if($('#GST_Reverse').is(':checked') == true)
       {
-        if($(this).find('[id*="CT_TYPE"]').val() ==="DISCOUNT"){
-                  totalvalue  = parseFloat(totalvalue) - parseFloat(ctvalue);
-                  totalvalue  = totalvalue > 0?totalvalue:0;
-                }
-                else{
-                  totalvalue = parseFloat(totalvalue) + parseFloat(ctvalue);
-                }
-        totalvalue = parseFloat(totalvalue).toFixed(2);
+      if($(this).find('[id*="CT_TYPE"]').val() ==="DISCOUNT"){
+              totalvalue  = parseFloat(totalvalue) - parseFloat(ctvalue);
+              totalvalue  = totalvalue > 0?totalvalue:0;
+            }
+            else{
+              totalvalue = parseFloat(totalvalue) + parseFloat(ctvalue);
+            }
+              totalvalue = parseFloat(totalvalue).toFixed(2);
       }
       else{
         if($(this).find('[id*="CT_TYPE"]').val() ==="DISCOUNT"){
-                  totalvalue  = parseFloat(totalvalue) - parseFloat(ctvalue);
-                  totalvalue  = totalvalue > 0?totalvalue:0;
-                }
-                else{
-                  totalvalue = parseFloat(totalvalue) + parseFloat(ctvalue);
-                }
+          totalvalue  = parseFloat(totalvalue) - parseFloat(ctvalue);
+          totalvalue  = totalvalue > 0?totalvalue:0;
+        }
+        else{
+          totalvalue = parseFloat(totalvalue) + parseFloat(ctvalue);
+        }
         totalvalue = parseFloat(totalvalue) + parseFloat(ctgstvalue);
         totalvalue = parseFloat(totalvalue).toFixed(2);
       }
@@ -9254,13 +8167,13 @@ function reverse_gst(){
       }
     });
   }
-  MultiCurrency_Conversion('TotalValue'); 
+
   $('#TotalValue').val(totalvalue);
+  MultiCurrency_Conversion('TotalValue'); 
 }
 
-
 function bindTotalValue(){
-     
+  
   var totalvalue  = 0.00;
   var tvalue      = 0.00;
   var ctvalue     = 0.00;
@@ -9279,186 +8192,163 @@ function bindTotalValue(){
       ctgstvalue  = $(this).find('[id*="TOTGSTAMT"]').val() !=''?$(this).find('[id*="TOTGSTAMT"]').val():0;
 
       if($(this).find('[id*="CT_TYPE"]').val() ==="DISCOUNT"){
-        totalvalue  = parseFloat(totalvalue) - parseFloat(ctvalue);
-        totalvalue  = totalvalue > 0?totalvalue:0;
-      }
-      else{
-        totalvalue = parseFloat(totalvalue) + parseFloat(ctvalue);
-      }
-
+                  totalvalue  = parseFloat(totalvalue) - parseFloat(ctvalue);
+                  totalvalue  = totalvalue > 0?totalvalue:0;
+                }
+                else{
+                  totalvalue = parseFloat(totalvalue) + parseFloat(ctvalue);
+                }
       totalvalue  = parseFloat(totalvalue) + parseFloat(ctgstvalue);
       totalvalue  = parseFloat(totalvalue).toFixed(2);
     });
   }
-      
+
   var DealerPer     = $("#DEALER_COMMISSION").val(); 
  
  if(DealerPer != '' && DealerPer > 0 && totalvalue > 0){
    dealer_commission = (parseFloat(totalvalue) * parseFloat(DealerPer)/100).toFixed(2);
    $('#DEALER_COMMISSION_AMT').val(dealer_commission);
  }
- 
+      
   $('#TotalValue').val(totalvalue);
-    MultiCurrency_Conversion('TotalValue'); 
+  MultiCurrency_Conversion('TotalValue'); 
   getActionEvent();
-}
-
-    function showSelectedCheck(hidden_value,selectAll){
-
-var divid ="";
-
-if(hidden_value !=""){
-
-    var all_location_id = document.querySelectorAll('input[name="'+selectAll+'[]"]');
-    
-    for(var x = 0, l = all_location_id.length; x < l;  x++){
-    
-        var checkid=all_location_id[x].id;
-        var checkval=all_location_id[x].value;
-    
-        if(hidden_value == checkval){
-        divid = checkid;
-        }
-
-        $("#"+checkid).prop('checked', false);
-        
-    }
-}
-
-if(divid !=""){
-    $("#"+divid).prop('checked', true);
-}
 }
 
 
 function dataCal(id){
 
-var index             = id.split('_').pop();
-var totalvalue        = 0;
-var discount_amount   = 0;
+  var index             = id.split('_').pop();
 
-var quantity          = $("#SO_QTY_"+index).val() !=''?parseFloat($("#SO_QTY_"+index).val()):0;
-var altquantity       = $("#ALT_UOMID_QTY_"+index).val() !=''?parseFloat($("#ALT_UOMID_QTY_"+index).val()):0;
+  var totalvalue        = 0;
+  var discount_amount   = 0;
 
+  
 
-var itemid    = $("#ITEMID_REF_"+index).val();
-var altuomid  = $("#ALT_UOMID_REF_"+index).val();
+  
 
-if(altuomid !='' && id === "SO_QTY_"+index){
-            
-  $.ajaxSetup({
-    headers: {
-      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    }
-  });
+  var quantity          = $("#SO_QTY_"+index).val() !=''?parseFloat($("#SO_QTY_"+index).val()):0;
+  var altquantity       = $("#ALT_UOMID_QTY_"+index).val() !=''?parseFloat($("#ALT_UOMID_QTY_"+index).val()):0;
+  
 
-  $.ajax({
-    url:'{{route("transaction",[38,"getaltuomqty"])}}',
-    type:'POST',
-    data:{'id':altuomid, 'itemid':itemid, 'mqty':quantity},
-      success:function(data) {
-        if(intRegex.test(data)){
-            data = (data +'.000');
-        }
-      
-        $("#ALT_UOMID_QTY_"+index).val(data);                      
-      },
-      error:function(data){
-        console.log("Error: Something went wrong.");
-        $("#"+txtid).val('');                        
-      },
-  }); 
-                
-}
+  var itemid    = $("#ITEMID_REF_"+index).val();
+  var altuomid  = $("#ALT_UOMID_REF_"+index).val();
 
-if(altuomid !='' && id === "ALT_UOMID_QTY_"+index){
-            
-            $.ajaxSetup({
-              headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-              }
-            });
-        
-            $.ajax({
-              url:'{{route("transaction",[38,"getmainuomqty"])}}',
-              type:'POST',
-              data:{'id':altuomid, 'itemid':itemid, 'aqty':altquantity},
-                success:function(data) {
-                  if(intRegex.test(data)){
-                      data = (data +'.000');
-                  }
-                
-                  $("#SO_QTY_"+index).val(data);                      
-                },
-                error:function(data){
-                  console.log("Error: Something went wrong.");
-                  $("#"+txtid).val('');                        
-                },
-            }); 
-                          
+  if(altuomid !='' && id === "SO_QTY_"+index){
+              
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+
+    $.ajax({
+      url:'<?php echo e(route("transaction",[38,"getaltuomqty"])); ?>',
+      type:'POST',
+      data:{'id':altuomid, 'itemid':itemid, 'mqty':quantity},
+        success:function(data) {
+          if(intRegex.test(data)){
+              data = (data +'.000');
           }
+        
+          $("#ALT_UOMID_QTY_"+index).val(data);                      
+        },
+        error:function(data){
+          console.log("Error: Something went wrong.");
+          $("#"+txtid).val('');                        
+        },
+    }); 
+                  
+  }
+
+  if(altuomid !='' && id === "ALT_UOMID_QTY_"+index){
+              
+              $.ajaxSetup({
+                headers: {
+                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+              });
           
-var quantity1          = $("#SO_QTY_"+index).val() !=''?parseFloat($("#SO_QTY_"+index).val()):0;
-var altquantity1       = $("#ALT_UOMID_QTY_"+index).val() !=''?parseFloat($("#ALT_UOMID_QTY_"+index).val()):0;
-var rate1              = $("#RATEPUOM_"+index).val() !=''?parseFloat($("#RATEPUOM_"+index).val()):0;
+              $.ajax({
+                url:'<?php echo e(route("transaction",[38,"getmainuomqty"])); ?>',
+                type:'POST',
+                data:{'id':altuomid, 'itemid':itemid, 'aqty':altquantity},
+                  success:function(data) {
+                    if(intRegex.test(data)){
+                        data = (data +'.000');
+                    }
+                  
+                    $("#SO_QTY_"+index).val(data);                      
+                  },
+                  error:function(data){
+                    console.log("Error: Something went wrong.");
+                    $("#"+txtid).val('');                        
+                  },
+              }); 
+                            
+            }
+            
+  var quantity1          = $("#SO_QTY_"+index).val() !=''?parseFloat($("#SO_QTY_"+index).val()):0;
+  var altquantity1       = $("#ALT_UOMID_QTY_"+index).val() !=''?parseFloat($("#ALT_UOMID_QTY_"+index).val()):0;
+  var rate1              = $("#RATEPUOM_"+index).val() !=''?parseFloat($("#RATEPUOM_"+index).val()):0;
 
-if($("#PRICE_BASED_ON").val() =='MAIN UOM'){
-  var amount1            = parseFloat(quantity1*rate1).toFixed(2);
+  if($("#PRICE_BASED_ON").val() =='MAIN UOM'){
+    var amount1            = parseFloat(quantity1*rate1).toFixed(2);
+  }
+  else{
+    var amount1            = parseFloat(altquantity1*rate1).toFixed(2);
+  }
+
+  var discount_percent  = $("#DISCPER_"+index).val() !=''?parseFloat($("#DISCPER_"+index).val()):0;
+  var discount_amount   = $("#DISCOUNT_AMT_"+index).val() !=''?parseFloat($("#DISCOUNT_AMT_"+index).val()):0;
+
+  if(id === "DISCPER_"+index){
+    var discount_amount   = parseFloat((parseFloat(amount1)*parseFloat(discount_percent))/100).toFixed(2);
+    $("#DISCOUNT_AMT_"+index).val(discount_amount);
+  }
+  else if(id === "DISCOUNT_AMT_"+index){
+    var discount_percent  = parseFloat((parseFloat(discount_amount)*100/parseFloat(amount1))).toFixed(2);
+    $("#DISCPER_"+index).val(discount_percent);
+  }
+
+  var amount1        = amount1 > 0?parseFloat(parseFloat(amount1) - parseFloat(discount_amount)).toFixed(2):0;   
+  var igst          = $("#IGST_"+index).val() !=''?parseFloat($("#IGST_"+index).val()):0;
+  var cgst          = $("#CGST_"+index).val() !=''?parseFloat($("#CGST_"+index).val()):0;
+  var sgst          = $("#SGST_"+index).val() !=''?parseFloat($("#SGST_"+index).val()):0;
+
+  var igst_amount   = igst > 0?parseFloat((amount1 * igst)/100).toFixed(2):0;
+  var cgst_amount   = cgst > 0?parseFloat((amount1 * cgst)/100).toFixed(2):0;
+  var sgst_amount   = sgst > 0?parseFloat((amount1 * sgst)/100).toFixed(2):0;
+
+  var tax_amount    = parseFloat(parseFloat(igst_amount) + parseFloat(cgst_amount) + parseFloat(sgst_amount)).toFixed(2); 
+  var total_amount  = parseFloat(parseFloat(amount1) + parseFloat(tax_amount)).toFixed(2);
+
+  
+ 
+
+  $("#DISAFTT_AMT_"+index).val(parseFloat(amount1).toFixed(2));
+  $("#TOT_AMT_"+index).val(parseFloat(total_amount).toFixed(2));
+  $("#TGST_AMT_"+index).val(parseFloat(tax_amount).toFixed(2));
+
+  $("#IGST_"+index).val(parseFloat(igst).toFixed(2));
+  $("#CGST_"+index).val(parseFloat(cgst).toFixed(2));
+  $("#SGST_"+index).val(parseFloat(sgst).toFixed(2));
+
+  $("#IGSTAMT_"+index).val(parseFloat(igst_amount).toFixed(2));
+  $("#CGSTAMT_"+index).val(parseFloat(cgst_amount).toFixed(2));
+  $("#SGSTAMT_"+index).val(parseFloat(sgst_amount).toFixed(2));
+
+  
+
+  if($('#CTID_REF').val()!=''){
+    bindGSTCalTemplate();
+  }
+
+  SchemeCal(index); 
+  bindTotalValue();
+  MultiCurrency_Conversion('TotalValue'); 
+  event.preventDefault();
 }
-else{
-  var amount1            = parseFloat(altquantity1*rate1).toFixed(2);
-}
-
-var discount_percent  = $("#DISCPER_"+index).val() !=''?parseFloat($("#DISCPER_"+index).val()):0;
-var discount_amount   = $("#DISCOUNT_AMT_"+index).val() !=''?parseFloat($("#DISCOUNT_AMT_"+index).val()):0;
-
-if(id === "DISCPER_"+index){
-  var discount_amount   = parseFloat((parseFloat(amount1)*parseFloat(discount_percent))/100).toFixed(2);
-  $("#DISCOUNT_AMT_"+index).val(discount_amount);
-}
-else if(id === "DISCOUNT_AMT_"+index){
-  var discount_percent  = parseFloat((parseFloat(discount_amount)*100/parseFloat(amount1))).toFixed(2);
-  $("#DISCPER_"+index).val(discount_percent);
-}
-
-var amount1        = amount1 > 0?parseFloat(parseFloat(amount1) - parseFloat(discount_amount)).toFixed(2):0;   
-var igst          = $("#IGST_"+index).val() !=''?parseFloat($("#IGST_"+index).val()):0;
-var cgst          = $("#CGST_"+index).val() !=''?parseFloat($("#CGST_"+index).val()):0;
-var sgst          = $("#SGST_"+index).val() !=''?parseFloat($("#SGST_"+index).val()):0;
-
-var igst_amount   = igst > 0?parseFloat((amount1 * igst)/100).toFixed(2):0;
-var cgst_amount   = cgst > 0?parseFloat((amount1 * cgst)/100).toFixed(2):0;
-var sgst_amount   = sgst > 0?parseFloat((amount1 * sgst)/100).toFixed(2):0;
-
-var tax_amount    = parseFloat(parseFloat(igst_amount) + parseFloat(cgst_amount) + parseFloat(sgst_amount)).toFixed(2); 
-var total_amount  = parseFloat(parseFloat(amount1) + parseFloat(tax_amount)).toFixed(2);
-
-
-
-
-$("#DISAFTT_AMT_"+index).val(parseFloat(amount1).toFixed(2));
-$("#TOT_AMT_"+index).val(parseFloat(total_amount).toFixed(2));
-$("#TGST_AMT_"+index).val(parseFloat(tax_amount).toFixed(2));
-
-$("#IGST_"+index).val(parseFloat(igst).toFixed(2));
-$("#CGST_"+index).val(parseFloat(cgst).toFixed(2));
-$("#SGST_"+index).val(parseFloat(sgst).toFixed(2));
-
-$("#IGSTAMT_"+index).val(parseFloat(igst_amount).toFixed(2));
-$("#CGSTAMT_"+index).val(parseFloat(cgst_amount).toFixed(2));
-$("#SGSTAMT_"+index).val(parseFloat(sgst_amount).toFixed(2));
-
-
-
-if($('#CTID_REF').val()!=''){
-  bindGSTCalTemplate();
-}
-SchemeCal(index);
-bindTotalValue();
-MultiCurrency_Conversion('TotalValue'); 
-event.preventDefault();
-}
-
 
 function SchemeCal(index){
   
@@ -9478,7 +8368,7 @@ function SchemeCal(index){
       if('SUB'+SCHEMEID_REF==schemeid && type=="SUB"){
 
         var schemeqty = $(this).find('[id*="SCHEMEQTY"]').val();
- 
+        $('.SUB'+SCHEMEID_REF).val(schemeqty*Qty); 
         $("#SO_QTY_"+$(this).find("[id*=SO_QTY]").attr("id").split("_").pop(0)).val(schemeqty*Qty);
 
 
@@ -9541,11 +8431,68 @@ function SchemeCal(index){
 }
 
 function dataDec(data,no){
-  
   var text_value  = data.value !=''?parseFloat(data.value).toFixed(no):'';
   $("#"+data.id).val(text_value);
-  
 }
+
+function dataCalculation(id){
+
+var index             = id.split('_').pop();
+var totalvalue        = 0;
+var discount_amount   = 0;
+
+var quantity          = $("#SO_QTY_"+index).val() !=''?parseFloat($("#SO_QTY_"+index).val()):0;
+var altquantity       = $("#ALT_UOMID_QTY_"+index).val() !=''?parseFloat($("#ALT_UOMID_QTY_"+index).val()):0;
+var itemid    = $("#ITEMID_REF_"+index).val();
+var altuomid  = $("#ALT_UOMID_REF_"+index).val();
+var quantity1          = $("#SO_QTY_"+index).val() !=''?parseFloat($("#SO_QTY_"+index).val()):0;
+var altquantity1       = $("#ALT_UOMID_QTY_"+index).val() !=''?parseFloat($("#ALT_UOMID_QTY_"+index).val()):0;
+var rate1              = $("#RATEPUOM_"+index).val() !=''?parseFloat($("#RATEPUOM_"+index).val()):0;
+var amount1            = parseFloat(quantity1*rate1).toFixed(2);
+var discount_percent  = $("#DISCPER_"+index).val() !=''?parseFloat($("#DISCPER_"+index).val()):0;
+var discount_amount   = $("#DISCOUNT_AMT_"+index).val() !=''?parseFloat($("#DISCOUNT_AMT_"+index).val()):0;
+
+if(id === "DISCPER_"+index){
+  var discount_amount   = parseFloat((parseFloat(amount1)*parseFloat(discount_percent))/100).toFixed(2);
+  $("#DISCOUNT_AMT_"+index).val(discount_amount);
+}
+else if(id === "DISCOUNT_AMT_"+index){
+  var discount_percent  = parseFloat((parseFloat(discount_amount)*100/parseFloat(amount1))).toFixed(2);
+  $("#DISCPER_"+index).val(discount_percent);
+}
+
+var amount1        = amount1 > 0?parseFloat(parseFloat(amount1) - parseFloat(discount_amount)).toFixed(2):0;   
+var igst          = $("#IGST_"+index).val() !=''?parseFloat($("#IGST_"+index).val()):0;
+var cgst          = $("#CGST_"+index).val() !=''?parseFloat($("#CGST_"+index).val()):0;
+var sgst          = $("#SGST_"+index).val() !=''?parseFloat($("#SGST_"+index).val()):0;
+
+var igst_amount   = igst > 0?parseFloat((amount1 * igst)/100).toFixed(2):0;
+var cgst_amount   = cgst > 0?parseFloat((amount1 * cgst)/100).toFixed(2):0;
+var sgst_amount   = sgst > 0?parseFloat((amount1 * sgst)/100).toFixed(2):0;
+
+var tax_amount    = parseFloat(parseFloat(igst_amount) + parseFloat(cgst_amount) + parseFloat(sgst_amount)).toFixed(2); 
+var total_amount  = parseFloat(parseFloat(amount1) + parseFloat(tax_amount)).toFixed(2);
+
+$("#DISAFTT_AMT_"+index).val(parseFloat(amount1).toFixed(2));
+$("#TOT_AMT_"+index).val(parseFloat(total_amount).toFixed(2));
+$("#TGST_AMT_"+index).val(parseFloat(tax_amount).toFixed(2));
+
+$("#IGST_"+index).val(parseFloat(igst).toFixed(2));
+$("#CGST_"+index).val(parseFloat(cgst).toFixed(2));
+$("#SGST_"+index).val(parseFloat(sgst).toFixed(2));
+
+$("#IGSTAMT_"+index).val(parseFloat(igst_amount).toFixed(2));
+$("#CGSTAMT_"+index).val(parseFloat(cgst_amount).toFixed(2));
+$("#SGSTAMT_"+index).val(parseFloat(sgst_amount).toFixed(2));
+
+if($('#CTID_REF').val()!=''){
+  bindGSTCalTemplate();
+}
+
+bindTotalValue();
+event.preventDefault();
+}
+
 
 
 
@@ -9625,35 +8572,36 @@ let Dealer = "#DealerOrderTable2";
 
   
 
-  $('#txtDealerpopup').on('click',function(event){  
-    if($("#CUSTOMER_TYPE").val() ==="CUSTOMER"){         
-                $("#Dataresult_dealer").html('');
-                  $.ajaxSetup({
-                      headers: {
-                          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                      }
-                  });
-                  $("#Data_seach_dealer").show();
-                  $.ajax({
-                      url:'{{route("transaction",[$FormId,"get_Dealer"])}}',
-                      type:'POST',
-                      data:{},
-                      success:function(data) {                                
-                        $("#Data_seach_dealer").hide();
-                        $("#Dataresult_dealer").html(data);   
-                        showSelectedCheck($("#DEALERID_REF").val(),"dealer");
-                        bindDealerEvents();                                        
-                      },
-                      error:function(data){
-                        console.log("Error: Something went wrong.");
-                        $("#Dataresult_dealer").html('');                        
-                      },
-                  }); 
+$('#txtDealerpopup').on('click',function(event){  
+  if($("#CUSTOMER_TYPE").val() ==="CUSTOMER"){
+              $("#Dataresult_dealer").html('');
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $("#Data_seach_dealer").show();
+                $.ajax({
+                    url:'<?php echo e(route("transaction",[$FormId,"get_Dealer"])); ?>',
+                    type:'POST',
+                    data:{},
+                    success:function(data) {                                
+                      $("#Data_seach_dealer").hide();
+                      $("#Dataresult_dealer").html(data);   
+                      showSelectedCheck($("#DEALERID_REF").val(),"dealer");
+                      bindDealerEvents();                                        
+                    },
+                    error:function(data){
+                      console.log("Error: Something went wrong.");
+                      $("#Dataresult_dealer").html('');                        
+                    },
+                }); 
 
-                  showSelectedCheck($("#DEALERID_REF").val(),"dealer");
-                  $("#Dealer_popup").show();  
-                }       
-    });
+                showSelectedCheck($("#DEALERID_REF").val(),"dealer");
+                $("#Dealer_popup").show();    
+                
+  }
+});
 
 /*==================================Dealer POPUP ENDS HERE====================================*/
 
@@ -9730,7 +8678,6 @@ let Project = "#ProjectOrderTable2";
         event.preventDefault();
       });
   }
-
   
 
   $('#txtProjectpopup').on('click',function(event){           
@@ -9742,7 +8689,7 @@ let Project = "#ProjectOrderTable2";
                   });
                   $("#Data_seach_project").show();
                   $.ajax({
-                      url:'{{route("transaction",[$FormId,"get_Project"])}}',
+                      url:'<?php echo e(route("transaction",[$FormId,"get_Project"])); ?>',
                       type:'POST',
                       data:{},
                       success:function(data) {                                
@@ -9843,7 +8790,7 @@ let Scheme = "#SchemeOrderTable2";
                   });
                   $("#Data_seach_scheme").show();
                   $.ajax({
-                      url:'{{route("transaction",[$FormId,"get_Scheme"])}}',
+                      url:'<?php echo e(route("transaction",[$FormId,"get_Scheme"])); ?>',
                       type:'POST',
                       data:{'SCHEMEID_REF':SCHEMEID_REF,'SODT':SODT},
                       success:function(data) {                                
@@ -9879,6 +8826,7 @@ $('#SchemeOrderTable2').find('.participantRow10').each(function(){
 }
 /*==================================Project POPUP ENDS HERE====================================*/
 
+
 function GetSchemeMaterial(){
   $.ajaxSetup({
       headers: {
@@ -9886,7 +8834,7 @@ function GetSchemeMaterial(){
       }
   });
   $.ajax({
-      url:'{{route("transaction",[$FormId,"GetSchemeMaterialItems"])}}',
+      url:'<?php echo e(route("transaction",[$FormId,"GetSchemeMaterialItems"])); ?>',
       type:'POST',
       data:$('#frm_trn_so').serialize(),
         
@@ -9909,10 +8857,13 @@ function GetSchemeMaterial(){
 
 
 
+
 </script>
 
 
-@endpush
+<?php $__env->stopPush(); ?>
+
+
 
 
 <script>
@@ -9942,7 +8893,7 @@ function getTechnicalSpecification(id){
     });
 
     $.ajax({
-      url:'{{route("transaction",[38,"getTechnicalSpecification"])}}',
+      url:'<?php echo e(route("transaction",[38,"getTechnicalSpecification"])); ?>',
       type:'POST',
       data:{ITEMID_REF:ITEMID_REF,TSID_REF:TSID_REF},
       success:function(data) {
@@ -10001,71 +8952,74 @@ function closeTechnicalSpecification(){
 }
 
 
+
 function get_delear_customer_price(row_id,action_type){
 
   
 
-var DOC_DATE    = $("#SODT").val();
-var TYPE        = $("#CUSTOMER_TYPE").val();
-var item_array  = [];
+    var DOC_DATE    = $("#SODT").val();
+    var TYPE        = $("#CUSTOMER_TYPE").val();
+    var item_array  = [];
 
-if(action_type =='direct'){
-  $('#Material').find('.participantRow').each(function(){
-    var TEXT_ID     = $(this).find('[id*="RATEPUOM"]').attr('id');
-    var ITEMID_REF  = $(this).find('[id*="ITEMID_REF"]').val();
-    var rate        = 0;
-    item_array.push(TEXT_ID+'#'+ITEMID_REF);
-  });
-}
-else{
-  var row_no      = row_id.split('_').pop();
-  var TEXT_ID     = row_id;
-  var ITEMID_REF  = $("#ITEMID_REF_"+row_no).val();
-  var rate        = $("#RATEPUOM_"+row_no).val();
-  item_array.push(TEXT_ID+'#'+ITEMID_REF);
-}
-
-$.ajaxSetup({
-    headers: {
-      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    if(action_type =='direct'){
+      $('#Material').find('.participantRow').each(function(){
+        var TEXT_ID     = $(this).find('[id*="RATEPUOM"]').attr('id');
+        var ITEMID_REF  = $(this).find('[id*="ITEMID_REF"]').val();
+        var rate        = 0;
+        item_array.push(TEXT_ID+'#'+ITEMID_REF);
+      });
     }
-});
+    else{
+      var row_no      = row_id.split('_').pop();
+      var TEXT_ID     = row_id;
+      var ITEMID_REF  = $("#ITEMID_REF_"+row_no).val();
+      var rate        = $("#RATEPUOM_"+row_no).val();
+      item_array.push(TEXT_ID+'#'+ITEMID_REF);
+    }
 
-$.ajax({
-    url:'{{route("transaction",[38,"get_delear_customer_price"])}}',
-    type:'POST',
-    data:{
-      action_type:action_type,
-      rate:rate,
-      TYPE:TYPE,
-      DOC_DATE:DOC_DATE,
-      item_array:item_array
-      },
-      success:function(data) {
+    $.ajaxSetup({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
 
-        if(data.length > 0){
-          $.each(data, function(key, value) {
+    $.ajax({
+        url:'<?php echo e(route("transaction",[38,"get_delear_customer_price"])); ?>',
+        type:'POST',
+        data:{
+          action_type:action_type,
+          rate:rate,
+          TYPE:TYPE,
+          DOC_DATE:DOC_DATE,
+          item_array:item_array
+          },
+          success:function(data) {
 
-            $("#"+value.TEXT_ID).val(value.RATE);
-            if($("#DEALERID_REF").val() !=""){
-              $("#DEALER_COMMISSION_AMT").val(value.COMMISSION);
-            }
-          });
-        }              
-    },
-    error: function (request, status, error) {
-      $("#YesBtn").hide();
-      $("#NoBtn").hide();
-      $("#OkBtn").show();
-      $("#AlertMessage").text(request.responseText);
-      $("#alert").modal('show');
-      $("#OkBtn").focus();
-      highlighFocusBtn('activeOk');                    
-    },
-});
+            if(data.length > 0){
+              $.each(data, function(key, value) {
 
+                $("#"+value.TEXT_ID).val(value.RATE);
+                if($("#DEALERID_REF").val() !=""){
+                  $("#DEALER_COMMISSION_AMT").val(value.COMMISSION);
+                }
+              });
+            }              
+        },
+        error: function (request, status, error) {
+          $("#YesBtn").hide();
+          $("#NoBtn").hide();
+          $("#OkBtn").show();
+          $("#AlertMessage").text(request.responseText);
+          $("#alert").modal('show');
+          $("#OkBtn").focus();
+          highlighFocusBtn('activeOk');                    
+        },
+    });
+  
 
 }
+
+
 
 function check_pancard(){
 
@@ -10074,7 +9028,7 @@ function check_pancard(){
 
   if(TotalValue > 200000){
     var posts     = $.ajax({
-                    url:'{{route("transaction",[38,"check_pancard"])}}',
+                    url:'<?php echo e(route("transaction",[38,"check_pancard"])); ?>',
                     type:'POST',
                     async: false,
                     dataType: 'json',
@@ -10089,3 +9043,4 @@ function check_pancard(){
   return posts;
 }
 </script>
+<?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\UNICORN_DEV\resources\views/transactions/sales/SalesOrder/trnfrm38add.blade.php ENDPATH**/ ?>

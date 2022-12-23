@@ -1912,18 +1912,23 @@ class TrnFrm38Controller extends Controller
              $PRICE_BASED_ON         = $request['PRICE_BASED_ON'] ? $request['PRICE_BASED_ON'] : NULL;
              $BILLTO_SHIPTO         = $request['Tax_State'] ? $request['Tax_State'] : NULL;
 
+             $SHIPPING_INSTRUCTION  =   $request['SHIPPING_INSTRUCTION'] !=''?$request['SHIPPING_INSTRUCTION']:NULL;
+             $DELIVERY_ADDRESS      =   $request['DELIVERY_ADDRESS'] !=''?$request['DELIVERY_ADDRESS']:NULL;
+            
+
             $log_data = [ 
                 $SONO,$SODT,$GLID_REF,$SLID_REF,$SOFC,$CRID_REF,$CONVFACT,$OVFDT,$OVTDT,$CUSTOMERPONO,$CUSTOMERDT,
                 $SPID_REF,$REFNO,$CREDITDAYS,$BILLTO,$SHIPTO,$REMARKS,$CYID_REF, $BRID_REF, $FYID_REF,$VTID_REF,
                 $XMLMAT, $XMLTNC,$XMLUDF,$XMLCAL,$XMLPSLB, $USERID, Date('Y-m-d'), Date('h:i:s.u'),$ACTIONNAME, 
                 $IPADDRESS, $GST_N_Avail,$GST_Reverse,$EXE_GST,$Template_Description,$XMLTDSD,$TDS,$DEALERID_REF,$PROJECTID_REF,$DEALER_COMMISSION_AMT
-                ,$GROSS_TOTAL,$NET_TOTAL,$CGSTAMT,$SGSTAMT,$IGSTAMT,$DISCOUNT,$OTHER_CHARGES,$TDS_AMOUNT,$PRICE_BASED_ON,$BILLTO_SHIPTO
+                ,$GROSS_TOTAL,$NET_TOTAL,$CGSTAMT,$SGSTAMT,$IGSTAMT,$DISCOUNT,$OTHER_CHARGES,$TDS_AMOUNT,$PRICE_BASED_ON,$BILLTO_SHIPTO,
+                $SHIPPING_INSTRUCTION,$DELIVERY_ADDRESS
             ];   
 
             
 
                       
-            $sp_result = DB::select('EXEC SP_SO_IN ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?, ?,?,?,?,?, ?,?,?,?,?', $log_data);       
+            $sp_result = DB::select('EXEC SP_SO_IN ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?, ?,?,?,?,?, ?,?,?,?,?, ?,?', $log_data);       
             
         
             $contains = Str::contains($sp_result[0]->RESULT, 'SUCCESS');
@@ -2922,6 +2927,9 @@ class TrnFrm38Controller extends Controller
         $PRICE_BASED_ON         = $request['PRICE_BASED_ON'] ? $request['PRICE_BASED_ON'] : NULL;
         $BILLTO_SHIPTO         = $request['Tax_State'] ? $request['Tax_State'] : NULL;
 
+        $SHIPPING_INSTRUCTION  =   $request['SHIPPING_INSTRUCTION'] !=''?$request['SHIPPING_INSTRUCTION']:NULL;
+        $DELIVERY_ADDRESS      =   $request['DELIVERY_ADDRESS'] !=''?$request['DELIVERY_ADDRESS']:NULL;
+
 
 
         $log_data = [ 
@@ -2929,13 +2937,14 @@ class TrnFrm38Controller extends Controller
             $SPID_REF,$REFNO,$CREDITDAYS,$BILLTO,$SHIPTO,$REMARKS,$CYID_REF, $BRID_REF, $FYID_REF,$VTID_REF,
             $XMLMAT, $XMLTNC,$XMLUDF,$XMLCAL,$XMLPSLB, $USERID, Date('Y-m-d'), Date('h:i:s.u'),$ACTIONNAME, 
             $IPADDRESS,$GST_N_Avail,$GST_Reverse,$EXE_GST,$Template_Description,$XMLTDSD,$TDS,$DEALERID_REF,$PROJECTID_REF,$DEALER_COMMISSION_AMT,
-            $GROSS_TOTAL,$NET_TOTAL,$CGSTAMT,$SGSTAMT,$IGSTAMT,$DISCOUNT,$OTHER_CHARGES,$TDS_AMOUNT,$PRICE_BASED_ON,$BILLTO_SHIPTO
+            $GROSS_TOTAL,$NET_TOTAL,$CGSTAMT,$SGSTAMT,$IGSTAMT,$DISCOUNT,$OTHER_CHARGES,$TDS_AMOUNT,$PRICE_BASED_ON,$BILLTO_SHIPTO,
+            $SHIPPING_INSTRUCTION,$DELIVERY_ADDRESS
         ];
 
     // dd($log_data); 
 
        
-        $sp_result = DB::select('EXEC SP_SO_UP ?,?,?,?,? ,?,?,?,?,?, ?,?,?,?,?, ?,?,?,?,?, ?,?,?,?,?, ?,?,?,?,?, ?,?,?,?,?, ?,?,?,?,?, ?,?,?,?,?, ?,?,?,?,?', $log_data);       
+        $sp_result = DB::select('EXEC SP_SO_UP ?,?,?,?,? ,?,?,?,?,?, ?,?,?,?,?, ?,?,?,?,?, ?,?,?,?,?, ?,?,?,?,?, ?,?,?,?,?, ?,?,?,?,?, ?,?,?,?,?, ?,?,?,?,?, ?,?', $log_data);       
     // dd($sp_result); 
     
         $contains = Str::contains($sp_result[0]->RESULT, 'SUCCESS');
@@ -3225,17 +3234,21 @@ class TrnFrm38Controller extends Controller
                 $PRICE_BASED_ON         = isset($request['PRICE_BASED_ON'])?trim($request['PRICE_BASED_ON']):NULL;
                 $BILLTO_SHIPTO         = $request['Tax_State'] ? $request['Tax_State'] : NULL;
 
+                $SHIPPING_INSTRUCTION  =   $request['SHIPPING_INSTRUCTION'] !=''?$request['SHIPPING_INSTRUCTION']:NULL;
+                $DELIVERY_ADDRESS      =   $request['DELIVERY_ADDRESS'] !=''?$request['DELIVERY_ADDRESS']:NULL;
+
 
                 $log_data = [ 
                     $SONO,$SODT,$GLID_REF,$SLID_REF,$SOFC,$CRID_REF,$CONVFACT,$OVFDT,$OVTDT,$CUSTOMERPONO,$CUSTOMERDT,
                     $SPID_REF,$REFNO,$CREDITDAYS,$BILLTO,$SHIPTO,$REMARKS,$CYID_REF, $BRID_REF, $FYID_REF,$VTID_REF,
                     $XMLMAT, $XMLTNC,$XMLUDF,$XMLCAL,$XMLPSLB, $USERID, Date('Y-m-d'), Date('h:i:s.u'),$ACTIONNAME, 
                     $IPADDRESS,$GST_N_Avail,$GST_Reverse,$EXE_GST,$Template_Description,$XMLTDSD,$TDS,$DEALERID_REF,$PROJECTID_REF,$DEALER_COMMISSION_AMT
-                    ,$GROSS_TOTAL,$NET_TOTAL,$CGSTAMT,$SGSTAMT,$IGSTAMT,$DISCOUNT,$OTHER_CHARGES,$TDS_AMOUNT,$PRICE_BASED_ON,$BILLTO_SHIPTO
+                    ,$GROSS_TOTAL,$NET_TOTAL,$CGSTAMT,$SGSTAMT,$IGSTAMT,$DISCOUNT,$OTHER_CHARGES,$TDS_AMOUNT,$PRICE_BASED_ON,$BILLTO_SHIPTO,
+                    $SHIPPING_INSTRUCTION,$DELIVERY_ADDRESS
                 ];
 
                 
-                $sp_result = DB::select('EXEC SP_SO_UP ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?, ?,?,?,?,?, ?,?,?,?,?', $log_data);       
+                $sp_result = DB::select('EXEC SP_SO_UP ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?, ?,?,?,?,?, ?,?,?,?,?, ?,?', $log_data);       
                 
             
                 $contains = Str::contains($sp_result[0]->RESULT, 'SUCCESS');
@@ -5879,5 +5892,21 @@ public function getTechnicalSpecification(Request $request){
     return Response::json($data_array);
 }
 
+
+    public function check_pancard(Request $request){
+
+        $CYID_REF   =   Auth::user()->CYID_REF;
+        $BRID_REF   =   Session::get('BRID_REF');
+        $FYID_REF   =   Session::get('FYID_REF');
+        $SLID_REF   =   $request['SLID_REF'];
+       
+        $count      =   DB::table('TBL_MST_CUSTOMER')
+                        ->where('CYID_REF','=',Auth::user()->CYID_REF)
+                        ->where('SLID_REF','=',$SLID_REF)     
+                        ->where('PANNO','!=','')
+                        ->count();
+
+        return Response::json($count);
+    }
 
 }

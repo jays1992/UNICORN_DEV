@@ -181,7 +181,7 @@
 
                             <div class="col-lg-2 pl"><p>Total Value</p></div>
                             <div class="col-lg-2 pl">
-                                <input type="text" name="TotalValue" id="TotalValue" class="form-control"  autocomplete="off" readonly  />
+                                <input type="text" name="TotalValue" id="TotalValue" class="form-control"  autocomplete="off" readonly />
                             </div>
 
                             <div id="multi_currency_section" style="display:none">
@@ -199,6 +199,18 @@
                               <option value="MAIN UOM" selected >MAIN UOM</option>
                               <option value="ALT UOM" >ALT UOM</option>
                           </select>
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <div class="col-lg-2 pl"><p>Shipping Instruction</p></div>
+                          <div class="col-lg-4 pl">
+                            <textarea name="SHIPPING_INSTRUCTION" id="SHIPPING_INSTRUCTION" autocomplete="off" class="form-control" style="height:60px;" ></textarea>
+                          </div> 
+                          
+                          <div class="col-lg-2 pl"><p>Delivery Address</p></div>
+                          <div class="col-lg-4 pl">
+                            <textarea name="DELIVERY_ADDRESS" id="DELIVERY_ADDRESS" autocomplete="off" class="form-control" style="height:60px;" ></textarea>
                           </div>
                         </div>
 
@@ -6827,6 +6839,8 @@ $(document).ready(function() {
 });
 function validateForm(){
 
+  
+
   /* for ( instance in CKEDITOR.instances ) {
             CKEDITOR.instances.Template_Description.updateElement();
         } */
@@ -6841,6 +6855,8 @@ function validateForm(){
  var CUSTOMERDT     =   $.trim($("#CUSTOMERDT").val());
  var SPID_REF       =   $.trim($("#SPID_REF").val());
  var REFNO          =   $.trim($("#REFNO").val());
+
+ 
 
  if($('#TotalValue').val() < '0.00'){
     $("#YesBtn").hide();
@@ -6906,6 +6922,17 @@ function validateForm(){
      $("#NoBtn").hide();
      $("#OkBtn1").show();
      $("#AlertMessage").text('Please select Customer.');
+     $("#alert").modal('show');
+     $("#OkBtn1").focus();
+     return false;
+ }
+ else if(check_pancard(SLID_REF) == 0){
+     $("#FocusId").val('txtsubgl_popup');
+     $("#ProceedBtn").focus();
+     $("#YesBtn").hide();
+     $("#NoBtn").hide();
+     $("#OkBtn1").show();
+     $("#AlertMessage").text('Please update pancard no for this customer.');
      $("#alert").modal('show');
      $("#OkBtn1").focus();
      return false;
@@ -8983,5 +9010,29 @@ function get_delear_customer_price(row_id,action_type){
     });
   
 
+}
+
+
+
+function check_pancard(){
+
+  var SLID_REF    = $("#SLID_REF").val();
+  var TotalValue  = $("#TotalValue").val() !=''?parseFloat($("#TotalValue").val()):0;
+
+  if(TotalValue > 200000){
+    var posts     = $.ajax({
+                    url:'{{route("transaction",[38,"check_pancard"])}}',
+                    type:'POST',
+                    async: false,
+                    dataType: 'json',
+                    data: {SLID_REF:SLID_REF},
+                    done: function(response) {return response;}
+                    }).responseText;
+  }
+  else{
+    var posts=1;
+  }
+
+  return posts;
 }
 </script>

@@ -1,12 +1,12 @@
 
-@extends('layouts.app')
-@section('content')
+
+<?php $__env->startSection('content'); ?>
 <!-- <form id="frm_trn_so" onsubmit="return validateForm()"  method="POST" class="needs-validation"  >     -->
 
     <div class="container-fluid topnav">
             <div class="row">
                 <div class="col-lg-2">
-                <a href="{{route('transaction',[38,'index'])}}" class="btn singlebt">Sales Order</a>
+                <a href="<?php echo e(route('transaction',[38,'index'])); ?>" class="btn singlebt">Sales Order</a>
                 </div><!--col-2-->
 
                 <div class="col-lg-10 topnav-pd">
@@ -14,7 +14,7 @@
                         <button class="btn topnavbt" id="btnEdit" disabled="disabled"><i class="fa fa-pencil-square-o"></i> Edit</button>
                         <button class="btn topnavbt" id="btnSaveSO"  disabled="disabled" ><i class="fa fa-floppy-o"></i> Save</button>
                         <button class="btn topnavbt" id="btnView" disabled="disabled"><i class="fa fa-eye"></i> View</button>
-                        <button class="btn topnavbt" id="btnPrint" {{isset($objRights->PRINT) && $objRights->PRINT != 1 ? 'disabled' : ''}} ><i class="fa fa-print"></i> Print</button>
+                        <button class="btn topnavbt" id="btnPrint" <?php echo e(isset($objRights->PRINT) && $objRights->PRINT != 1 ? 'disabled' : ''); ?> ><i class="fa fa-print"></i> Print</button>
                         <button class="btn topnavbt" id="btnUndo"  disabled="disabled" ><i class="fa fa-undo"></i> Undo</button>
                         <button class="btn topnavbt" id="btnCancel" disabled="disabled"><i class="fa fa-times"></i> Cancel</button>
                         <button class="btn topnavbt" id="btnApprove"  disabled="disabled"><i class="fa fa-thumbs-o-up"></i> Approved</button>
@@ -27,8 +27,9 @@
     <!-- multiple table-responsive table-wrapper-scroll-y my-custom-scrollbar -->
     <div class="container-fluid purchase-order-view">
         <form id="frm_trn_so"  method="POST">   
-            @csrf
-            {{isset($objSO->SOID[0]) ? method_field('PUT') : '' }}
+            <?php echo csrf_field(); ?>
+            <?php echo e(isset($objSO->SOID[0]) ? method_field('PUT') : ''); ?>
+
             <div class="container-fluid filter">
 
                     <div class="inner-form">
@@ -36,21 +37,21 @@
                         <div class="row">
                             <div class="col-lg-2 pl"><p>Sales Order No* </p></div>
                             <div class="col-lg-2 pl">
-                                <input type="text" {{$ActionStatus}} name="SONO" id="SONO" value="{{ isset($objSO->SONO)?$objSO->SONO:'' }}" class="form-control mandatory" maxlength="15" autocomplete="off" style="text-transform:uppercase"  readonly >
-                                <input type="hidden" name="hdnattachment" id="hdnattachment" class="form-control" autocomplete="off" value="{{isset($objCountAttachment)?$objCountAttachment:''}}" /> 
+                                <input type="text" <?php echo e($ActionStatus); ?> name="SONO" id="SONO" value="<?php echo e(isset($objSO->SONO)?$objSO->SONO:''); ?>" class="form-control mandatory" maxlength="15" autocomplete="off" style="text-transform:uppercase"  readonly >
+                                <input type="hidden" name="hdnattachment" id="hdnattachment" class="form-control" autocomplete="off" value="<?php echo e(isset($objCountAttachment)?$objCountAttachment:''); ?>" /> 
                             </div>
                             
                             <div class="col-lg-2 pl"><p>Sales Order Date*</p></div>
                             <div class="col-lg-2 pl">
-                                <input type="date" {{$ActionStatus}} name="SODT" id="SODT" onchange="checkPeriodClosing(38,this.value,1)" value="{{ isset($objSO->SODT)?$objSO->SODT:'' }}" class="form-control mandatory" autocomplete="off" placeholder="dd/mm/yyyy" >
+                                <input type="date" <?php echo e($ActionStatus); ?> name="SODT" id="SODT" onchange="checkPeriodClosing(38,this.value,1)" value="<?php echo e(isset($objSO->SODT)?$objSO->SODT:''); ?>" class="form-control mandatory" autocomplete="off" placeholder="dd/mm/yyyy" >
                             </div>
                             
                             <div class="col-lg-2 pl"><p>Customer*</p></div>
                             <div class="col-lg-2 pl">
-                                <input type="text" {{$ActionStatus}} name="SubGl_popup" id="txtsubgl_popup" class="form-control mandatory" value="{{isset($objsubglcode->SGLCODE)?$objsubglcode->SGLCODE:''}} {{isset($objsubglcode->SLNAME)?'-'.$objsubglcode->SLNAME:''}}"  autocomplete="off" readonly/>
-                                <input type="hidden" name="SLID_REF" id="SLID_REF" class="form-control" autocomplete="off"  value="{{ isset($objSO->SLID_REF)?$objSO->SLID_REF:'' }}"/>
-                                <input type="hidden" name="GLID_REF" id="GLID_REF" class="form-control" autocomplete="off" value="{{ isset($objSO->GLID_REF)?$objSO->GLID_REF:'' }}" />
-                                <input type="hidden" name="CUSTOMER_TYPE" id="CUSTOMER_TYPE" value="{{isset($objsubglcode->BELONGS_TO)?strtoupper($objsubglcode->BELONGS_TO):''}}" />
+                                <input type="text" <?php echo e($ActionStatus); ?> name="SubGl_popup" id="txtsubgl_popup" class="form-control mandatory" value="<?php echo e(isset($objsubglcode->SGLCODE)?$objsubglcode->SGLCODE:''); ?> <?php echo e(isset($objsubglcode->SLNAME)?'-'.$objsubglcode->SLNAME:''); ?>"  autocomplete="off" readonly/>
+                                <input type="hidden" name="SLID_REF" id="SLID_REF" class="form-control" autocomplete="off"  value="<?php echo e(isset($objSO->SLID_REF)?$objSO->SLID_REF:''); ?>"/>
+                                <input type="hidden" name="GLID_REF" id="GLID_REF" class="form-control" autocomplete="off" value="<?php echo e(isset($objSO->GLID_REF)?$objSO->GLID_REF:''); ?>" />
+                                <input type="hidden" name="CUSTOMER_TYPE" id="CUSTOMER_TYPE" value="<?php echo e(isset($objsubglcode->BELONGS_TO)?strtoupper($objsubglcode->BELONGS_TO):''); ?>" />
                                 <input type="hidden" name="hdnmaterial" id="hdnmaterial" class="form-control" autocomplete="off" />                                                                                           
                             </div>
                         </div>
@@ -58,75 +59,75 @@
                         <div class="row">                               
                             <div class="col-lg-2 pl "><p>Dealer</p></div>
                             <div class="col-lg-2 pl"  >
-                            <input type="text"  {{$ActionStatus}}  name="Dealerpopup" id="txtDealerpopup" class="form-control mandatory"  autocomplete="off" value="{{ isset($objSO->CUSTOMER_NAME)?$objSO->CUSTOMER_NAME:'' }}"  readonly/>
-                            <input type="hidden" name="DEALERID_REF" value="{{ isset($objSO->DEALERID_REF)?$objSO->DEALERID_REF:'' }}" id="DEALERID_REF" class="form-control" autocomplete="off" />                                
-                            <input type="hidden" name="DEALER_COMMISSION" value="{{ isset($objSO->COMMISION)?$objSO->COMMISION:'' }}" id="DEALER_COMMISSION" class="form-control" autocomplete="off" />                                
+                            <input type="text"  <?php echo e($ActionStatus); ?>  name="Dealerpopup" id="txtDealerpopup" class="form-control mandatory"  autocomplete="off" value="<?php echo e(isset($objSO->CUSTOMER_NAME)?$objSO->CUSTOMER_NAME:''); ?>"  readonly/>
+                            <input type="hidden" name="DEALERID_REF" value="<?php echo e(isset($objSO->DEALERID_REF)?$objSO->DEALERID_REF:''); ?>" id="DEALERID_REF" class="form-control" autocomplete="off" />                                
+                            <input type="hidden" name="DEALER_COMMISSION" value="<?php echo e(isset($objSO->COMMISION)?$objSO->COMMISION:''); ?>" id="DEALER_COMMISSION" class="form-control" autocomplete="off" />                                
                             </div>                            
                             <div class="col-lg-2 pl"><p>Dealer Commission</p></div>
                             <div class="col-lg-2 pl">
-                                <input type="text" {{$ActionStatus}} value="{{ isset($objSO->DEALER_COMMISSION_AMT) && $objSO->DEALER_COMMISSION_AMT !=''?number_format($objSO->DEALER_COMMISSION_AMT, 2, '.', ''):'' }}"  name="DEALER_COMMISSION_AMT" id="DEALER_COMMISSION_AMT" readonly autocomplete="off" class="form-control" maxlength="100"  />
+                                <input type="text" <?php echo e($ActionStatus); ?> value="<?php echo e(isset($objSO->DEALER_COMMISSION_AMT) && $objSO->DEALER_COMMISSION_AMT !=''?number_format($objSO->DEALER_COMMISSION_AMT, 2, '.', ''):''); ?>"  name="DEALER_COMMISSION_AMT" id="DEALER_COMMISSION_AMT" readonly autocomplete="off" class="form-control" maxlength="100"  />
                             </div>
                             <div class="col-lg-2 pl "><p>Project</p></div>
                             <div class="col-lg-2 pl"  >
-                            <input type="text" {{$ActionStatus}} value="{{ isset($objSO->PROJECT_NAME)?$objSO->PROJECT_NAME:'' }}"  name="Projectpopup" id="txtProjectpopup" class="form-control mandatory"  autocomplete="off"  readonly/>
-                            <input type="hidden" name="PROJECTID_REF" value="{{ isset($objSO->PROJECTID_REF)?$objSO->PROJECTID_REF:'' }}" id="PROJECTID_REF" class="form-control" autocomplete="off" />                                                            
+                            <input type="text" <?php echo e($ActionStatus); ?> value="<?php echo e(isset($objSO->PROJECT_NAME)?$objSO->PROJECT_NAME:''); ?>"  name="Projectpopup" id="txtProjectpopup" class="form-control mandatory"  autocomplete="off"  readonly/>
+                            <input type="hidden" name="PROJECTID_REF" value="<?php echo e(isset($objSO->PROJECTID_REF)?$objSO->PROJECTID_REF:''); ?>" id="PROJECTID_REF" class="form-control" autocomplete="off" />                                                            
                             </div>    
                         </div>   
 
                         <div class="row">
                             <div class="col-lg-2 pl"><p>FC</p></div>
                             <div class="col-lg-2 pl">
-                                <input type="checkbox" {{$ActionStatus}} name="SOFC" id="SOFC" class="form-checkbox" {{isset($objSO->SOFC) && $objSO->SOFC == 1 ? 'checked' : ''}} >
+                                <input type="checkbox" <?php echo e($ActionStatus); ?> name="SOFC" id="SOFC" class="form-checkbox" <?php echo e(isset($objSO->SOFC) && $objSO->SOFC == 1 ? 'checked' : ''); ?> >
                             </div>
                             
                             <div class="col-lg-2 pl"><p>Currency</p></div>
                             <div class="col-lg-2 pl" id="divcurrency" >
 
                             
-                                <input type="text" {{$ActionStatus}} name="CRID_popup" id="txtCRID_popup" disabled class="form-control"   autocomplete="off"   value="{{ isset($objSO->CRDESCRIPTION) && $objSO->CRDESCRIPTION !=''? $objSO->CRCODE.'-'.$objSO->CRDESCRIPTION:'' }}"/>
+                                <input type="text" <?php echo e($ActionStatus); ?> name="CRID_popup" id="txtCRID_popup" disabled class="form-control"   autocomplete="off"   value="<?php echo e(isset($objSO->CRDESCRIPTION) && $objSO->CRDESCRIPTION !=''? $objSO->CRCODE.'-'.$objSO->CRDESCRIPTION:''); ?>"/>
                            
-                                <input type="hidden"  name="CRID_REF" id="CRID_REF" class="form-control" autocomplete="off"   value="{{ isset($objSO->CRID_REF)?$objSO->CRID_REF:'' }}" />
+                                <input type="hidden"  name="CRID_REF" id="CRID_REF" class="form-control" autocomplete="off"   value="<?php echo e(isset($objSO->CRID_REF)?$objSO->CRID_REF:''); ?>" />
                                 
                             </div>
                             
                             <div class="col-lg-2 pl"><p>Conversion Factor</p></div>
                             <div class="col-lg-2 pl">
-                                <input type="text" {{$ActionStatus}} name="CONVFACT" id="CONVFACT" class="form-control" onkeyup="MultiCurrency_Conversion('TotalValue')" maxlength="100" autocomplete="off" value="{{ isset($objSO->CONVFACT)?$objSO->CONVFACT:'' }}"  />
+                                <input type="text" <?php echo e($ActionStatus); ?> name="CONVFACT" id="CONVFACT" class="form-control" onkeyup="MultiCurrency_Conversion('TotalValue')" maxlength="100" autocomplete="off" value="<?php echo e(isset($objSO->CONVFACT)?$objSO->CONVFACT:''); ?>"  />
                             </div>
                         </div>
                         
                         <div class="row">
                             <div class="col-lg-2 pl"><p>Order Validity From*</p></div>
                             <div class="col-lg-2 pl">
-                                <input type="date" {{$ActionStatus}} name="OVFDT" id="OVFDT" class="form-control mandatory" autocomplete="off" placeholder="dd/mm/yyyy" value="{{ isset($objSO->OVFDT)?$objSO->OVFDT:'' }}" >
+                                <input type="date" <?php echo e($ActionStatus); ?> name="OVFDT" id="OVFDT" class="form-control mandatory" autocomplete="off" placeholder="dd/mm/yyyy" value="<?php echo e(isset($objSO->OVFDT)?$objSO->OVFDT:''); ?>" >
                             </div>
                             
                             <div class="col-lg-2 pl"><p>Order Validity To*</p></div>
                             <div class="col-lg-2 pl">
-                                <input type="date" {{$ActionStatus}} name="OVTDT" id="OVTDT" class="form-control mandatory" autocomplete="off"  placeholder="dd/mm/yyyy" value="{{ isset($objSO->OVTDT)?$objSO->OVTDT:'' }}" >
+                                <input type="date" <?php echo e($ActionStatus); ?> name="OVTDT" id="OVTDT" class="form-control mandatory" autocomplete="off"  placeholder="dd/mm/yyyy" value="<?php echo e(isset($objSO->OVTDT)?$objSO->OVTDT:''); ?>" >
                             </div>
                             
                             <div class="col-lg-2 pl"><p>Customer PO No*</p></div>
                             <div class="col-lg-2 pl">
-                                <input type="text" {{$ActionStatus}} name="CUSTOMERPONO" id="CUSTOMERPONO" class="form-control" autocomplete="off" style="text-transform:uppercase" value="{{ isset($objSO->CUSTOMERPONO)?$objSO->CUSTOMERPONO:'' }}">
+                                <input type="text" <?php echo e($ActionStatus); ?> name="CUSTOMERPONO" id="CUSTOMERPONO" class="form-control" autocomplete="off" style="text-transform:uppercase" value="<?php echo e(isset($objSO->CUSTOMERPONO)?$objSO->CUSTOMERPONO:''); ?>">
                             </div>
                         </div>
                         
                         <div class="row">	
                             <div class="col-lg-2 pl"><p>Customer PO Date*</p></div>
                             <div class="col-lg-2 pl">
-                                <input type="date" {{$ActionStatus}} name="CUSTOMERDT"  id="CUSTOMERDT" class="form-control " value="{{ isset($objSO->CUSTOMERDT)?$objSO->CUSTOMERDT:'' }}" autocomplete="off" placeholder="dd/mm/yyyy"  >
+                                <input type="date" <?php echo e($ActionStatus); ?> name="CUSTOMERDT"  id="CUSTOMERDT" class="form-control " value="<?php echo e(isset($objSO->CUSTOMERDT)?$objSO->CUSTOMERDT:''); ?>" autocomplete="off" placeholder="dd/mm/yyyy"  >
                             </div>
                             
                             <div class="col-lg-2 pl"><p>Sales Person</p></div>
                             <div class="col-lg-2 pl">
-                                <input type="text" {{$ActionStatus}} name="SPID_popup" id="txtSPID_popup" class="form-control mandatory"  autocomplete="off" value="{{ isset($objSPID[0])?$objSPID[0]:'' }}"  readonly/>
-                                <input type="hidden" name="SPID_REF" id="SPID_REF" class="form-control" autocomplete="off" value="{{ isset($objSO->SPID_REF)?$objSO->SPID_REF:'' }}" />
+                                <input type="text" <?php echo e($ActionStatus); ?> name="SPID_popup" id="txtSPID_popup" class="form-control mandatory"  autocomplete="off" value="<?php echo e(isset($objSPID[0])?$objSPID[0]:''); ?>"  readonly/>
+                                <input type="hidden" name="SPID_REF" id="SPID_REF" class="form-control" autocomplete="off" value="<?php echo e(isset($objSO->SPID_REF)?$objSO->SPID_REF:''); ?>" />
                             </div>
                             
                             <div class="col-lg-2 pl"><p>Ref No*</p></div>
                             <div class="col-lg-2 pl">
-                                <input type="text" {{$ActionStatus}} name="REFNO" id="REFNO" class="form-control" maxlength="100" value="{{ isset($objSO->REFNO)?$objSO->REFNO:'' }}" autocomplete="off" style="text-transform:uppercase">
+                                <input type="text" <?php echo e($ActionStatus); ?> name="REFNO" id="REFNO" class="form-control" maxlength="100" value="<?php echo e(isset($objSO->REFNO)?$objSO->REFNO:''); ?>" autocomplete="off" style="text-transform:uppercase">
                             </div>
                             
                             
@@ -135,29 +136,29 @@
                         <div class="row">
                             <div class="col-lg-2 pl"><p>Credit Days</p></div>
                             <div class="col-lg-2 pl">
-                                <input type="text" {{$ActionStatus}} name="CREDITDAYS" id="CREDITDAYS" class="form-control" autocomplete="off" value="{{ isset($objSO->CREDITDAYS)?$objSO->CREDITDAYS:'' }}" readonly>
+                                <input type="text" <?php echo e($ActionStatus); ?> name="CREDITDAYS" id="CREDITDAYS" class="form-control" autocomplete="off" value="<?php echo e(isset($objSO->CREDITDAYS)?$objSO->CREDITDAYS:''); ?>" readonly>
                             </div>
                             <div class="col-lg-2 pl"><p>Bill To </p></div>
                             <div class="col-lg-2 pl" id="div_billto">
-                                <input type="text" {{$ActionStatus}} name="txtBILLTO" id="txtBILLTO" class="form-control"  autocomplete="off" value="{{ isset($objBillAddress[0])?$objBillAddress[0]:'' }}" readonly  />
-                                <input type="hidden" name="BILLTO" id="BILLTO" class="form-control" autocomplete="off" value="{{ isset($objSO->BILLTO)?$objSO->BILLTO:'' }}" />
+                                <input type="text" <?php echo e($ActionStatus); ?> name="txtBILLTO" id="txtBILLTO" class="form-control"  autocomplete="off" value="<?php echo e(isset($objBillAddress[0])?$objBillAddress[0]:''); ?>" readonly  />
+                                <input type="hidden" name="BILLTO" id="BILLTO" class="form-control" autocomplete="off" value="<?php echo e(isset($objSO->BILLTO)?$objSO->BILLTO:''); ?>" />
                             </div>
                            
                             <div class="col-lg-2 pl"><p>Ship To</p></div>
                             <div class="col-lg-2 pl" id="div_shipto">
-                                <input type="text" {{$ActionStatus}} name="txtSHIPTO" id="txtSHIPTO" class="form-control"  autocomplete="off" value="{{ isset($objShpAddress[0])?$objShpAddress[0]:'' }}" readonly  />
-                                <input type="hidden" name="SHIPTO" id="SHIPTO" class="form-control" autocomplete="off" value="{{ isset($objSO->SHIPTO)?$objSO->SHIPTO:'' }}" />
-                                <input type="hidden" name="Tax_State" id="Tax_State" class="form-control" autocomplete="off" value=" {{ isset($TAXSTATE[0])?$TAXSTATE[0]:'' }}"   />
+                                <input type="text" <?php echo e($ActionStatus); ?> name="txtSHIPTO" id="txtSHIPTO" class="form-control"  autocomplete="off" value="<?php echo e(isset($objShpAddress[0])?$objShpAddress[0]:''); ?>" readonly  />
+                                <input type="hidden" name="SHIPTO" id="SHIPTO" class="form-control" autocomplete="off" value="<?php echo e(isset($objSO->SHIPTO)?$objSO->SHIPTO:''); ?>" />
+                                <input type="hidden" name="Tax_State" id="Tax_State" class="form-control" autocomplete="off" value=" <?php echo e(isset($TAXSTATE[0])?$TAXSTATE[0]:''); ?>"   />
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-2 pl"><p>Remarks</p></div>
                             <div class="col-lg-2 pl">
-                                <input type="text" {{$ActionStatus}} name="REMARKS" id="REMARKS" class="form-control" autocomplete="off" maxlength="200" value="{{ isset($objSO->REMARKS)?$objSO->REMARKS:'' }}"  >
+                                <input type="text" <?php echo e($ActionStatus); ?> name="REMARKS" id="REMARKS" class="form-control" autocomplete="off" maxlength="200" value="<?php echo e(isset($objSO->REMARKS)?$objSO->REMARKS:''); ?>"  >
                             </div>
                             <div class="col-lg-2 pl"><p>Direct Sales Order</p></div>
                             <div class="col-lg-2 pl">
-                                  <input type="checkbox" {{$ActionStatus}} name="DirectSO" id="DirectSO" class="form-checkbox"  disabled />
+                                  <input type="checkbox" <?php echo e($ActionStatus); ?> name="DirectSO" id="DirectSO" class="form-checkbox"  disabled />
                             </div>
                            
              
@@ -165,17 +166,17 @@
                         <div class="row">
                         <div class="col-lg-2 pl"><p>Reverse GST</p></div>
                         <div class="col-lg-2 pl">
-                            <input type="checkbox" {{$ActionStatus}} name="GST_Reverse" id="GST_Reverse" {{isset($objSO->REVERSE_GST) && $objSO->REVERSE_GST == 1 ? 'checked' : ''}}    />                          
+                            <input type="checkbox" <?php echo e($ActionStatus); ?> name="GST_Reverse" id="GST_Reverse" <?php echo e(isset($objSO->REVERSE_GST) && $objSO->REVERSE_GST == 1 ? 'checked' : ''); ?>    />                          
                         </div>
                         <div class="col-lg-2 pl"><p>GST Input Not Avail</p></div>
                         <div class="col-lg-2 pl">
-                            <input type="checkbox" {{$ActionStatus}} name="GST_N_Avail" id="GST_N_Avail"  {{isset($objSO->GST_INPUT) && $objSO->GST_INPUT == 1 ? 'checked' : ''}}    />
+                            <input type="checkbox" <?php echo e($ActionStatus); ?> name="GST_N_Avail" id="GST_N_Avail"  <?php echo e(isset($objSO->GST_INPUT) && $objSO->GST_INPUT == 1 ? 'checked' : ''); ?>    />
                         </div>      
                         
              
                         <div class="col-lg-2 pl ExceptionalGST" style="display:none;" ><p>Exemptional for GST</p></div>
                         <div class="col-lg-2 pl ExceptionalGST" style="display:none;">
-                        <input type="checkbox" {{$ActionStatus}} name="EXE_GST" id="EXE_GST" class="filter-none"  value="1" onchange="getExceptionalGst()" >
+                        <input type="checkbox" <?php echo e($ActionStatus); ?> name="EXE_GST" id="EXE_GST" class="filter-none"  value="1" onchange="getExceptionalGst()" >
                         </div>
                         
                         </div>
@@ -183,19 +184,19 @@
                         <div class="row">
                         <div class="col-lg-2 pl "><p>Scheme</p></div>
                             <div class="col-lg-2 pl"  >
-                            <input type="text" {{$ActionStatus}}  name="Schemepopup" id="txtSchemepopup" class="form-control mandatory"  autocomplete="off"  readonly value="{{ isset($SchemeName)?$SchemeName:'' }}"/>
-                            <input type="hidden" name="SCHEMEID_REF" id="SCHEMEID_REF" class="form-control" value="{{ isset($SchemeId)?$SchemeId:'' }}"  autocomplete="off" />                                                            
+                            <input type="text" <?php echo e($ActionStatus); ?>  name="Schemepopup" id="txtSchemepopup" class="form-control mandatory"  autocomplete="off"  readonly value="<?php echo e(isset($SchemeName)?$SchemeName:''); ?>"/>
+                            <input type="hidden" name="SCHEMEID_REF" id="SCHEMEID_REF" class="form-control" value="<?php echo e(isset($SchemeId)?$SchemeId:''); ?>"  autocomplete="off" />                                                            
                             </div>  
 
                             <div class="col-lg-2 pl"><p>Total Value</p></div>
                             <div class="col-lg-2 pl">
-                                <input type="text" {{$ActionStatus}} name="TotalValue" id="TotalValue" class="form-control"  autocomplete="off" readonly  />
+                                <input type="text" <?php echo e($ActionStatus); ?> name="TotalValue" id="TotalValue" class="form-control"  autocomplete="off" readonly  />
                             </div>
 
                             <div id="multi_currency_section" style="display:none">
                             <div class="col-lg-2 pl"  ><p id="currency_section"></p></div>
                             <div class="col-lg-2 pl">
-                                <input type="text" {{$ActionStatus}} name="TotalValue_Conversion" id="TotalValue_Conversion" class="form-control"  autocomplete="off" readonly  />
+                                <input type="text" <?php echo e($ActionStatus); ?> name="TotalValue_Conversion" id="TotalValue_Conversion" class="form-control"  autocomplete="off" readonly  />
                             </div>
                             </div>                          
                         </div> 
@@ -203,9 +204,9 @@
                         <div class="row"> 
                           <div class="col-lg-2 pl"><p>Price Based On</p></div>
                           <div class="col-lg-2 pl">
-                            <select {{$ActionStatus}} name="PRICE_BASED_ON" id="PRICE_BASED_ON" class="form-control mandatory">
-                              <option {{isset($objSO->PRICE_BASED_ON) && $objSO->PRICE_BASED_ON =="MAIN UOM"?'selected="selected"':''}} value="MAIN UOM" >MAIN UOM</option>
-                              <option {{isset($objSO->PRICE_BASED_ON) && $objSO->PRICE_BASED_ON =="ALT UOM"?'selected="selected"':''}} value="ALT UOM" >ALT UOM</option>
+                            <select <?php echo e($ActionStatus); ?> name="PRICE_BASED_ON" id="PRICE_BASED_ON" class="form-control mandatory">
+                              <option <?php echo e(isset($objSO->PRICE_BASED_ON) && $objSO->PRICE_BASED_ON =="MAIN UOM"?'selected="selected"':''); ?> value="MAIN UOM" >MAIN UOM</option>
+                              <option <?php echo e(isset($objSO->PRICE_BASED_ON) && $objSO->PRICE_BASED_ON =="ALT UOM"?'selected="selected"':''); ?> value="ALT UOM" >ALT UOM</option>
                           </select>
                           </div>
                         </div>
@@ -213,12 +214,12 @@
                         <div class="row">
                           <div class="col-lg-2 pl"><p>Shipping Instruction</p></div>
                           <div class="col-lg-4 pl">
-                            <textarea {{$ActionStatus}} name="SHIPPING_INSTRUCTION" id="SHIPPING_INSTRUCTION" autocomplete="off" class="form-control" style="height:60px;" >{{ isset($objSO->SHIPPING_INSTRUCTION)?$objSO->SHIPPING_INSTRUCTION:'' }}</textarea>
+                            <textarea <?php echo e($ActionStatus); ?> name="SHIPPING_INSTRUCTION" id="SHIPPING_INSTRUCTION" autocomplete="off" class="form-control" style="height:60px;" ><?php echo e(isset($objSO->SHIPPING_INSTRUCTION)?$objSO->SHIPPING_INSTRUCTION:''); ?></textarea>
                           </div> 
                           
                           <div class="col-lg-2 pl"><p>Delivery Address</p></div>
                           <div class="col-lg-4 pl">
-                            <textarea {{$ActionStatus}} name="DELIVERY_ADDRESS" id="DELIVERY_ADDRESS" autocomplete="off" class="form-control" style="height:60px;" >{{ isset($objSO->DELIVERY_ADDRESS)?$objSO->DELIVERY_ADDRESS:'' }}</textarea>
+                            <textarea <?php echo e($ActionStatus); ?> name="DELIVERY_ADDRESS" id="DELIVERY_ADDRESS" autocomplete="off" class="form-control" style="height:60px;" ><?php echo e(isset($objSO->DELIVERY_ADDRESS)?$objSO->DELIVERY_ADDRESS:''); ?></textarea>
                           </div>
                         </div>
                         
@@ -247,7 +248,7 @@
                                             <thead id="thead1"  style="position: sticky;top: 0">
                                                     
                                                   <tr>
-                                                      <th colspan="{{$AlpsStatus['colspan']}}"></th>
+                                                      <th colspan="<?php echo e($AlpsStatus['colspan']); ?>"></th>
                                                       <th colspan="4">Sales Quotation / SQ Amendment</th>
                                                       <th colspan="4">Sales Order</th>
                                                       <th colspan="17"></th>                                                      
@@ -260,9 +261,9 @@
                                                       <th rowspan="2">Technical Specification</th>
                                                       <th rowspan="2">Item Name</th>
                                                       <th rowspan="2">Item Specification</th>
-                                                      <th rowspan="2" style=" width:4%;" {{$AlpsStatus['hidden']}} >{{isset($TabSetting->FIELD8) && $TabSetting->FIELD8 !=''?$TabSetting->FIELD8:'Add. Info Part No'}}</th>
-                                                    <th rowspan="2" style=" width:4%;" {{$AlpsStatus['hidden']}} >{{isset($TabSetting->FIELD9) && $TabSetting->FIELD9 !=''?$TabSetting->FIELD9:'Add. Info Customer Part No'}}</th>
-                                                    <th rowspan="2" style=" width:4%;" {{$AlpsStatus['hidden']}} >{{isset($TabSetting->FIELD10) && $TabSetting->FIELD10 !=''?$TabSetting->FIELD10:'Add. Info OEM Part No.'}}</th>
+                                                      <th rowspan="2" style=" width:4%;" <?php echo e($AlpsStatus['hidden']); ?> ><?php echo e(isset($TabSetting->FIELD8) && $TabSetting->FIELD8 !=''?$TabSetting->FIELD8:'Add. Info Part No'); ?></th>
+                                                    <th rowspan="2" style=" width:4%;" <?php echo e($AlpsStatus['hidden']); ?> ><?php echo e(isset($TabSetting->FIELD9) && $TabSetting->FIELD9 !=''?$TabSetting->FIELD9:'Add. Info Customer Part No'); ?></th>
+                                                    <th rowspan="2" style=" width:4%;" <?php echo e($AlpsStatus['hidden']); ?> ><?php echo e(isset($TabSetting->FIELD10) && $TabSetting->FIELD10 !=''?$TabSetting->FIELD10:'Add. Info OEM Part No.'); ?></th>
                                                       <th rowspan="2">Main UOM</th>
                                                       <th rowspan="2">Qty (Main UOM)</th>
                                                       <th rowspan="2">ALT UOM</th>
@@ -290,9 +291,9 @@
                                                   </tr>
                                             </thead>
                                             <tbody>
-                                            @if(!empty($objSOMAT))
-                                                @foreach($objSOMAT as $key => $row)
-                                                @php
+                                            <?php if(!empty($objSOMAT)): ?>
+                                                <?php $__currentLoopData = $objSOMAT; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                <?php
                                                 $DISCPER      = isset($row->DISCPER) && $row->DISCPER !=''?floatVal($row->DISCPER):0;
                                                 $DISCPER      = number_format($DISCPER, 2, '.', '');
                                                 
@@ -313,96 +314,96 @@
 
                                                 $SO_QTY = isset($row->SO_QTY) && $row->SO_QTY !=''?floatVal($row->SO_QTY):0;
                                                 $SO_QTY = number_format($SO_QTY, 5, '.', '');
-                                                @endphp
+                                                ?>
 
                                                     <tr  class="participantRow">
-                                                    <td hidden><input type="hidden" name={{"SCHEMEID_REF_".$key}} id ={{"SCHEMEID_REF_".$key}}   class="form-control" autocomplete="off" style="width:130px;" value="{{ $row->SCHEMEID_REF }}"  /></td>
-                                                      <td hidden><input type="text" name={{"ITEM_TYPE_".$key}} id ={{"ITEM_TYPE_".$key}}    class="form-control" autocomplete="off" style="width:130px;"   value="{{ $row->ITEM_TYPE }}" /></td>
+                                                    <td hidden><input type="hidden" name=<?php echo e("SCHEMEID_REF_".$key); ?> id =<?php echo e("SCHEMEID_REF_".$key); ?>   class="form-control" autocomplete="off" style="width:130px;" value="<?php echo e($row->SCHEMEID_REF); ?>"  /></td>
+                                                      <td hidden><input type="text" name=<?php echo e("ITEM_TYPE_".$key); ?> id =<?php echo e("ITEM_TYPE_".$key); ?>    class="form-control" autocomplete="off" style="width:130px;"   value="<?php echo e($row->ITEM_TYPE); ?>" /></td>
 
-                                                      <td hidden><input type="hidden" name={{"SCHEMEQTY_".$key}} id ={{"SCHEMEQTY_".$key}}   class="form-control three-digits" maxlength="13"  autocomplete="off"  style="width:130px;text-align:right;"   value="{{ isset($row->SCHEMEQTY) ?  $row->SCHEMEQTY : ''}}"   /></td>
+                                                      <td hidden><input type="hidden" name=<?php echo e("SCHEMEQTY_".$key); ?> id =<?php echo e("SCHEMEQTY_".$key); ?>   class="form-control three-digits" maxlength="13"  autocomplete="off"  style="width:130px;text-align:right;"   value="<?php echo e(isset($row->SCHEMEQTY) ?  $row->SCHEMEQTY : ''); ?>"   /></td>
 
                     
                                                         <td hidden>
-                                                        <input   class="form-control" type="hidden" name={{"SOMATID_".$key}} id ={{"SOMATID_".$key}} maxlength="100" value="{{ $row->SOMATID }}" autocomplete="off"   >
+                                                        <input   class="form-control" type="hidden" name=<?php echo e("SOMATID_".$key); ?> id =<?php echo e("SOMATID_".$key); ?> maxlength="100" value="<?php echo e($row->SOMATID); ?>" autocomplete="off"   >
                                                         </td>
                                                         <td style="text-align:center;" >
-                                                        <input type="text" {{$ActionStatus}} name={{"txtSQ_popup_".$key}} id={{"txtSQ_popup_".$key}} class="form-control" value="{{ $row->SQNO }}"  autocomplete="off"   readonly style="width:130px;"/></td>
-                                                        <td hidden><input type="hidden" name={{"SQA_".$key}} id={{"SQA_".$key}} class="form-control" value="{{ $row->SQA }}" autocomplete="off" /></td>
-                                                        <td hidden><input type="hidden" name={{"SEQID_REF_".$key}} id={{"SEQID_REF_".$key}} class="form-control" value="{{ $row->SEQID_REF }}" autocomplete="off" /></td>
-                                                        <td><input type="text" name={{"LEADNO_".$key}} id={{"LEADNO_".$key}}  class="form-control"  autocomplete="off"  readonly value="{{ $row->LEAD_NO }}"  style="width:130px;"/></td>
-                                                    <td><input type="text" name={{"LEADDT_".$key}} id={{"LEADDT_".$key}}  class="form-control"  autocomplete="off"  readonly value="{{ $row->LEAD_DT }}"  style="width:130px;"/></td>
-                                                        <td><input type="text" {{$ActionStatus}} name={{"popupITEMID_".$key}} id={{"popupITEMID_".$key}} class="form-control"  autocomplete="off" value="{{ $row->ICODE }}" readonly style="width:130px;"/></td>
-                                                        <td><button  id={{"TECHSPEC_".$key}}  onclick="getTechnicalSpecification(this.id)" class="btn" type="button" ><i class="fa fa-clone"></i></button></td>
+                                                        <input type="text" <?php echo e($ActionStatus); ?> name=<?php echo e("txtSQ_popup_".$key); ?> id=<?php echo e("txtSQ_popup_".$key); ?> class="form-control" value="<?php echo e($row->SQNO); ?>"  autocomplete="off"   readonly style="width:130px;"/></td>
+                                                        <td hidden><input type="hidden" name=<?php echo e("SQA_".$key); ?> id=<?php echo e("SQA_".$key); ?> class="form-control" value="<?php echo e($row->SQA); ?>" autocomplete="off" /></td>
+                                                        <td hidden><input type="hidden" name=<?php echo e("SEQID_REF_".$key); ?> id=<?php echo e("SEQID_REF_".$key); ?> class="form-control" value="<?php echo e($row->SEQID_REF); ?>" autocomplete="off" /></td>
+                                                        <td><input type="text" name=<?php echo e("LEADNO_".$key); ?> id=<?php echo e("LEADNO_".$key); ?>  class="form-control"  autocomplete="off"  readonly value="<?php echo e($row->LEAD_NO); ?>"  style="width:130px;"/></td>
+                                                    <td><input type="text" name=<?php echo e("LEADDT_".$key); ?> id=<?php echo e("LEADDT_".$key); ?>  class="form-control"  autocomplete="off"  readonly value="<?php echo e($row->LEAD_DT); ?>"  style="width:130px;"/></td>
+                                                        <td><input type="text" <?php echo e($ActionStatus); ?> name=<?php echo e("popupITEMID_".$key); ?> id=<?php echo e("popupITEMID_".$key); ?> class="form-control"  autocomplete="off" value="<?php echo e($row->ICODE); ?>" readonly style="width:130px;"/></td>
+                                                        <td><button  id=<?php echo e("TECHSPEC_".$key); ?>  onclick="getTechnicalSpecification(this.id)" class="btn" type="button" ><i class="fa fa-clone"></i></button></td>
                   
-                                                        <td hidden ><input type="hidden" name={{"TSID_REF_".$key}} id={{"TSID_REF_".$key}} value="{{ $row->TSID_REF }}"   class="form-control" autocomplete="off" /></td>
+                                                        <td hidden ><input type="hidden" name=<?php echo e("TSID_REF_".$key); ?> id=<?php echo e("TSID_REF_".$key); ?> value="<?php echo e($row->TSID_REF); ?>"   class="form-control" autocomplete="off" /></td>
 
-                                                        <td hidden><input type="hidden" name={{"ITEMID_REF_".$key}} id={{"ITEMID_REF_".$key}} class="form-control"  value="{{ $row->ITEMID_REF }}" autocomplete="off" /></td>
-                                                        <td><input type="text" {{$ActionStatus}} name={{"ItemName_".$key}} id={{"ItemName_".$key}} class="form-control"  autocomplete="off" value="{{ $row->ItemName }}" readonly style="width:200px;"/></td>
-                                                        <td><input type="text" {{$ActionStatus}} name={{"Itemspec_".$key}} id={{"Itemspec_".$key}} class="form-control"  autocomplete="off" value="{{ $row->ITEMSPECI }}" style="width:200px;" /></td>
-                                                        <td {{$AlpsStatus['hidden']}}><input type="text" {{$ActionStatus}} name={{"Alpspartno_".$key}} id={{"Alpspartno_".$key}} class="form-control"  autocomplete="off" value="{{ $row->ALPS_PART_NO }}" readonly style="width:130px;"/></td>
-                                                        <td {{$AlpsStatus['hidden']}}><input type="text" {{$ActionStatus}} name={{"Custpartno_".$key}} id={{"Custpartno_".$key}} class="form-control"  autocomplete="off" value="{{ $row->CUSTOMER_PART_NO }}" readonly style="width:130px;"/></td>
-                                                        <td {{$AlpsStatus['hidden']}}><input type="text"{{$ActionStatus}} name={{"OEMpartno_".$key}} id={{"OEMpartno_".$key}} class="form-control"  autocomplete="off" value="{{ $row->OEM_PART_NO }}" readonly style="width:130px;"/></td>
-                                                        <td><input type="text" {{$ActionStatus}} name={{"SQMUOM_".$key}} id={{"SQMUOM_".$key}} class="form-control"  autocomplete="off" value="{{ $row->SQMUOM }}" readonly style="width:130px;"/></td>
-                                                        <td><input type="text" {{$ActionStatus}} name={{"SQMUOMQTY_".$key}} id={{"SQMUOMQTY_".$key}} class="form-control" maxlength="13" value="{{ $row->SQMUOMQTY }}" autocomplete="off"  readonly style="width:130px;text-align:right;"/></td>
-                                                        <td><input type="text" {{$ActionStatus}} name={{"SQAUOM_".$key}} id={{"SQAUOM_".$key}} class="form-control"  autocomplete="off" value="{{ $row->SQAUOM }}" readonly style="width:130px;"/></td>
-                                                        <td><input type="text" {{$ActionStatus}} name={{"SQAUOMQTY_".$key}} id={{"SQAUOMQTY_".$key}} class="form-control" maxlength="13" value="{{ $row->SQAUOMQTY }}" autocomplete="off"  readonly style="width:130px;text-align:right;"/></td>
-                                                        <td><input type="text" {{$ActionStatus}} name={{"popupMUOM_".$key}} id={{"popupMUOM_".$key}} class="form-control"  autocomplete="off" value="{{ $row->popupMUOM }}" readonly style="width:130px;"/></td>
-                                                        <td hidden><input type="hidden" name={{"MAIN_UOMID_REF_".$key}} id={{"MAIN_UOMID_REF_".$key}} class="form-control" value="{{ $row->MAIN_UOMID_REF }}" autocomplete="off" /></td>
-                                                        <td><input type="text" {{$ActionStatus}} name={{"SO_QTY_".$key}} id={{"SO_QTY_".$key}} class="form-control three-digits {{$row->ITEM_TYPE}}SCHEME{{$row->SCHEMEID_REF}}" maxlength="13" value="{{ $SO_QTY }}"  autocomplete="off" style="width:130px;text-align:right;" onkeyup="dataCal(this.id)" onfocusout="dataDec(this,'2')" /></td>
-                                                        <td hidden><input type="hidden" name={{"SO_FQTY_".$key}} id={{"SO_FQTY_".$key}} class="form-control three-digits" maxlength="13" value="1"  autocomplete="off"   readonly /></td>
-                                                        <td><input type="text" {{$ActionStatus}} name={{"popupAUOM_".$key}} id={{"popupAUOM_".$key}} class="form-control"  autocomplete="off" value="{{ $row->popupAUOM }}" readonly style="width:130px;" /></td>
-                                                        <td hidden><input type="hidden" name={{"ALT_UOMID_REF_".$key}} id={{"ALT_UOMID_REF_".$key}} class="form-control"  autocomplete="off" value="{{ $row->ALT_UOMID_REF }}"  readonly/></td>
-                                                        <td><input type="text" {{$ActionStatus}} name={{"ALT_UOMID_QTY_".$key}} id={{"ALT_UOMID_QTY_".$key}} class="form-control three-digits" maxlength="13" autocomplete="off" value="{{ $row->ALT_UOMID_QTY }}" style="width:130px;text-align:right;" onkeyup="dataCal(this.id)" onfocusout="dataDec(this,'2')" /></td>
+                                                        <td hidden><input type="hidden" name=<?php echo e("ITEMID_REF_".$key); ?> id=<?php echo e("ITEMID_REF_".$key); ?> class="form-control"  value="<?php echo e($row->ITEMID_REF); ?>" autocomplete="off" /></td>
+                                                        <td><input type="text" <?php echo e($ActionStatus); ?> name=<?php echo e("ItemName_".$key); ?> id=<?php echo e("ItemName_".$key); ?> class="form-control"  autocomplete="off" value="<?php echo e($row->ItemName); ?>" readonly style="width:200px;"/></td>
+                                                        <td><input type="text" <?php echo e($ActionStatus); ?> name=<?php echo e("Itemspec_".$key); ?> id=<?php echo e("Itemspec_".$key); ?> class="form-control"  autocomplete="off" value="<?php echo e($row->ITEMSPECI); ?>" style="width:200px;" /></td>
+                                                        <td <?php echo e($AlpsStatus['hidden']); ?>><input type="text" <?php echo e($ActionStatus); ?> name=<?php echo e("Alpspartno_".$key); ?> id=<?php echo e("Alpspartno_".$key); ?> class="form-control"  autocomplete="off" value="<?php echo e($row->ALPS_PART_NO); ?>" readonly style="width:130px;"/></td>
+                                                        <td <?php echo e($AlpsStatus['hidden']); ?>><input type="text" <?php echo e($ActionStatus); ?> name=<?php echo e("Custpartno_".$key); ?> id=<?php echo e("Custpartno_".$key); ?> class="form-control"  autocomplete="off" value="<?php echo e($row->CUSTOMER_PART_NO); ?>" readonly style="width:130px;"/></td>
+                                                        <td <?php echo e($AlpsStatus['hidden']); ?>><input type="text"<?php echo e($ActionStatus); ?> name=<?php echo e("OEMpartno_".$key); ?> id=<?php echo e("OEMpartno_".$key); ?> class="form-control"  autocomplete="off" value="<?php echo e($row->OEM_PART_NO); ?>" readonly style="width:130px;"/></td>
+                                                        <td><input type="text" <?php echo e($ActionStatus); ?> name=<?php echo e("SQMUOM_".$key); ?> id=<?php echo e("SQMUOM_".$key); ?> class="form-control"  autocomplete="off" value="<?php echo e($row->SQMUOM); ?>" readonly style="width:130px;"/></td>
+                                                        <td><input type="text" <?php echo e($ActionStatus); ?> name=<?php echo e("SQMUOMQTY_".$key); ?> id=<?php echo e("SQMUOMQTY_".$key); ?> class="form-control" maxlength="13" value="<?php echo e($row->SQMUOMQTY); ?>" autocomplete="off"  readonly style="width:130px;text-align:right;"/></td>
+                                                        <td><input type="text" <?php echo e($ActionStatus); ?> name=<?php echo e("SQAUOM_".$key); ?> id=<?php echo e("SQAUOM_".$key); ?> class="form-control"  autocomplete="off" value="<?php echo e($row->SQAUOM); ?>" readonly style="width:130px;"/></td>
+                                                        <td><input type="text" <?php echo e($ActionStatus); ?> name=<?php echo e("SQAUOMQTY_".$key); ?> id=<?php echo e("SQAUOMQTY_".$key); ?> class="form-control" maxlength="13" value="<?php echo e($row->SQAUOMQTY); ?>" autocomplete="off"  readonly style="width:130px;text-align:right;"/></td>
+                                                        <td><input type="text" <?php echo e($ActionStatus); ?> name=<?php echo e("popupMUOM_".$key); ?> id=<?php echo e("popupMUOM_".$key); ?> class="form-control"  autocomplete="off" value="<?php echo e($row->popupMUOM); ?>" readonly style="width:130px;"/></td>
+                                                        <td hidden><input type="hidden" name=<?php echo e("MAIN_UOMID_REF_".$key); ?> id=<?php echo e("MAIN_UOMID_REF_".$key); ?> class="form-control" value="<?php echo e($row->MAIN_UOMID_REF); ?>" autocomplete="off" /></td>
+                                                        <td><input type="text" <?php echo e($ActionStatus); ?> name=<?php echo e("SO_QTY_".$key); ?> id=<?php echo e("SO_QTY_".$key); ?> class="form-control three-digits <?php echo e($row->ITEM_TYPE); ?>SCHEME<?php echo e($row->SCHEMEID_REF); ?>" maxlength="13" value="<?php echo e($SO_QTY); ?>"  autocomplete="off" style="width:130px;text-align:right;" onkeyup="dataCal(this.id)" onfocusout="dataDec(this,'2')" /></td>
+                                                        <td hidden><input type="hidden" name=<?php echo e("SO_FQTY_".$key); ?> id=<?php echo e("SO_FQTY_".$key); ?> class="form-control three-digits" maxlength="13" value="1"  autocomplete="off"   readonly /></td>
+                                                        <td><input type="text" <?php echo e($ActionStatus); ?> name=<?php echo e("popupAUOM_".$key); ?> id=<?php echo e("popupAUOM_".$key); ?> class="form-control"  autocomplete="off" value="<?php echo e($row->popupAUOM); ?>" readonly style="width:130px;" /></td>
+                                                        <td hidden><input type="hidden" name=<?php echo e("ALT_UOMID_REF_".$key); ?> id=<?php echo e("ALT_UOMID_REF_".$key); ?> class="form-control"  autocomplete="off" value="<?php echo e($row->ALT_UOMID_REF); ?>"  readonly/></td>
+                                                        <td><input type="text" <?php echo e($ActionStatus); ?> name=<?php echo e("ALT_UOMID_QTY_".$key); ?> id=<?php echo e("ALT_UOMID_QTY_".$key); ?> class="form-control three-digits" maxlength="13" autocomplete="off" value="<?php echo e($row->ALT_UOMID_QTY); ?>" style="width:130px;text-align:right;" onkeyup="dataCal(this.id)" onfocusout="dataDec(this,'2')" /></td>
                                                         
-                                                        <td><input type="text" {{$ActionStatus}} name={{"RATEPUOM_".$key}} id={{"RATEPUOM_".$key}} class="form-control five-digits blurRate" maxlength="13" value="{{ $RATEPUOM }}"  autocomplete="off" style="width:130px;text-align:right;" onkeyup="dataCal(this.id),get_delear_customer_price(this.id,'change')" onfocusout="dataDec(this,'5')" /></td>
+                                                        <td><input type="text" <?php echo e($ActionStatus); ?> name=<?php echo e("RATEPUOM_".$key); ?> id=<?php echo e("RATEPUOM_".$key); ?> class="form-control five-digits blurRate" maxlength="13" value="<?php echo e($RATEPUOM); ?>"  autocomplete="off" style="width:130px;text-align:right;" onkeyup="dataCal(this.id),get_delear_customer_price(this.id,'change')" onfocusout="dataDec(this,'5')" /></td>
                                                         
-                                                        <td><input  type="text" {{$ActionStatus}} name={{"DISCPER_".$key}} id={{"DISCPER_".$key}} class="form-control" maxlength="8" value="{{$DISCPER}}"  autocomplete="off" style="width:130px;text-align:right;" onkeyup="dataCal(this.id)" onfocusout="dataDec(this,'2')" /></td>
-                                                        <td><input  type="text" {{$ActionStatus}} name={{"DISCOUNT_AMT_".$key}} id={{"DISCOUNT_AMT_".$key}} class="form-control" value="{{$DISCOUNT_AMT}}" maxlength="15"  autocomplete="off" style="width:130px;text-align:right;" onkeyup="dataCal(this.id)" onfocusout="dataDec(this,'2')" /></td>
-                                                        @php
+                                                        <td><input  type="text" <?php echo e($ActionStatus); ?> name=<?php echo e("DISCPER_".$key); ?> id=<?php echo e("DISCPER_".$key); ?> class="form-control" maxlength="8" value="<?php echo e($DISCPER); ?>"  autocomplete="off" style="width:130px;text-align:right;" onkeyup="dataCal(this.id)" onfocusout="dataDec(this,'2')" /></td>
+                                                        <td><input  type="text" <?php echo e($ActionStatus); ?> name=<?php echo e("DISCOUNT_AMT_".$key); ?> id=<?php echo e("DISCOUNT_AMT_".$key); ?> class="form-control" value="<?php echo e($DISCOUNT_AMT); ?>" maxlength="15"  autocomplete="off" style="width:130px;text-align:right;" onkeyup="dataCal(this.id)" onfocusout="dataDec(this,'2')" /></td>
+                                                        <?php
                                                             $TaxAmt=number_format((($SO_QTY*$RATEPUOM) - $DISCOUNT_AMT),2, '.', '');
-                                                        @endphp
-                                                        <td><input type="text" {{$ActionStatus}} name={{"DISAFTT_AMT_".$key}} id={{"DISAFTT_AMT_".$key}} class="form-control two-digits" maxlength="15" autocomplete="off"  readonly style="width:130px;text-align:right;"/></td>
-                                                        <td><input type="text" {{$ActionStatus}} name={{"IGST_".$key}} id={{"IGST_".$key}} class="form-control four-digits" maxlength="8" value="{{ $IGST }}" autocomplete="off" onkeyup="dataCal(this.id)"  readonly style="width:130px;text-align:right;"/></td>
-                                                        @php
+                                                        ?>
+                                                        <td><input type="text" <?php echo e($ActionStatus); ?> name=<?php echo e("DISAFTT_AMT_".$key); ?> id=<?php echo e("DISAFTT_AMT_".$key); ?> class="form-control two-digits" maxlength="15" autocomplete="off"  readonly style="width:130px;text-align:right;"/></td>
+                                                        <td><input type="text" <?php echo e($ActionStatus); ?> name=<?php echo e("IGST_".$key); ?> id=<?php echo e("IGST_".$key); ?> class="form-control four-digits" maxlength="8" value="<?php echo e($IGST); ?>" autocomplete="off" onkeyup="dataCal(this.id)"  readonly style="width:130px;text-align:right;"/></td>
+                                                        <?php
                                                             $IGSTAMT=number_format((((($SO_QTY*$RATEPUOM) - $DISCOUNT_AMT)*$IGST)/100),2, '.', '');
-                                                        @endphp
-                                                        <td><input type="text" {{$ActionStatus}} name={{"IGSTAMT_".$key}} id={{"IGSTAMT_".$key}} class="form-control two-digits" maxlength="15" autocomplete="off"  readonly/></td>
-                                                        <td><input type="text" {{$ActionStatus}} name={{"CGST_".$key}} id={{"CGST_".$key}} class="form-control four-digits" maxlength="8" value="{{ $CGST }}" autocomplete="off" onkeyup="dataCal(this.id)"  readonly style="width:130px;text-align:right;"/></td>
-                                                        @php
+                                                        ?>
+                                                        <td><input type="text" <?php echo e($ActionStatus); ?> name=<?php echo e("IGSTAMT_".$key); ?> id=<?php echo e("IGSTAMT_".$key); ?> class="form-control two-digits" maxlength="15" autocomplete="off"  readonly/></td>
+                                                        <td><input type="text" <?php echo e($ActionStatus); ?> name=<?php echo e("CGST_".$key); ?> id=<?php echo e("CGST_".$key); ?> class="form-control four-digits" maxlength="8" value="<?php echo e($CGST); ?>" autocomplete="off" onkeyup="dataCal(this.id)"  readonly style="width:130px;text-align:right;"/></td>
+                                                        <?php
                                                             $CGSTAMT=number_format((((($SO_QTY*$RATEPUOM) - $DISCOUNT_AMT)*$CGST)/100),2, '.', '');
-                                                        @endphp
-                                                        <td><input type="text" {{$ActionStatus}} name={{"CGSTAMT_".$key}} id={{"CGSTAMT_".$key}} class="form-control two-digits" maxlength="15" autocomplete="off"  readonly style="width:130px;text-align:right;"/></td>
-                                                        <td><input type="text" {{$ActionStatus}} name={{"SGST_".$key}} id={{"SGST_".$key}} class="form-control four-digits" maxlength="8" value="{{ $SGST }}" autocomplete="off" onkeyup="dataCal(this.id)"  readonly style="width:130px;text-align:right;"/></td>
-                                                        @php
+                                                        ?>
+                                                        <td><input type="text" <?php echo e($ActionStatus); ?> name=<?php echo e("CGSTAMT_".$key); ?> id=<?php echo e("CGSTAMT_".$key); ?> class="form-control two-digits" maxlength="15" autocomplete="off"  readonly style="width:130px;text-align:right;"/></td>
+                                                        <td><input type="text" <?php echo e($ActionStatus); ?> name=<?php echo e("SGST_".$key); ?> id=<?php echo e("SGST_".$key); ?> class="form-control four-digits" maxlength="8" value="<?php echo e($SGST); ?>" autocomplete="off" onkeyup="dataCal(this.id)"  readonly style="width:130px;text-align:right;"/></td>
+                                                        <?php
                                                             $SGSTAMT=number_format((((($SO_QTY*$RATEPUOM) - $DISCOUNT_AMT)*$SGST)/100),2, '.', '');
-                                                        @endphp
-                                                        <td><input type="text" {{$ActionStatus}} name={{"SGSTAMT_".$key}} id={{"SGSTAMT_".$key}} class="form-control two-digits" maxlength="15" autocomplete="off"  readonly style="width:130px;text-align:right;"/></td>
-                                                        @php
+                                                        ?>
+                                                        <td><input type="text" <?php echo e($ActionStatus); ?> name=<?php echo e("SGSTAMT_".$key); ?> id=<?php echo e("SGSTAMT_".$key); ?> class="form-control two-digits" maxlength="15" autocomplete="off"  readonly style="width:130px;text-align:right;"/></td>
+                                                        <?php
                                                             $IGSTAMT=number_format((((($SO_QTY*$RATEPUOM) - $DISCOUNT_AMT)*$IGST)/100),2, '.', '');
                                                             $CGSTAMT=number_format((((($SO_QTY*$RATEPUOM) - $DISCOUNT_AMT)*$CGST)/100),2, '.', '');
                                                             $SGSTAMT=number_format((((($SO_QTY*$RATEPUOM) - $DISCOUNT_AMT)*$SGST)/100),2, '.', '');
                                                             $TOTGST =number_format(($IGSTAMT+$CGSTAMT+$SGSTAMT),2, '.', '');
-                                                        @endphp
-                                                        <td><input type="text" {{$ActionStatus}} name={{"TGST_AMT_".$key}} id={{"TGST_AMT_".$key}} class="form-control two-digits" maxlength="15" autocomplete="off"  readonly style="width:130px;text-align:right;"/></td>
-                                                        @php
+                                                        ?>
+                                                        <td><input type="text" <?php echo e($ActionStatus); ?> name=<?php echo e("TGST_AMT_".$key); ?> id=<?php echo e("TGST_AMT_".$key); ?> class="form-control two-digits" maxlength="15" autocomplete="off"  readonly style="width:130px;text-align:right;"/></td>
+                                                        <?php
                                                             $TaxAmt=number_format((($SO_QTY*$RATEPUOM) - $DISCOUNT_AMT),2, '.', '');
                                                             $IGSTAMT=number_format((((($SO_QTY*$RATEPUOM) - $DISCOUNT_AMT)*$IGST)/100),2, '.', '');
                                                             $CGSTAMT=number_format((((($SO_QTY*$RATEPUOM) - $DISCOUNT_AMT)*$CGST)/100),2, '.', '');
                                                             $SGSTAMT=number_format((((($SO_QTY*$RATEPUOM) - $DISCOUNT_AMT)*$SGST)/100),2, '.', '');
                                                             $TOTAMT =number_format(($TaxAmt+$IGSTAMT+$CGSTAMT+$SGSTAMT),2, '.', '');
-                                                        @endphp
-                                                        <td><input type="text" {{$ActionStatus}} name={{"TOT_AMT_".$key}} id={{"TOT_AMT_".$key}} class="form-control two-digits" maxlength="15" autocomplete="off"  readonly style="width:130px;text-align:right;"/></td>
-                                                        <td align="center"><button class="btn add material" title="add" data-toggle="tooltip" type="button"><i class="fa fa-plus"></i></button><button class="btn remove dmaterial" title="Delete" data-toggle="tooltip" id={{"remove_".$key}}  type="button"><i class="fa fa-trash" ></i></button></td>
+                                                        ?>
+                                                        <td><input type="text" <?php echo e($ActionStatus); ?> name=<?php echo e("TOT_AMT_".$key); ?> id=<?php echo e("TOT_AMT_".$key); ?> class="form-control two-digits" maxlength="15" autocomplete="off"  readonly style="width:130px;text-align:right;"/></td>
+                                                        <td align="center"><button class="btn add material" title="add" data-toggle="tooltip" type="button"><i class="fa fa-plus"></i></button><button class="btn remove dmaterial" title="Delete" data-toggle="tooltip" id=<?php echo e("remove_".$key); ?>  type="button"><i class="fa fa-trash" ></i></button></td>
                                                     </tr>
                                                     <tr></tr>
-                                                @endforeach 
-                                              @endif 
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?> 
+                                              <?php endif; ?> 
                                             </tbody>
                                             <tr  class="participantRowFotter">
                                                 <td colspan="6" style="text-align:center;font-weight:bold;">TOTAL</td>    
-                                                <td {{$AlpsStatus['hidden']}} ></td>
-                                                <td {{$AlpsStatus['hidden']}} ></td>
-                                                <td {{$AlpsStatus['hidden']}} ></td>                               
+                                                <td <?php echo e($AlpsStatus['hidden']); ?> ></td>
+                                                <td <?php echo e($AlpsStatus['hidden']); ?> ></td>
+                                                <td <?php echo e($AlpsStatus['hidden']); ?> ></td>                               
                                                 <td></td>
                                                 <td></td>
                                                 <td></td>
@@ -438,12 +439,12 @@
                                     <div class="row" style="margin-top:10px;margin-left:3px;" >	
                                         <div class="col-lg-1 pl"><p>T&C Template</p></div>
                                         <div class="col-lg-2 pl">
-                                        <input type="text" {{$ActionStatus}} name="txtTNCID_popup" id="txtTNCID_popup" class="form-control"  autocomplete="off"  readonly/>
-                                        @if(!empty($objSOTNC))
-                                         <input type="hidden" name="TNCID_REF" id="TNCID_REF" class="form-control" value="{{$objSOTNC[0]->TNCID_REF}}" autocomplete="off" />
-                                         @else
+                                        <input type="text" <?php echo e($ActionStatus); ?> name="txtTNCID_popup" id="txtTNCID_popup" class="form-control"  autocomplete="off"  readonly/>
+                                        <?php if(!empty($objSOTNC)): ?>
+                                         <input type="hidden" name="TNCID_REF" id="TNCID_REF" class="form-control" value="<?php echo e($objSOTNC[0]->TNCID_REF); ?>" autocomplete="off" />
+                                         <?php else: ?>
                                          <input type="hidden" name="TNCID_REF" id="TNCID_REF" class="form-control"  autocomplete="off" />
-                                         @endif 
+                                         <?php endif; ?> 
                                         </div>
                                     </div>
                                     
@@ -459,31 +460,31 @@
                                             </tr>
                                             </thead>
                                             <tbody id="tncbody">
-                                            @if(!empty($objSOTNC))
-                                                @foreach($objSOTNC as $Tkey => $Trow)
+                                            <?php if(!empty($objSOTNC)): ?>
+                                                <?php $__currentLoopData = $objSOTNC; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $Tkey => $Trow): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                     <tr  class="participantRow3">
-                                                    <td><input type="text" {{$ActionStatus}} name={{"popupTNCDID_".$Tkey}} id={{"popupTNCDID_".$Tkey}} class="form-control"  autocomplete="off"  readonly/></td>
-                                                    <td hidden><input type="hidden" name={{"TNCDID_REF_".$Tkey}} id={{"TNCDID_REF_".$Tkey}} class="form-control" value="{{$Trow->TNCDID_REF}}" autocomplete="off" /></td>
-                                                    <td hidden><input type="hidden" name={{"TNCismandatory_".$Tkey}} id={{"TNCismandatory_".$Tkey}} class="form-control" autocomplete="off" /></td>
-                                                    <td id={{"tdinputid_".$Tkey}}>
-                                                    {{-- dynamic input --}} 
+                                                    <td><input type="text" <?php echo e($ActionStatus); ?> name=<?php echo e("popupTNCDID_".$Tkey); ?> id=<?php echo e("popupTNCDID_".$Tkey); ?> class="form-control"  autocomplete="off"  readonly/></td>
+                                                    <td hidden><input type="hidden" name=<?php echo e("TNCDID_REF_".$Tkey); ?> id=<?php echo e("TNCDID_REF_".$Tkey); ?> class="form-control" value="<?php echo e($Trow->TNCDID_REF); ?>" autocomplete="off" /></td>
+                                                    <td hidden><input type="hidden" name=<?php echo e("TNCismandatory_".$Tkey); ?> id=<?php echo e("TNCismandatory_".$Tkey); ?> class="form-control" autocomplete="off" /></td>
+                                                    <td id=<?php echo e("tdinputid_".$Tkey); ?>>
+                                                     
                                                     </td>
                                                         <td align="center" ><button class="btn add TNC" title="add" data-toggle="tooltip"  type="button" disabled><i class="fa fa-plus"></i></button><button class="btn remove DTNC" title="Delete" data-toggle="tooltip" type="button" disabled><i class="fa fa-trash" ></i></button></td>
                                                     </tr>
                                                 <tr></tr>
-                                                @endforeach 
-                                                @else
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?> 
+                                                <?php else: ?>
                                                 <tr  class="participantRow3">
-                                                    <td><input type="text" {{$ActionStatus}} name="popupTNCDID_0" id="popupTNCDID_0" class="form-control"  autocomplete="off"  readonly/></td>
+                                                    <td><input type="text" <?php echo e($ActionStatus); ?> name="popupTNCDID_0" id="popupTNCDID_0" class="form-control"  autocomplete="off"  readonly/></td>
                                                     <td hidden><input type="hidden" name="TNCDID_REF_0" id="TNCDID_REF_0" class="form-control" autocomplete="off" /></td>
                                                     <td hidden><input type="hidden" name="TNCismandatory_0" id="TNCismandatory_0" class="form-control" autocomplete="off" /></td>
                                                     <td id="tdinputid_0">
-                                                      {{-- dynamic input --}} 
+                                                       
                                                     </td>
                                                         <td align="center" ><button class="btn add TNC" title="add" data-toggle="tooltip"  type="button" disabled><i class="fa fa-plus"></i></button><button class="btn remove DTNC" title="Delete" data-toggle="tooltip" type="button" disabled><i class="fa fa-trash" ></i></button></td>
                                                     </tr>
                                                 <tr></tr>
-                                            @endif 
+                                            <?php endif; ?> 
                                             </tbody>
                                         </table>
                                     </div>
@@ -501,34 +502,34 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                        @if(!empty($objSOUDF))
-                                            @foreach($objSOUDF as $Ukey => $Urow)
+                                        <?php if(!empty($objSOUDF)): ?>
+                                            <?php $__currentLoopData = $objSOUDF; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $Ukey => $Urow): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                 <tr  class="participantRow4">
-                                                    <td><input type="text" {{$ActionStatus}} name={{"popupUDFSOID_".$Ukey}} id={{"popupUDFSOID_".$Ukey}}  class="form-control"  autocomplete="off"  readonly/></td>
-                                                    <td hidden><input type="hidden" name={{"UDFSOID_REF_".$Ukey}}  id={{"UDFSOID_REF_".$Ukey}} class="form-control" value="{{$Urow->UDFSOID_REF}}" autocomplete="off" /></td>
-                                                    <td hidden><input type="hidden" name={{"UDFismandatory_".$Ukey}} id={{"UDFismandatory_".$Ukey}} class="form-control" autocomplete="off" /></td>
-                                                    <td id={{"udfinputid_".$Ukey}}>
-                                                    {{-- dynamic input --}} 
+                                                    <td><input type="text" <?php echo e($ActionStatus); ?> name=<?php echo e("popupUDFSOID_".$Ukey); ?> id=<?php echo e("popupUDFSOID_".$Ukey); ?>  class="form-control"  autocomplete="off"  readonly/></td>
+                                                    <td hidden><input type="hidden" name=<?php echo e("UDFSOID_REF_".$Ukey); ?>  id=<?php echo e("UDFSOID_REF_".$Ukey); ?> class="form-control" value="<?php echo e($Urow->UDFSOID_REF); ?>" autocomplete="off" /></td>
+                                                    <td hidden><input type="hidden" name=<?php echo e("UDFismandatory_".$Ukey); ?> id=<?php echo e("UDFismandatory_".$Ukey); ?> class="form-control" autocomplete="off" /></td>
+                                                    <td id=<?php echo e("udfinputid_".$Ukey); ?>>
+                                                     
                                                     </td>
                                                     <td align="center" ><button class="btn add UDF" title="add" data-toggle="tooltip" type="button" disabled><i class="fa fa-plus"></i></button><button class="btn remove DUDF" title="Delete" data-toggle="tooltip" type="button" disabled><i class="fa fa-trash" ></i></button></td>
                                                 </tr>
                                                 <tr></tr>
-                                            @endforeach 
-                                            @else
-                                            @foreach($objUdfSOData as $uindex=>$uRow)
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?> 
+                                            <?php else: ?>
+                                            <?php $__currentLoopData = $objUdfSOData; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $uindex=>$uRow): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                               <tr  class="participantRow4">
-                                                  <td><input type="text" {{$ActionStatus}} name={{"popupUDFSOID_".$uindex}} id={{"popupUDFSOID_".$uindex}} class="form-control" value="{{$uRow->LABEL}}" autocomplete="off"  readonly/></td>
-                                                  <td hidden><input type="hidden" name={{"UDFSOID_REF_".$uindex}} id={{"UDFSOID_REF_".$uindex}} class="form-control" value="{{$uRow->UDFID}}" autocomplete="off"   /></td>
-                                                  <td hidden><input type="hidden" name={{"UDFismandatory_".$uindex}} id={{"UDFismandatory_".$uindex}} value="{{$uRow->ISMANDATORY}}" class="form-control"   autocomplete="off" /></td>
-                                                  <td id={{"udfinputid_".$uindex}} >
+                                                  <td><input type="text" <?php echo e($ActionStatus); ?> name=<?php echo e("popupUDFSOID_".$uindex); ?> id=<?php echo e("popupUDFSOID_".$uindex); ?> class="form-control" value="<?php echo e($uRow->LABEL); ?>" autocomplete="off"  readonly/></td>
+                                                  <td hidden><input type="hidden" name=<?php echo e("UDFSOID_REF_".$uindex); ?> id=<?php echo e("UDFSOID_REF_".$uindex); ?> class="form-control" value="<?php echo e($uRow->UDFID); ?>" autocomplete="off"   /></td>
+                                                  <td hidden><input type="hidden" name=<?php echo e("UDFismandatory_".$uindex); ?> id=<?php echo e("UDFismandatory_".$uindex); ?> value="<?php echo e($uRow->ISMANDATORY); ?>" class="form-control"   autocomplete="off" /></td>
+                                                  <td id=<?php echo e("udfinputid_".$uindex); ?> >
                                                     
                                                   </td>
                                                   <td align="center" ><button class="btn add UDF" title="add" data-toggle="tooltip" type="button" disabled><i class="fa fa-plus"></i></button><button class="btn remove DUDF" title="Delete" data-toggle="tooltip" type="button" disabled><i class="fa fa-trash" ></i></button></td>
                                                   
                                               </tr>
                                               <tr></tr>
-                                            @endforeach  
-                                        @endif 
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>  
+                                        <?php endif; ?> 
                                         
                                     
                                             </tbody>
@@ -541,7 +542,7 @@
                                         <div class="col-lg-2 pl"><p>Calculation Template</p></div>
                                         <div class="col-lg-2 pl">
                                           <input type="text" name="txtCTID_popup" id="txtCTID_popup" class="form-control"  autocomplete="off"  readonly/>
-                                          <input type="hidden" name="CTID_REF" id="CTID_REF" class="form-control" autocomplete="off" value="{{isset($objSOCAL[0]->CTID_REF) ? $objSOCAL[0]->CTID_REF:''}}" />
+                                          <input type="hidden" name="CTID_REF" id="CTID_REF" class="form-control" autocomplete="off" value="<?php echo e(isset($objSOCAL[0]->CTID_REF) ? $objSOCAL[0]->CTID_REF:''); ?>" />
                                         </div>
                                     </div>
                                     <div class="table-responsive table-wrapper-scroll-y" style="height:240px;margin-top:10px;" >
@@ -565,55 +566,55 @@
                                                 </tr>
                                             </thead>
                                             <tbody id="tbody_ctid">
-                                            @if(!empty($objSOCAL))
-                                                @foreach($objSOCAL as $Ckey => $Crow)
+                                            <?php if(!empty($objSOCAL)): ?>
+                                                <?php $__currentLoopData = $objSOCAL; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $Ckey => $Crow): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                     <tr  class="participantRow5">
-                                                        <td><input type="text" class="form-control" autocomplete="off" readonly value="{{$Crow->CTCODE}}" /></td>
-                                                        <td hidden><input type="hidden" name="CTID_REF_{{$Ckey}}" id="CTID_REF_{{$Ckey}}" value="{{$Crow->CTID_REF}}"  /></td>
-                                                        <td hidden><input type="hidden" name="CT_TYPE_{{$Ckey}}" id="CT_TYPE_{{$Ckey}}" value="{{$Crow->TYPE}}"  /></td>
+                                                        <td><input type="text" class="form-control" autocomplete="off" readonly value="<?php echo e($Crow->CTCODE); ?>" /></td>
+                                                        <td hidden><input type="hidden" name="CTID_REF_<?php echo e($Ckey); ?>" id="CTID_REF_<?php echo e($Ckey); ?>" value="<?php echo e($Crow->CTID_REF); ?>"  /></td>
+                                                        <td hidden><input type="hidden" name="CT_TYPE_<?php echo e($Ckey); ?>" id="CT_TYPE_<?php echo e($Ckey); ?>" value="<?php echo e($Crow->TYPE); ?>"  /></td>
 
-                                                        <td><input type="text" {{$ActionStatus}} name={{"popupTID_".$Ckey}} id={{"popupTID_".$Ckey}}  class="form-control"  autocomplete="off"  readonly/></td>
-                                                        <td hidden><input type="hidden" name={{"TID_REF_".$Ckey}}  id={{"TID_REF_".$Ckey}}  class="form-control" autocomplete="off" value="{{$Crow->TID_REF}}" /></td>
-                                                        <td><input type="text" {{$ActionStatus}} name={{"RATE_".$Ckey}}  id={{"RATE_".$Ckey}} class="form-control four-digits" maxlength="8" autocomplete="off" value="{{$Crow->RATE}}"  readonly/></td>
-                                                        <td hidden><input type="hidden" name={{"BASIS_".$Ckey}} id={{"BASIS_".$Ckey}} class="form-control" autocomplete="off"  /></td>
-                                                        <td hidden><input type="hidden" name={{"SQNO_".$Ckey}} id={{"SQNO_".$Ckey}} class="form-control" autocomplete="off" /></td>
-                                                        <td hidden><input type="hidden" name={{"FORMULA_".$Ckey}} id={{"FORMULA_".$Ckey}} class="form-control" autocomplete="off" /></td>
-                                                        <td><input type="text" {{$ActionStatus}} name={{"VALUE_".$Ckey}} id={{"VALUE_".$Ckey}} class="form-control two-digits" maxlength="15" autocomplete="off" value="{{$Crow->VALUE}}" readonly/></td>
-                                                        <td style="text-align:center;" ><input type="checkbox" {{$ActionStatus}} class="filter-none" name={{"calGST_".$Ckey}} id={{"calGST_".$Ckey}} {{$Crow->GST == 1 ? 'checked' : ''}}   ></td>
+                                                        <td><input type="text" <?php echo e($ActionStatus); ?> name=<?php echo e("popupTID_".$Ckey); ?> id=<?php echo e("popupTID_".$Ckey); ?>  class="form-control"  autocomplete="off"  readonly/></td>
+                                                        <td hidden><input type="hidden" name=<?php echo e("TID_REF_".$Ckey); ?>  id=<?php echo e("TID_REF_".$Ckey); ?>  class="form-control" autocomplete="off" value="<?php echo e($Crow->TID_REF); ?>" /></td>
+                                                        <td><input type="text" <?php echo e($ActionStatus); ?> name=<?php echo e("RATE_".$Ckey); ?>  id=<?php echo e("RATE_".$Ckey); ?> class="form-control four-digits" maxlength="8" autocomplete="off" value="<?php echo e($Crow->RATE); ?>"  readonly/></td>
+                                                        <td hidden><input type="hidden" name=<?php echo e("BASIS_".$Ckey); ?> id=<?php echo e("BASIS_".$Ckey); ?> class="form-control" autocomplete="off"  /></td>
+                                                        <td hidden><input type="hidden" name=<?php echo e("SQNO_".$Ckey); ?> id=<?php echo e("SQNO_".$Ckey); ?> class="form-control" autocomplete="off" /></td>
+                                                        <td hidden><input type="hidden" name=<?php echo e("FORMULA_".$Ckey); ?> id=<?php echo e("FORMULA_".$Ckey); ?> class="form-control" autocomplete="off" /></td>
+                                                        <td><input type="text" <?php echo e($ActionStatus); ?> name=<?php echo e("VALUE_".$Ckey); ?> id=<?php echo e("VALUE_".$Ckey); ?> class="form-control two-digits" maxlength="15" autocomplete="off" value="<?php echo e($Crow->VALUE); ?>" readonly/></td>
+                                                        <td style="text-align:center;" ><input type="checkbox" <?php echo e($ActionStatus); ?> class="filter-none" name=<?php echo e("calGST_".$Ckey); ?> id=<?php echo e("calGST_".$Ckey); ?> <?php echo e($Crow->GST == 1 ? 'checked' : ''); ?>   ></td>
                                                         
-                                                        <td><input type="text" {{$ActionStatus}} name={{"calIGST_".$Ckey}} id={{"calIGST_".$Ckey}} class="form-control four-digits" maxlength="8" autocomplete="off" value="{{$Crow->IGST}}" readonly/></td>
-                                                        <td><input type="text" {{$ActionStatus}} name={{"AMTIGST_".$Ckey}} id={{"AMTIGST_".$Ckey}} class="form-control two-digits" maxlength="15" autocomplete="off"  readonly/></td>
-                                                        <td><input type="text" {{$ActionStatus}} name={{"calCGST_".$Ckey}} id={{"calCGST_".$Ckey}} class="form-control four-digits" maxlength="8" autocomplete="off" value="{{$Crow->CGST}}" readonly/></td>
-                                                        <td><input type="text" {{$ActionStatus}} name={{"AMTCGST_".$Ckey}} id={{"AMTCGST_".$Ckey}} class="form-control two-digits" maxlength="15" autocomplete="off"  readonly/></td>
-                                                        <td><input type="text" {{$ActionStatus}} name={{"calSGST_".$Ckey}} id={{"calSGST_".$Ckey}} class="form-control four-digits" maxlength="8" autocomplete="off" value="{{$Crow->SGST}}" readonly/></td>
-                                                        <td><input type="text" {{$ActionStatus}} name={{"AMTSGST_".$Ckey}} id={{"AMTSGST_".$Ckey}} class="form-control two-digits" maxlength="15" autocomplete="off"  readonly/></td>
-                                                        <td><input type="text" {{$ActionStatus}} name={{"TOTGSTAMT_".$Ckey}} id={{"TOTGSTAMT_".$Ckey}} class="form-control two-digits"  maxlength="15" autocomplete="off"  readonly/></td>
-                                                        <td style="text-align:center;"><input type="checkbox" class="filter-none" name={{"calACTUAL_".$Ckey}} id={{"calACTUAL_".$Ckey}} value="" {{$Crow->ACTUAL == 1 ? 'checked' : ''}}  ></td>
+                                                        <td><input type="text" <?php echo e($ActionStatus); ?> name=<?php echo e("calIGST_".$Ckey); ?> id=<?php echo e("calIGST_".$Ckey); ?> class="form-control four-digits" maxlength="8" autocomplete="off" value="<?php echo e($Crow->IGST); ?>" readonly/></td>
+                                                        <td><input type="text" <?php echo e($ActionStatus); ?> name=<?php echo e("AMTIGST_".$Ckey); ?> id=<?php echo e("AMTIGST_".$Ckey); ?> class="form-control two-digits" maxlength="15" autocomplete="off"  readonly/></td>
+                                                        <td><input type="text" <?php echo e($ActionStatus); ?> name=<?php echo e("calCGST_".$Ckey); ?> id=<?php echo e("calCGST_".$Ckey); ?> class="form-control four-digits" maxlength="8" autocomplete="off" value="<?php echo e($Crow->CGST); ?>" readonly/></td>
+                                                        <td><input type="text" <?php echo e($ActionStatus); ?> name=<?php echo e("AMTCGST_".$Ckey); ?> id=<?php echo e("AMTCGST_".$Ckey); ?> class="form-control two-digits" maxlength="15" autocomplete="off"  readonly/></td>
+                                                        <td><input type="text" <?php echo e($ActionStatus); ?> name=<?php echo e("calSGST_".$Ckey); ?> id=<?php echo e("calSGST_".$Ckey); ?> class="form-control four-digits" maxlength="8" autocomplete="off" value="<?php echo e($Crow->SGST); ?>" readonly/></td>
+                                                        <td><input type="text" <?php echo e($ActionStatus); ?> name=<?php echo e("AMTSGST_".$Ckey); ?> id=<?php echo e("AMTSGST_".$Ckey); ?> class="form-control two-digits" maxlength="15" autocomplete="off"  readonly/></td>
+                                                        <td><input type="text" <?php echo e($ActionStatus); ?> name=<?php echo e("TOTGSTAMT_".$Ckey); ?> id=<?php echo e("TOTGSTAMT_".$Ckey); ?> class="form-control two-digits"  maxlength="15" autocomplete="off"  readonly/></td>
+                                                        <td style="text-align:center;"><input type="checkbox" class="filter-none" name=<?php echo e("calACTUAL_".$Ckey); ?> id=<?php echo e("calACTUAL_".$Ckey); ?> value="" <?php echo e($Crow->ACTUAL == 1 ? 'checked' : ''); ?>  ></td>
                                                         <td align="center" ><button class="btn add" title="add" data-toggle="tooltip" type="button" disabled><i class="fa fa-plus"></i></button><button class="btn remove" title="Delete" data-toggle="tooltip" type="button" disabled><i class="fa fa-trash" ></i></button></td>
                                                     </tr>
                                                     <tr></tr>
-                                                @endforeach 
-                                                @else
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?> 
+                                                <?php else: ?>
                                                 <tr  class="participantRow5">
-                                                    <td><input type="text" {{$ActionStatus}} name="popupTID_0" id="popupTID_0" class="form-control"  autocomplete="off"  readonly/></td>
+                                                    <td><input type="text" <?php echo e($ActionStatus); ?> name="popupTID_0" id="popupTID_0" class="form-control"  autocomplete="off"  readonly/></td>
                                                     <td hidden><input type="hidden" name="TID_REF_0" id="TID_REF_0" class="form-control" autocomplete="off" /></td>
-                                                    <td><input type="text" {{$ActionStatus}} name="RATE_0" id="RATE_0" class="form-control four-digits" maxlength="8" autocomplete="off"  readonly/></td>
+                                                    <td><input type="text" <?php echo e($ActionStatus); ?> name="RATE_0" id="RATE_0" class="form-control four-digits" maxlength="8" autocomplete="off"  readonly/></td>
                                                     <td hidden><input type="hidden" name="BASIS_0" id="BASIS_0" class="form-control" autocomplete="off" /></td>
                                                     <td hidden><input type="hidden" name="SQNO_0" id="SQNO_0" class="form-control" autocomplete="off" /></td>
-                                                    <td><input type="text" {{$ActionStatus}} name="VALUE_0" id="VALUE_0" class="form-control two-digits" maxlength="15" autocomplete="off"  readonly/></td>
+                                                    <td><input type="text" <?php echo e($ActionStatus); ?> name="VALUE_0" id="VALUE_0" class="form-control two-digits" maxlength="15" autocomplete="off"  readonly/></td>
                                                     <td style="text-align:center;" ><input type="checkbox" class="filter-none" name="calGST_0" id="calGST_0" value="" ></td>
-                                                    <td><input type="text" {{$ActionStatus}} name="calIGST_0" id="calIGST_0" class="form-control four-digits" maxlength="8" autocomplete="off"  readonly/></td>
-                                                    <td><input type="text" {{$ActionStatus}} name="AMTIGST_0" id="AMTIGST_0" class="form-control two-digits" maxlength="15" autocomplete="off"  readonly/></td>
-                                                    <td><input type="text" {{$ActionStatus}} name="calCGST_0" id="calCGST_0" class="form-control four-digits" maxlength="8" autocomplete="off"  readonly/></td>
-                                                    <td><input type="text" {{$ActionStatus}} name="AMTCGST_0" id="AMTCGST_0" class="form-control two-digits" maxlength="15" autocomplete="off"  readonly/></td>
-                                                    <td><input type="text" {{$ActionStatus}} name="calSGST_0" id="calSGST_0" class="form-control four-digits" maxlength="8" autocomplete="off"  readonly/></td>
-                                                    <td><input type="text" {{$ActionStatus}} name="AMTSGST_0" id="AMTSGST_0" class="form-control two-digits" maxlength="15" autocomplete="off"  readonly/></td>
-                                                    <td><input type="text" {{$ActionStatus}} name="TOTGSTAMT_0" id="TOTGSTAMT_0" class="form-control two-digits"  maxlength="15" autocomplete="off"  readonly/></td>
-                                                    <td style="text-align:center;"><input type="checkbox" {{$ActionStatus}} class="filter-none" name="calACTUAL_0" id="calACTUAL_0" value=""   ></td>
+                                                    <td><input type="text" <?php echo e($ActionStatus); ?> name="calIGST_0" id="calIGST_0" class="form-control four-digits" maxlength="8" autocomplete="off"  readonly/></td>
+                                                    <td><input type="text" <?php echo e($ActionStatus); ?> name="AMTIGST_0" id="AMTIGST_0" class="form-control two-digits" maxlength="15" autocomplete="off"  readonly/></td>
+                                                    <td><input type="text" <?php echo e($ActionStatus); ?> name="calCGST_0" id="calCGST_0" class="form-control four-digits" maxlength="8" autocomplete="off"  readonly/></td>
+                                                    <td><input type="text" <?php echo e($ActionStatus); ?> name="AMTCGST_0" id="AMTCGST_0" class="form-control two-digits" maxlength="15" autocomplete="off"  readonly/></td>
+                                                    <td><input type="text" <?php echo e($ActionStatus); ?> name="calSGST_0" id="calSGST_0" class="form-control four-digits" maxlength="8" autocomplete="off"  readonly/></td>
+                                                    <td><input type="text" <?php echo e($ActionStatus); ?> name="AMTSGST_0" id="AMTSGST_0" class="form-control two-digits" maxlength="15" autocomplete="off"  readonly/></td>
+                                                    <td><input type="text" <?php echo e($ActionStatus); ?> name="TOTGSTAMT_0" id="TOTGSTAMT_0" class="form-control two-digits"  maxlength="15" autocomplete="off"  readonly/></td>
+                                                    <td style="text-align:center;"><input type="checkbox" <?php echo e($ActionStatus); ?> class="filter-none" name="calACTUAL_0" id="calACTUAL_0" value=""   ></td>
                                                     <td align="center" ><button class="btn add" title="add" data-toggle="tooltip" type="button" disabled><i class="fa fa-plus"></i></button><button class="btn remove" title="Delete" data-toggle="tooltip" type="button" disabled><i class="fa fa-trash" ></i></button></td>
                                                 </tr>
                                                 <tr></tr>
-                                            @endif 
+                                            <?php endif; ?> 
                                             </tbody>
                                     </table>
                                     </div>	
@@ -633,28 +634,28 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            @if(!empty($objSOPSLB))
-                                                @foreach($objSOPSLB as $Pkey => $Prow)
+                                            <?php if(!empty($objSOPSLB)): ?>
+                                                <?php $__currentLoopData = $objSOPSLB; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $Pkey => $Prow): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                     <tr  class="participantRow6">
-                                                        <td> <input type="text" {{$ActionStatus}} class="form-control" id={{"PAY_DAYS_".$Pkey}} name={{"PAY_DAYS_".$Pkey}} value="{{$Prow->PAY_DAYS}}" autocomplete="off"  /> </td>
-                                                        <td> <input type="text" {{$ActionStatus}} class="form-control four-digits" id={{"DUE_".$Pkey}} name={{"DUE_".$Pkey}} value="{{$Prow->DUE}}" maxlength="8" autocomplete="off" /> </td>
-                                                        <td> <input type="text" {{$ActionStatus}} class="form-control" id={{"PSREMARKS_".$Pkey}} name={{"PSREMARKS_".$Pkey}} value="{{$Prow->REMARKS}}" autocomplete="off"  /> </td>
-                                                        <td> <input type="text" {{$ActionStatus}} class="form-control" id={{"DUE_DATE_".$Pkey}} name={{"DUE_DATE_".$Pkey}} value="{{$Prow->DUE_DATE}}" autocomplete="off"  /> </td>
+                                                        <td> <input type="text" <?php echo e($ActionStatus); ?> class="form-control" id=<?php echo e("PAY_DAYS_".$Pkey); ?> name=<?php echo e("PAY_DAYS_".$Pkey); ?> value="<?php echo e($Prow->PAY_DAYS); ?>" autocomplete="off"  /> </td>
+                                                        <td> <input type="text" <?php echo e($ActionStatus); ?> class="form-control four-digits" id=<?php echo e("DUE_".$Pkey); ?> name=<?php echo e("DUE_".$Pkey); ?> value="<?php echo e($Prow->DUE); ?>" maxlength="8" autocomplete="off" /> </td>
+                                                        <td> <input type="text" <?php echo e($ActionStatus); ?> class="form-control" id=<?php echo e("PSREMARKS_".$Pkey); ?> name=<?php echo e("PSREMARKS_".$Pkey); ?> value="<?php echo e($Prow->REMARKS); ?>" autocomplete="off"  /> </td>
+                                                        <td> <input type="text" <?php echo e($ActionStatus); ?> class="form-control" id=<?php echo e("DUE_DATE_".$Pkey); ?> name=<?php echo e("DUE_DATE_".$Pkey); ?> value="<?php echo e($Prow->DUE_DATE); ?>" autocomplete="off"  /> </td>
                                                         
                                                         <td align="center" style="width:105px;" ><button class="btn add" title="add" data-toggle="tooltip" type="button"><i class="fa fa-plus"></i></button><button class="btn remove" title="Delete" data-toggle="tooltip" type="button" ><i class="fa fa-trash" ></i></button></td>
                                                     </tr>
                                                     <tr></tr>
-                                                @endforeach 
-                                                @else
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?> 
+                                                <?php else: ?>
                                                 <tr  class="participantRow6">
-                                                        <td> <input type="text" {{$ActionStatus}} class="form-control" id="PAY_DAYS_0" name="PAY_DAYS_0"  autocomplete="off" /> </td>
-                                                        <td> <input type="text" {{$ActionStatus}} class="form-control four-digits" id="DUE_0" name="DUE_0"  maxlength="8" autocomplete="off" /> </td>
-                                                        <td> <input type="text" {{$ActionStatus}} class="form-control" id="PSREMARKS_0" name="PSREMARKS_0" autocomplete="off"  /> </td>
-                                                        <td> <input type="date" {{$ActionStatus}} class="form-control" id="DUE_DATE_0" name="DUE_DATE_0" autocomplete="off"  readonly /> </td>
+                                                        <td> <input type="text" <?php echo e($ActionStatus); ?> class="form-control" id="PAY_DAYS_0" name="PAY_DAYS_0"  autocomplete="off" /> </td>
+                                                        <td> <input type="text" <?php echo e($ActionStatus); ?> class="form-control four-digits" id="DUE_0" name="DUE_0"  maxlength="8" autocomplete="off" /> </td>
+                                                        <td> <input type="text" <?php echo e($ActionStatus); ?> class="form-control" id="PSREMARKS_0" name="PSREMARKS_0" autocomplete="off"  /> </td>
+                                                        <td> <input type="date" <?php echo e($ActionStatus); ?> class="form-control" id="DUE_DATE_0" name="DUE_DATE_0" autocomplete="off"  readonly /> </td>
                                                         <td align="center" style="width:105px;" ><button class="btn add" title="add" data-toggle="tooltip" type="button"><i class="fa fa-plus"></i></button><button class="btn remove" title="Delete" data-toggle="tooltip" type="button" ><i class="fa fa-trash" ></i></button></td>
                                                     </tr>
                                                 <tr></tr>
-                                            @endif 
+                                            <?php endif; ?> 
                                         
                                     
                                             </tbody>
@@ -666,10 +667,10 @@
             <div class="row" style="margin-top:10px;margin-left:3px;" >	
                 <div class="col-lg-1 pl"><p>TDS Applicable</p></div>
                 <div class="col-lg-2 pl">
-                  <select {{$ActionStatus}} name="drpTDS" id="drpTDS" class="form-control">
+                  <select <?php echo e($ActionStatus); ?> name="drpTDS" id="drpTDS" class="form-control">
                       <option value=""></option>    
-                      <option {{ isset($objSO->TDS) && $objSO->TDS =='1'?'selected="selected"':'' }} value="Yes">Yes</option>
-                      <option {{ isset($objSO->TDS) && $objSO->TDS =='0'?'selected="selected"':'' }} value="No">No</option>
+                      <option <?php echo e(isset($objSO->TDS) && $objSO->TDS =='1'?'selected="selected"':''); ?> value="Yes">Yes</option>
+                      <option <?php echo e(isset($objSO->TDS) && $objSO->TDS =='0'?'selected="selected"':''); ?> value="No">No</option>
                   </select>
                 </div>
             </div>
@@ -677,7 +678,7 @@
                 <table id="example7" class="display nowrap table table-striped table-bordered itemlist" width="100%" style="height:auto !important;">
                     <thead id="thead1"  style="position: sticky;top: 0">
                           <tr>
-                              <th width="8%">TDS<input class="form-control" type="hidden" name="Row_Count6" id ="Row_Count6"  value="{{$objCount6}}" /></th>
+                              <th width="8%">TDS<input class="form-control" type="hidden" name="Row_Count6" id ="Row_Count6"  value="<?php echo e($objCount6); ?>" /></th>
                               <th width="8%">TDS Ledger</th>
                               <th width="5%">Applicable</th>
                               <th width="8%">Assessable Value</th>
@@ -697,72 +698,72 @@
                           </tr>
                     </thead>
                     <tbody id="tbody_tds">
-                    @if(!empty($objSOTDS))
-                      @foreach($objSOTDS as $tkey => $trow)
+                    <?php if(!empty($objSOTDS)): ?>
+                      <?php $__currentLoopData = $objSOTDS; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tkey => $trow): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <tr  class="participantRow7">
                           <td style="text-align:center;" >
-                          <input {{$ActionStatus}} type="text" {{$ActionStatus}} name={{"txtTDS_".$tkey}} id={{"txtTDS_".$tkey}} class="form-control" value="{{$trow->CODE}}" autocomplete="off"  readonly/></td>
-                          <td hidden><input type="hidden" name={{"TDSID_REF_".$tkey}} id={{"TDSID_REF_".$tkey}} value="{{$trow->TDSID_REF}}" class="form-control" autocomplete="off" /></td>
-                          <td><input {{$ActionStatus}} type="text"  name={{"TDSLedger_".$tkey}} id={{"TDSLedger_".$tkey}} class="form-control" value="{{$trow->CODE_DESC}}" autocomplete="off"  readonly/></td>
-                          <td  align="center" style="text-align:center;" ><input {{$ActionStatus}} type="checkbox" name={{"TDSApplicable_".$tkey}} id={{"TDSApplicable_".$tkey}} {{isset($trow->TDS_APPLICABLE) && $trow->TDS_APPLICABLE == 1?'checked' : ''}}/></td>
-                          <td><input {{$ActionStatus}} type="text" name={{"ASSESSABLE_VL_TDS_".$tkey}} id={{"ASSESSABLE_VL_TDS_".$tkey}} class="form-control two-digits" value="{{$trow->ASSESSABLE_VL_TDS}}" maxlength="15"  autocomplete="off"  /></td>
-                          <td><input {{$ActionStatus}} type="text" name={{"TDS_RATE_".$tkey}} id={{"TDS_RATE_".$tkey}} class="form-control four-digits" maxlength="12" value="{{$trow->TDS_RATE}}" autocomplete="off"  /></td>
-                          <td hidden><input type="hidden" name={{"TDS_EXEMPT_".$tkey}} id={{"TDS_EXEMPT_".$tkey}} class="form-control two-digits" value="0.00" /></td>
-                          <td><input {{$ActionStatus}} type="text" name={{"TDS_AMT_".$tkey}} id={{"TDS_AMT_".$tkey}} class="form-control two-digits" maxlength="15"  autocomplete="off"  value="{{$trow->TDS_AMT}}" readonly/></td>
-                          <td><input {{$ActionStatus}} type="text" name={{"ASSESSABLE_VL_SURCHARGE_".$tkey}} id={{"ASSESSABLE_VL_SURCHARGE_".$tkey}} class="form-control two-digits" value="{{$trow->ASSESSABLE_VL_SURCHARGE}}" maxlength="15"  autocomplete="off" /></td>
-                          <td><input {{$ActionStatus}} type="text" name={{"SURCHARGE_RATE_".$tkey}} id={{"SURCHARGE_RATE_".$tkey}} class="form-control four-digits" maxlength="12" value="{{$trow->SURCHARGE_RATE}}"  autocomplete="off"  /></td>
-                          <td hidden><input type="hidden" name={{"SURCHARGE_EXEMPT_".$tkey}} id={{"SURCHARGE_EXEMPT_".$tkey}} class="form-control two-digits" value="0.00" /></td>
-                          <td><input {{$ActionStatus}} type="text" name={{"SURCHARGE_AMT_".$tkey}} id={{"SURCHARGE_AMT_".$tkey}} class="form-control two-digits" maxlength="15" value="{{$trow->SURCHARGE_AMT}}" autocomplete="off"  readonly/></td>
-                          <td><input {{$ActionStatus}} type="text" name={{"ASSESSABLE_VL_CESS_".$tkey}} id={{"ASSESSABLE_VL_CESS_".$tkey}} class="form-control two-digits" maxlength="15" value="{{$trow->ASSESSABLE_VL_CESS}}" autocomplete="off" /></td>
-                          <td><input {{$ActionStatus}} type="text" name={{"CESS_RATE_".$tkey}} id={{"CESS_RATE_".$tkey}} class="form-control four-digits" maxlength="12" value="{{$trow->CESS_RATE}}" autocomplete="off"  /></td>
-                          <td hidden><input type="hidden" name={{"CESS_EXEMPT_".$tkey}} id={{"CESS_EXEMPT_".$tkey}} class="form-control two-digits" value="0.00" /></td>
-                          <td><input {{$ActionStatus}} type="text" name={{"CESS_AMT_".$tkey}} id={{"CESS_AMT_".$tkey}} class="form-control two-digits" maxlength="15" value="{{$trow->CESS_AMT}}" autocomplete="off"  readonly/></td>
-                          <td><input {{$ActionStatus}} type="text" name={{"ASSESSABLE_VL_SPCESS_".$tkey}} id={{"ASSESSABLE_VL_SPCESS_".$tkey}} class="form-control two-digits" maxlength="15" value="{{$trow->ASSESSABLE_VL_SPCESS}}"  autocomplete="off" /></td>
-                          <td><input {{$ActionStatus}} type="text" name={{"SPCESS_RATE_".$tkey}} id={{"SPCESS_RATE_".$tkey}} class="form-control four-digits" maxlength="12" value="{{$trow->SPCESS_RATE}}" autocomplete="off"  /></td>
-                          <td hidden><input type="hidden" name={{"SPCESS_EXEMPT_".$tkey}} id={{"SPCESS_EXEMPT_".$tkey}} class="form-control two-digits" value="0.00" /></td>
-                          <td><input {{$ActionStatus}} type="text" name={{"SPCESS_AMT_".$tkey}} id={{"SPCESS_AMT_".$tkey}} class="form-control two-digits" maxlength="15" value="{{$trow->SPCESS_AMT}}"  autocomplete="off"  readonly/></td>
-                  @php
+                          <input <?php echo e($ActionStatus); ?> type="text" <?php echo e($ActionStatus); ?> name=<?php echo e("txtTDS_".$tkey); ?> id=<?php echo e("txtTDS_".$tkey); ?> class="form-control" value="<?php echo e($trow->CODE); ?>" autocomplete="off"  readonly/></td>
+                          <td hidden><input type="hidden" name=<?php echo e("TDSID_REF_".$tkey); ?> id=<?php echo e("TDSID_REF_".$tkey); ?> value="<?php echo e($trow->TDSID_REF); ?>" class="form-control" autocomplete="off" /></td>
+                          <td><input <?php echo e($ActionStatus); ?> type="text"  name=<?php echo e("TDSLedger_".$tkey); ?> id=<?php echo e("TDSLedger_".$tkey); ?> class="form-control" value="<?php echo e($trow->CODE_DESC); ?>" autocomplete="off"  readonly/></td>
+                          <td  align="center" style="text-align:center;" ><input <?php echo e($ActionStatus); ?> type="checkbox" name=<?php echo e("TDSApplicable_".$tkey); ?> id=<?php echo e("TDSApplicable_".$tkey); ?> <?php echo e(isset($trow->TDS_APPLICABLE) && $trow->TDS_APPLICABLE == 1?'checked' : ''); ?>/></td>
+                          <td><input <?php echo e($ActionStatus); ?> type="text" name=<?php echo e("ASSESSABLE_VL_TDS_".$tkey); ?> id=<?php echo e("ASSESSABLE_VL_TDS_".$tkey); ?> class="form-control two-digits" value="<?php echo e($trow->ASSESSABLE_VL_TDS); ?>" maxlength="15"  autocomplete="off"  /></td>
+                          <td><input <?php echo e($ActionStatus); ?> type="text" name=<?php echo e("TDS_RATE_".$tkey); ?> id=<?php echo e("TDS_RATE_".$tkey); ?> class="form-control four-digits" maxlength="12" value="<?php echo e($trow->TDS_RATE); ?>" autocomplete="off"  /></td>
+                          <td hidden><input type="hidden" name=<?php echo e("TDS_EXEMPT_".$tkey); ?> id=<?php echo e("TDS_EXEMPT_".$tkey); ?> class="form-control two-digits" value="0.00" /></td>
+                          <td><input <?php echo e($ActionStatus); ?> type="text" name=<?php echo e("TDS_AMT_".$tkey); ?> id=<?php echo e("TDS_AMT_".$tkey); ?> class="form-control two-digits" maxlength="15"  autocomplete="off"  value="<?php echo e($trow->TDS_AMT); ?>" readonly/></td>
+                          <td><input <?php echo e($ActionStatus); ?> type="text" name=<?php echo e("ASSESSABLE_VL_SURCHARGE_".$tkey); ?> id=<?php echo e("ASSESSABLE_VL_SURCHARGE_".$tkey); ?> class="form-control two-digits" value="<?php echo e($trow->ASSESSABLE_VL_SURCHARGE); ?>" maxlength="15"  autocomplete="off" /></td>
+                          <td><input <?php echo e($ActionStatus); ?> type="text" name=<?php echo e("SURCHARGE_RATE_".$tkey); ?> id=<?php echo e("SURCHARGE_RATE_".$tkey); ?> class="form-control four-digits" maxlength="12" value="<?php echo e($trow->SURCHARGE_RATE); ?>"  autocomplete="off"  /></td>
+                          <td hidden><input type="hidden" name=<?php echo e("SURCHARGE_EXEMPT_".$tkey); ?> id=<?php echo e("SURCHARGE_EXEMPT_".$tkey); ?> class="form-control two-digits" value="0.00" /></td>
+                          <td><input <?php echo e($ActionStatus); ?> type="text" name=<?php echo e("SURCHARGE_AMT_".$tkey); ?> id=<?php echo e("SURCHARGE_AMT_".$tkey); ?> class="form-control two-digits" maxlength="15" value="<?php echo e($trow->SURCHARGE_AMT); ?>" autocomplete="off"  readonly/></td>
+                          <td><input <?php echo e($ActionStatus); ?> type="text" name=<?php echo e("ASSESSABLE_VL_CESS_".$tkey); ?> id=<?php echo e("ASSESSABLE_VL_CESS_".$tkey); ?> class="form-control two-digits" maxlength="15" value="<?php echo e($trow->ASSESSABLE_VL_CESS); ?>" autocomplete="off" /></td>
+                          <td><input <?php echo e($ActionStatus); ?> type="text" name=<?php echo e("CESS_RATE_".$tkey); ?> id=<?php echo e("CESS_RATE_".$tkey); ?> class="form-control four-digits" maxlength="12" value="<?php echo e($trow->CESS_RATE); ?>" autocomplete="off"  /></td>
+                          <td hidden><input type="hidden" name=<?php echo e("CESS_EXEMPT_".$tkey); ?> id=<?php echo e("CESS_EXEMPT_".$tkey); ?> class="form-control two-digits" value="0.00" /></td>
+                          <td><input <?php echo e($ActionStatus); ?> type="text" name=<?php echo e("CESS_AMT_".$tkey); ?> id=<?php echo e("CESS_AMT_".$tkey); ?> class="form-control two-digits" maxlength="15" value="<?php echo e($trow->CESS_AMT); ?>" autocomplete="off"  readonly/></td>
+                          <td><input <?php echo e($ActionStatus); ?> type="text" name=<?php echo e("ASSESSABLE_VL_SPCESS_".$tkey); ?> id=<?php echo e("ASSESSABLE_VL_SPCESS_".$tkey); ?> class="form-control two-digits" maxlength="15" value="<?php echo e($trow->ASSESSABLE_VL_SPCESS); ?>"  autocomplete="off" /></td>
+                          <td><input <?php echo e($ActionStatus); ?> type="text" name=<?php echo e("SPCESS_RATE_".$tkey); ?> id=<?php echo e("SPCESS_RATE_".$tkey); ?> class="form-control four-digits" maxlength="12" value="<?php echo e($trow->SPCESS_RATE); ?>" autocomplete="off"  /></td>
+                          <td hidden><input type="hidden" name=<?php echo e("SPCESS_EXEMPT_".$tkey); ?> id=<?php echo e("SPCESS_EXEMPT_".$tkey); ?> class="form-control two-digits" value="0.00" /></td>
+                          <td><input <?php echo e($ActionStatus); ?> type="text" name=<?php echo e("SPCESS_AMT_".$tkey); ?> id=<?php echo e("SPCESS_AMT_".$tkey); ?> class="form-control two-digits" maxlength="15" value="<?php echo e($trow->SPCESS_AMT); ?>"  autocomplete="off"  readonly/></td>
+                  <?php
                     $TotalTDS=number_format(($trow->TDS_AMT+$trow->SURCHARGE_AMT+$trow->CESS_AMT+$trow->SPCESS_AMT),2, '.', '');
-                  @endphp
-                            <td><input {{$ActionStatus}} type="text" name={{"TOT_TD_AMT_".$tkey}} id={{"TOT_TD_AMT_".$tkey}} class="form-control two-digits" maxlength="15" value="{{$TotalTDS}}"  autocomplete="off"  readonly/></td>
+                  ?>
+                            <td><input <?php echo e($ActionStatus); ?> type="text" name=<?php echo e("TOT_TD_AMT_".$tkey); ?> id=<?php echo e("TOT_TD_AMT_".$tkey); ?> class="form-control two-digits" maxlength="15" value="<?php echo e($TotalTDS); ?>"  autocomplete="off"  readonly/></td>
                             <td style="min-width: 100px;" >
-                            <button {{$ActionStatus}} class="btn add" title="add" data-toggle="tooltip" type="button"><i class="fa fa-plus"></i></button>
-                            <button {{$ActionStatus}} class="btn remove" title="Delete" data-toggle="tooltip" type="button"><i class="fa fa-trash" ></i></button>
+                            <button <?php echo e($ActionStatus); ?> class="btn add" title="add" data-toggle="tooltip" type="button"><i class="fa fa-plus"></i></button>
+                            <button <?php echo e($ActionStatus); ?> class="btn remove" title="Delete" data-toggle="tooltip" type="button"><i class="fa fa-trash" ></i></button>
                           </td>
                         </tr>
                         <tr></tr>
-                      @endforeach
-                    @else
+                      <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    <?php else: ?>
                         <tr  class="participantRow7">
                             <td style="text-align:center;" >
-                            <input {{$ActionStatus}} type="text" name="txtTDS_0" id="txtTDS_0" class="form-control"  autocomplete="off"  readonly/></td>
+                            <input <?php echo e($ActionStatus); ?> type="text" name="txtTDS_0" id="txtTDS_0" class="form-control"  autocomplete="off"  readonly/></td>
                             <td hidden><input type="hidden" name="TDSID_REF_0" id="TDSID_REF_0" class="form-control" autocomplete="off" /></td>
-                            <td><input {{$ActionStatus}} type="text" name="TDSLedger_0" id="TDSLedger_0" class="form-control"  autocomplete="off"  readonly/></td>
-                            <td  align="center" style="text-align:center;" ><input {{$ActionStatus}} type="checkbox" name="TDSApplicable_0" id="TDSApplicable_0" /></td>
-                            <td><input {{$ActionStatus}} type="text" name="ASSESSABLE_VL_TDS_0" id="ASSESSABLE_VL_TDS_0" class="form-control two-digits" maxlength="15"  autocomplete="off"  /></td>
-                            <td><input {{$ActionStatus}} type="text" name="TDS_RATE_0" id="TDS_RATE_0" class="form-control four-digits" maxlength="12"  autocomplete="off"  /></td>
+                            <td><input <?php echo e($ActionStatus); ?> type="text" name="TDSLedger_0" id="TDSLedger_0" class="form-control"  autocomplete="off"  readonly/></td>
+                            <td  align="center" style="text-align:center;" ><input <?php echo e($ActionStatus); ?> type="checkbox" name="TDSApplicable_0" id="TDSApplicable_0" /></td>
+                            <td><input <?php echo e($ActionStatus); ?> type="text" name="ASSESSABLE_VL_TDS_0" id="ASSESSABLE_VL_TDS_0" class="form-control two-digits" maxlength="15"  autocomplete="off"  /></td>
+                            <td><input <?php echo e($ActionStatus); ?> type="text" name="TDS_RATE_0" id="TDS_RATE_0" class="form-control four-digits" maxlength="12"  autocomplete="off"  /></td>
                             <td hidden><input type="hidden" name="TDS_EXEMPT_0" id="TDS_EXEMPT_0" class="form-control two-digits" /></td>
-                            <td><input {{$ActionStatus}} type="text" name="TDS_AMT_0" id="TDS_AMT_0" class="form-control two-digits" maxlength="15"  autocomplete="off"  readonly/></td>
-                            <td><input {{$ActionStatus}} type="text" name="ASSESSABLE_VL_SURCHARGE_0" id="ASSESSABLE_VL_SURCHARGE_0" class="form-control two-digits" maxlength="15"  autocomplete="off" /></td>
-                            <td><input {{$ActionStatus}} type="text" name="SURCHARGE_RATE_0" id="SURCHARGE_RATE_0" class="form-control four-digits" maxlength="12"  autocomplete="off"  /></td>
+                            <td><input <?php echo e($ActionStatus); ?> type="text" name="TDS_AMT_0" id="TDS_AMT_0" class="form-control two-digits" maxlength="15"  autocomplete="off"  readonly/></td>
+                            <td><input <?php echo e($ActionStatus); ?> type="text" name="ASSESSABLE_VL_SURCHARGE_0" id="ASSESSABLE_VL_SURCHARGE_0" class="form-control two-digits" maxlength="15"  autocomplete="off" /></td>
+                            <td><input <?php echo e($ActionStatus); ?> type="text" name="SURCHARGE_RATE_0" id="SURCHARGE_RATE_0" class="form-control four-digits" maxlength="12"  autocomplete="off"  /></td>
                             <td hidden><input type="hidden" name="SURCHARGE_EXEMPT_0" id="SURCHARGE_EXEMPT_0" class="form-control two-digits" /></td>
-                            <td><input {{$ActionStatus}} type="text" name="SURCHARGE_AMT_0" id="SURCHARGE_AMT_0" class="form-control two-digits" maxlength="15"  autocomplete="off"  readonly/></td>
-                            <td><input {{$ActionStatus}} type="text" name="ASSESSABLE_VL_CESS_0" id="ASSESSABLE_VL_CESS_0" class="form-control two-digits" maxlength="15"  autocomplete="off" /></td>
-                            <td><input {{$ActionStatus}} type="text" name="CESS_RATE_0" id="CESS_RATE_0" class="form-control four-digits" maxlength="12"  autocomplete="off"  /></td>
+                            <td><input <?php echo e($ActionStatus); ?> type="text" name="SURCHARGE_AMT_0" id="SURCHARGE_AMT_0" class="form-control two-digits" maxlength="15"  autocomplete="off"  readonly/></td>
+                            <td><input <?php echo e($ActionStatus); ?> type="text" name="ASSESSABLE_VL_CESS_0" id="ASSESSABLE_VL_CESS_0" class="form-control two-digits" maxlength="15"  autocomplete="off" /></td>
+                            <td><input <?php echo e($ActionStatus); ?> type="text" name="CESS_RATE_0" id="CESS_RATE_0" class="form-control four-digits" maxlength="12"  autocomplete="off"  /></td>
                             <td hidden><input type="hidden" name="CESS_EXEMPT_0" id="CESS_EXEMPT_0" class="form-control two-digits" /></td>
-                            <td><input {{$ActionStatus}} type="text" name="CESS_AMT_0" id="CESS_AMT_0" class="form-control two-digits" maxlength="15"  autocomplete="off"  readonly/></td>
-                            <td><input {{$ActionStatus}} type="text" name="ASSESSABLE_VL_SPCESS_0" id="ASSESSABLE_VL_SPCESS_0" class="form-control two-digits" maxlength="15"  autocomplete="off" /></td>
-                            <td><input {{$ActionStatus}} type="text" name="SPCESS_RATE_0" id="SPCESS_RATE_0" class="form-control four-digits" maxlength="12"  autocomplete="off"  /></td>
+                            <td><input <?php echo e($ActionStatus); ?> type="text" name="CESS_AMT_0" id="CESS_AMT_0" class="form-control two-digits" maxlength="15"  autocomplete="off"  readonly/></td>
+                            <td><input <?php echo e($ActionStatus); ?> type="text" name="ASSESSABLE_VL_SPCESS_0" id="ASSESSABLE_VL_SPCESS_0" class="form-control two-digits" maxlength="15"  autocomplete="off" /></td>
+                            <td><input <?php echo e($ActionStatus); ?> type="text" name="SPCESS_RATE_0" id="SPCESS_RATE_0" class="form-control four-digits" maxlength="12"  autocomplete="off"  /></td>
                             <td hidden><input type="hidden" name="SPCESS_EXEMPT_0" id="SPCESS_EXEMPT_0" class="form-control two-digits" /></td>
-                            <td><input {{$ActionStatus}} type="text" name="SPCESS_AMT_0" id="SPCESS_AMT_0" class="form-control two-digits" maxlength="15"  autocomplete="off"  readonly/></td>
-                            <td><input {{$ActionStatus}} type="text" name="TOT_TD_AMT_0" id="TOT_TD_AMT_0" class="form-control two-digits" maxlength="15"  autocomplete="off"  readonly/></td>
+                            <td><input <?php echo e($ActionStatus); ?> type="text" name="SPCESS_AMT_0" id="SPCESS_AMT_0" class="form-control two-digits" maxlength="15"  autocomplete="off"  readonly/></td>
+                            <td><input <?php echo e($ActionStatus); ?> type="text" name="TOT_TD_AMT_0" id="TOT_TD_AMT_0" class="form-control two-digits" maxlength="15"  autocomplete="off"  readonly/></td>
                             <td style="min-width: 100px;" >
-                            <button {{$ActionStatus}} class="btn add" title="add" data-toggle="tooltip" type="button"><i class="fa fa-plus"></i></button>
-                            <button {{$ActionStatus}} class="btn remove" title="Delete" data-toggle="tooltip" type="button"><i class="fa fa-trash" ></i></button>
+                            <button <?php echo e($ActionStatus); ?> class="btn add" title="add" data-toggle="tooltip" type="button"><i class="fa fa-plus"></i></button>
+                            <button <?php echo e($ActionStatus); ?> class="btn remove" title="Delete" data-toggle="tooltip" type="button"><i class="fa fa-trash" ></i></button>
                           </td>
                         </tr>
                         <tr></tr>
-                    @endif
+                    <?php endif; ?>
                     </tbody>
                 </table>
             </div>	
@@ -772,7 +773,7 @@
                                     <div class="row" style="margin-top:10px;margin-left:3px;" >	
                                         <div class="col-lg-2 pl"><p>Template Master</p></div>
                                         <div class="col-lg-2 pl">
-                                        <input type="text" name="txtTemplate_popup" {{$ActionStatus}} id="txtTemplate_popup" class="form-control"  autocomplete="off"  readonly/>
+                                        <input type="text" name="txtTemplate_popup" <?php echo e($ActionStatus); ?> id="txtTemplate_popup" class="form-control"  autocomplete="off"  readonly/>
                                          <input type="hidden" name="TEMPID_REF" id="TEMPID_REF" class="form-control" autocomplete="off" />
                                         </div>
                                     </div>
@@ -780,7 +781,7 @@
                                         <div class="col-lg-2 pl"><p>Template Description</p></div>
                                         <div class="col-lg-6 pl">
                              
-                                        <textarea name="Template_Description" {{$ActionStatus}} id="Template_Description" cols="118" rows="10" tabindex="3" >{{ isset($Template->TEMPLATE)?$Template->TEMPLATE:'' }}</textarea>
+                                        <textarea name="Template_Description" <?php echo e($ActionStatus); ?> id="Template_Description" cols="118" rows="10" tabindex="3" ><?php echo e(isset($Template->TEMPLATE)?$Template->TEMPLATE:''); ?></textarea>
                                         </div>
                                     </div>            
                             </div>
@@ -793,8 +794,8 @@
 
 <!-- </div> -->
 </form>
-@endsection
-@section('alert')
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('alert'); ?>
 
 <div id="tech_data_model" class="modal" role="dialog"  data-backdrop="static">
   <div class="modal-dialog modal-md" style="width:40%;">
@@ -1097,15 +1098,16 @@
          
         </thead>
         <tbody>
-        @foreach ($objTNCHeader as $tncindex=>$tncRow)
+        <?php $__currentLoopData = $objTNCHeader; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tncindex=>$tncRow): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
         <tr>
-              <td class="ROW1"> <input type="checkbox" name="SELECT_TNCID[]" id="tncidcode_{{ $tncindex }}" class="clstncid" value="{{ $tncRow-> TNCID }}" ></td>
-              <td class="ROW2">{{ $tncRow-> TNC_CODE }}
-                <input type="hidden" id="txttncidcode_{{ $tncindex }}" data-desc="{{ $tncRow-> TNC_CODE }}" data-desc2="{{ $tncRow-> TNC_DESC }}"  value="{{ $tncRow-> TNCID }}"/>
+              <td class="ROW1"> <input type="checkbox" name="SELECT_TNCID[]" id="tncidcode_<?php echo e($tncindex); ?>" class="clstncid" value="<?php echo e($tncRow-> TNCID); ?>" ></td>
+              <td class="ROW2"><?php echo e($tncRow-> TNC_CODE); ?>
+
+                <input type="hidden" id="txttncidcode_<?php echo e($tncindex); ?>" data-desc="<?php echo e($tncRow-> TNC_CODE); ?>" data-desc2="<?php echo e($tncRow-> TNC_DESC); ?>"  value="<?php echo e($tncRow-> TNCID); ?>"/>
               </td>
-              <td class="ROW3">{{ $tncRow-> TNC_DESC }}</td>
+              <td class="ROW3"><?php echo e($tncRow-> TNC_DESC); ?></td>
           </tr>
-        @endforeach
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </tbody>
       </table>
     </div>
@@ -1193,15 +1195,16 @@
          
         </thead>
         <tbody>
-        @foreach ($objCalculationHeader as $calindex=>$calRow)
+        <?php $__currentLoopData = $objCalculationHeader; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $calindex=>$calRow): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
         <tr>
-            <td class="ROW1"> <input type="checkbox" name="SELECT_CTID[]" id="CTIDcode_{{ $calindex }}" class="clsctid" value="{{ $calRow-> CTID }}" onchange="getCalculationComponent()" ></td>
-            <td class="ROW2">{{ $calRow-> CTCODE }}
-              <input type="hidden" id="txtCTIDcode_{{ $calindex }}" data-desc="{{ $calRow-> CTCODE }}" data-desc2="{{ $calRow-> CTDESCRIPTION }}"  value="{{ $calRow-> CTID }}"/>
+            <td class="ROW1"> <input type="checkbox" name="SELECT_CTID[]" id="CTIDcode_<?php echo e($calindex); ?>" class="clsctid" value="<?php echo e($calRow-> CTID); ?>" onchange="getCalculationComponent()" ></td>
+            <td class="ROW2"><?php echo e($calRow-> CTCODE); ?>
+
+              <input type="hidden" id="txtCTIDcode_<?php echo e($calindex); ?>" data-desc="<?php echo e($calRow-> CTCODE); ?>" data-desc2="<?php echo e($calRow-> CTDESCRIPTION); ?>"  value="<?php echo e($calRow-> CTID); ?>"/>
             </td>
-            <td class="ROW3">{{ $calRow-> CTDESCRIPTION }}</td>
+            <td class="ROW3"><?php echo e($calRow-> CTDESCRIPTION); ?></td>
         </tr>
-        @endforeach
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </tbody>
       </table>
     </div>
@@ -1305,15 +1308,16 @@
           
         </thead>
         <tbody>
-        @foreach ($objothcurrency as $crindex=>$crRow)
+        <?php $__currentLoopData = $objothcurrency; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $crindex=>$crRow): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
         <tr>
-          <td class="ROW1"> <input type="checkbox" name="SELECT_CRID[]" id="cridcode_{{ $crindex }}" class="clscrid" value="{{ $crRow-> CRID }}" ></td>
-          <td class="ROW2">{{ $crRow-> CRCODE }}
-            <input type="hidden" id="txtcridcode_{{ $crindex }}" data-desc="{{ $crRow-> CRCODE }}" data-desc2="{{ $crRow-> CRDESCRIPTION }}"  value="{{ $crRow-> CRID }}"/>
+          <td class="ROW1"> <input type="checkbox" name="SELECT_CRID[]" id="cridcode_<?php echo e($crindex); ?>" class="clscrid" value="<?php echo e($crRow-> CRID); ?>" ></td>
+          <td class="ROW2"><?php echo e($crRow-> CRCODE); ?>
+
+            <input type="hidden" id="txtcridcode_<?php echo e($crindex); ?>" data-desc="<?php echo e($crRow-> CRCODE); ?>" data-desc2="<?php echo e($crRow-> CRDESCRIPTION); ?>"  value="<?php echo e($crRow-> CRID); ?>"/>
           </td>
-          <td class="ROW3">{{ $crRow-> CRDESCRIPTION }}</td>
+          <td class="ROW3"><?php echo e($crRow-> CRDESCRIPTION); ?></td>
         </tr>
-        @endforeach
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </tbody>
       </table>
     </div>
@@ -1345,8 +1349,8 @@
     <tbody>
     <tr>
         <td class="ROW1"><span class="check_th">&#10004;</span></td>
-        <td class="ROW2"><input type="text" id="customercodesearch" class="form-control" onkeyup="CustomerCodeFunction('{{$FormId}}')"></td>
-        <td class="ROW3"><input type="text" id="customernamesearch" class="form-control" onkeyup="CustomerNameFunction('{{$FormId}}')"></td>
+        <td class="ROW2"><input type="text" id="customercodesearch" class="form-control" onkeyup="CustomerCodeFunction('<?php echo e($FormId); ?>')"></td>
+        <td class="ROW3"><input type="text" id="customernamesearch" class="form-control" onkeyup="CustomerNameFunction('<?php echo e($FormId); ?>')"></td>
     </tr>
     </tbody>
     </table>
@@ -1395,16 +1399,17 @@
         <thead id="thead2">          
         </thead>
         <tbody >     
-        @foreach ($objSalesPerson as $spindex=>$spRow)
+        <?php $__currentLoopData = $objSalesPerson; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $spindex=>$spRow): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
         <tr>
-          <td class="ROW1"> <input type="checkbox" name="SELECT_EMPID[]" id="spidcode_{{ $spindex }}" class="clsspid" value="{{ $spRow-> EMPID }}" ></td>
-          <td class="ROW2">{{ $spRow-> EMPCODE }}
-            <input type="hidden" id="txtspidcode_{{ $spindex }}" data-desc="{{ $spRow-> EMPCODE }}" data-desc2="{{ $spRow-> FNAME }}"  
-            data-desc3="{{ $spRow-> LNAME }}" value="{{ $spRow-> EMPID }}"/>
+          <td class="ROW1"> <input type="checkbox" name="SELECT_EMPID[]" id="spidcode_<?php echo e($spindex); ?>" class="clsspid" value="<?php echo e($spRow-> EMPID); ?>" ></td>
+          <td class="ROW2"><?php echo e($spRow-> EMPCODE); ?>
+
+            <input type="hidden" id="txtspidcode_<?php echo e($spindex); ?>" data-desc="<?php echo e($spRow-> EMPCODE); ?>" data-desc2="<?php echo e($spRow-> FNAME); ?>"  
+            data-desc3="<?php echo e($spRow-> LNAME); ?>" value="<?php echo e($spRow-> EMPID); ?>"/>
           </td>
-          <td class="ROW3">{{ $spRow-> FNAME }} {{ $spRow-> MNAME }} {{ $spRow-> LNAME }}</td>
+          <td class="ROW3"><?php echo e($spRow-> FNAME); ?> <?php echo e($spRow-> MNAME); ?> <?php echo e($spRow-> LNAME); ?></td>
         </tr>
-        @endforeach  
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>  
         </tbody>
       </table>
     </div>
@@ -1509,25 +1514,25 @@
             <th style="width:8%;">Item Group</th>
             <th style="width:8%;">Item Category</th>
             <th style="width:8%;">Business Unit</th>
-            <th style="width:8%;" {{$AlpsStatus['hidden']}} >{{isset($TabSetting->FIELD8) && $TabSetting->FIELD8 !=''?$TabSetting->FIELD8:'Add. Info Part No'}}</th>
-            <th style="width:8%;" {{$AlpsStatus['hidden']}} >{{isset($TabSetting->FIELD9) && $TabSetting->FIELD9 !=''?$TabSetting->FIELD9:'Add. Info Customer Part No'}}</th>
-            <th style="width:8%;" {{$AlpsStatus['hidden']}} >{{isset($TabSetting->FIELD10) && $TabSetting->FIELD10 !=''?$TabSetting->FIELD10:'Add. Info OEM Part No.'}}</th>
+            <th style="width:8%;" <?php echo e($AlpsStatus['hidden']); ?> ><?php echo e(isset($TabSetting->FIELD8) && $TabSetting->FIELD8 !=''?$TabSetting->FIELD8:'Add. Info Part No'); ?></th>
+            <th style="width:8%;" <?php echo e($AlpsStatus['hidden']); ?> ><?php echo e(isset($TabSetting->FIELD9) && $TabSetting->FIELD9 !=''?$TabSetting->FIELD9:'Add. Info Customer Part No'); ?></th>
+            <th style="width:8%;" <?php echo e($AlpsStatus['hidden']); ?> ><?php echo e(isset($TabSetting->FIELD10) && $TabSetting->FIELD10 !=''?$TabSetting->FIELD10:'Add. Info OEM Part No.'); ?></th>
             <th style="width:8%;">Status</th>
       </tr>
     </thead>
     <tbody>
     <tr>
         <td style="width:8%;text-align:center;"><input type="checkbox" class="js-selectall" data-target=".js-selectall1" /></td>
-        <td style="width:10%;"><input type="text" id="Itemcodesearch" class="form-control" onkeyup="ItemCodeFunction('{{$FormId}}')"></td>
-        <td style="width:10%;"><input type="text" id="Itemnamesearch" class="form-control" onkeyup="ItemNameFunction('{{$FormId}}')"></td>
-        <td style="width:8%;"><input type="text" id="ItemUOMsearch" class="form-control" onkeyup="ItemUOMFunction('{{$FormId}}')"></td>
+        <td style="width:10%;"><input type="text" id="Itemcodesearch" class="form-control" onkeyup="ItemCodeFunction('<?php echo e($FormId); ?>')"></td>
+        <td style="width:10%;"><input type="text" id="Itemnamesearch" class="form-control" onkeyup="ItemNameFunction('<?php echo e($FormId); ?>')"></td>
+        <td style="width:8%;"><input type="text" id="ItemUOMsearch" class="form-control" onkeyup="ItemUOMFunction('<?php echo e($FormId); ?>')"></td>
         <td style="width:8%;"><input type="text" id="ItemQTYsearch" class="form-control" onkeyup="ItemQTYFunction()"></td>
-        <td style="width:8%;"><input type="text" id="ItemGroupsearch" class="form-control" onkeyup="ItemGroupFunction('{{$FormId}}')"></td>
-        <td style="width:8%;"><input type="text" id="ItemCategorysearch" class="form-control" onkeyup="ItemCategoryFunction('{{$FormId}}')"></td>
-        <td style="width:8%;"><input type="text" id="ItemBUsearch" class="form-control" onkeyup="ItemBUFunction('{{$FormId}}')"></td>
-        <td style="width:8%;" {{$AlpsStatus['hidden']}} ><input type="text" id="ItemAPNsearch" class="form-control" onkeyup="ItemAPNFunction('{{$FormId}}')"></td>
-        <td style="width:8%;" {{$AlpsStatus['hidden']}} ><input type="text" id="ItemCPNsearch" class="form-control" onkeyup="ItemCPNFunction('{{$FormId}}')"></td>
-        <td style="width:8%;" {{$AlpsStatus['hidden']}} ><input type="text" id="ItemOEMPNsearch" class="form-control" onkeyup="ItemOEMPNFunction('{{$FormId}}')"></td>
+        <td style="width:8%;"><input type="text" id="ItemGroupsearch" class="form-control" onkeyup="ItemGroupFunction('<?php echo e($FormId); ?>')"></td>
+        <td style="width:8%;"><input type="text" id="ItemCategorysearch" class="form-control" onkeyup="ItemCategoryFunction('<?php echo e($FormId); ?>')"></td>
+        <td style="width:8%;"><input type="text" id="ItemBUsearch" class="form-control" onkeyup="ItemBUFunction('<?php echo e($FormId); ?>')"></td>
+        <td style="width:8%;" <?php echo e($AlpsStatus['hidden']); ?> ><input type="text" id="ItemAPNsearch" class="form-control" onkeyup="ItemAPNFunction('<?php echo e($FormId); ?>')"></td>
+        <td style="width:8%;" <?php echo e($AlpsStatus['hidden']); ?> ><input type="text" id="ItemCPNsearch" class="form-control" onkeyup="ItemCPNFunction('<?php echo e($FormId); ?>')"></td>
+        <td style="width:8%;" <?php echo e($AlpsStatus['hidden']); ?> ><input type="text" id="ItemOEMPNsearch" class="form-control" onkeyup="ItemOEMPNFunction('<?php echo e($FormId); ?>')"></td>
         <td style="width:8%;"><input type="text" id="ItemStatussearch" class="form-control" onkeyup="ItemStatusFunction()"></td>
       </tr>                
     </tbody>
@@ -1632,16 +1637,18 @@
         <thead id="thead2">
         </thead>
         <tbody id="tbody_udfsoid"> 
-        @foreach ($objUdfSOData as $udfindex=>$udfRow)
-        <tr id="udfsoid_{{ $udfindex }}" class="clsudfsoid">
-          <td width="50%">{{ $udfRow->LABEL }}
-          <input type="hidden" id="txtudfsoid_{{ $udfindex }}" data-desc="{{ $udfRow->LABEL }}"  value="{{ $udfRow->UDFID }}"/>
+        <?php $__currentLoopData = $objUdfSOData; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $udfindex=>$udfRow): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+        <tr id="udfsoid_<?php echo e($udfindex); ?>" class="clsudfsoid">
+          <td width="50%"><?php echo e($udfRow->LABEL); ?>
+
+          <input type="hidden" id="txtudfsoid_<?php echo e($udfindex); ?>" data-desc="<?php echo e($udfRow->LABEL); ?>"  value="<?php echo e($udfRow->UDFID); ?>"/>
           </td>
-          <td id="udfvalue_{{ $udfindex }}">{{ $udfRow-> VALUETYPE }}
-          <input type="hidden" id="txtudfvalue__{{ $udfindex }}" data-desc="{{ $udfRow->DESCRIPTIONS }}"  
-          value="{{ $udfRow->ISMANDATORY }}"/></td>
+          <td id="udfvalue_<?php echo e($udfindex); ?>"><?php echo e($udfRow-> VALUETYPE); ?>
+
+          <input type="hidden" id="txtudfvalue__<?php echo e($udfindex); ?>" data-desc="<?php echo e($udfRow->DESCRIPTIONS); ?>"  
+          value="<?php echo e($udfRow->ISMANDATORY); ?>"/></td>
         </tr>
-        @endforeach        
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>        
         </tbody>
       </table>
     </div>
@@ -1709,15 +1716,16 @@
          
         </thead>
         <tbody>
-        @foreach ($objTemplateMaster as $calindex=>$TempRow)
+        <?php $__currentLoopData = $objTemplateMaster; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $calindex=>$TempRow): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
         <tr>
-            <td class="ROW1"> <input type="checkbox" name="SELECT_TEMPLATE[]" id="Templatecode_{{ $calindex }}" class="clstemplateid" value="{{ $TempRow-> TEMPLATEID }}" ></td>
-            <td class="ROW2">{{ $TempRow-> TEMPLATE_NAME }}
-              <input type="hidden" id="txtTemplatecode_{{ $calindex }}" data-desc="{{ $TempRow-> TEMPLATE_NAME }}" data-desc2="{{isset($TempRow->INDATE) && $TempRow->INDATE !='' && $TempRow->INDATE !='1900-01-01' ? date('d-m-Y',strtotime($TempRow->INDATE)):''}}" data-desc3="{{ $TempRow-> TEMPLATE }}"  value="{{ $TempRow-> TEMPLATEID }}"/>
+            <td class="ROW1"> <input type="checkbox" name="SELECT_TEMPLATE[]" id="Templatecode_<?php echo e($calindex); ?>" class="clstemplateid" value="<?php echo e($TempRow-> TEMPLATEID); ?>" ></td>
+            <td class="ROW2"><?php echo e($TempRow-> TEMPLATE_NAME); ?>
+
+              <input type="hidden" id="txtTemplatecode_<?php echo e($calindex); ?>" data-desc="<?php echo e($TempRow-> TEMPLATE_NAME); ?>" data-desc2="<?php echo e(isset($TempRow->INDATE) && $TempRow->INDATE !='' && $TempRow->INDATE !='1900-01-01' ? date('d-m-Y',strtotime($TempRow->INDATE)):''); ?>" data-desc3="<?php echo e($TempRow-> TEMPLATE); ?>"  value="<?php echo e($TempRow-> TEMPLATEID); ?>"/>
             </td>
-            <td class="ROW3">{{isset($TempRow->INDATE) && $TempRow->INDATE !='' && $TempRow->INDATE !='1900-01-01' ? date('d-m-Y',strtotime($TempRow->INDATE)):''}}</td>
+            <td class="ROW3"><?php echo e(isset($TempRow->INDATE) && $TempRow->INDATE !='' && $TempRow->INDATE !='1900-01-01' ? date('d-m-Y',strtotime($TempRow->INDATE)):''); ?></td>
         </tr>
-        @endforeach
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </tbody>
       </table>
     </div>
@@ -1729,10 +1737,10 @@
 <!-- Template Master Dropdown-->
 
 
-@endsection
+<?php $__env->stopSection(); ?>
 
 
-@push('bottom-css')
+<?php $__env->startPush('bottom-css'); ?>
 <style>
 #custom_dropdown, #frm_trn_so_filter {
     display: inline-table;
@@ -1840,8 +1848,8 @@
     width: 20%;
 }
 </style>
-@endpush
-@push('bottom-scripts')
+<?php $__env->stopPush(); ?>
+<?php $__env->startPush('bottom-scripts'); ?>
 <script>
 
 
@@ -1875,7 +1883,7 @@
 //             }
 //         });
 //         $.ajax({
-//             url:'{{route("transaction",[38,"checkcustomerpono"])}}',
+//             url:'<?php echo e(route("transaction",[38,"checkcustomerpono"])); ?>',
 //             type:'POST',
 //             data:formData,
 //             success:function(data) {
@@ -2160,7 +2168,7 @@ $('.clsudfsoid').dblclick(function(){
                 }
             });
             $.ajax({
-                url:'{{route("transaction",[38,"gettncdetails2"])}}',
+                url:'<?php echo e(route("transaction",[38,"gettncdetails2"])); ?>',
                 type:'POST',
                 data:{'id':customid},
                 success:function(data) {
@@ -2173,7 +2181,7 @@ $('.clsudfsoid').dblclick(function(){
                 },
             });            
             $.ajax({
-                url:'{{route("transaction",[38,"gettncdetails3"])}}',
+                url:'<?php echo e(route("transaction",[38,"gettncdetails3"])); ?>',
                 type:'POST',
                 data:{'id':customid},
                 success:function(data) {
@@ -2186,7 +2194,7 @@ $('.clsudfsoid').dblclick(function(){
                 },
             });
             $.ajax({
-                url:'{{route("transaction",[38,"gettncdetails"])}}',
+                url:'<?php echo e(route("transaction",[38,"gettncdetails"])); ?>',
                 type:'POST',
                 data:{'id':customid},
                 success:function(data) {
@@ -2419,7 +2427,7 @@ function getCalculationComponent(){
   });
 
   $.ajax({
-    url:'{{route("transaction",[38,"getcalculationdetails2"])}}',
+    url:'<?php echo e(route("transaction",[38,"getcalculationdetails2"])); ?>',
     type:'POST',
     data:{'id':customid},
     success:function(data) {
@@ -2434,7 +2442,7 @@ function getCalculationComponent(){
   });
 
   $.ajax({
-      url:'{{route("transaction",[38,"getcalculationdetails3"])}}',
+      url:'<?php echo e(route("transaction",[38,"getcalculationdetails3"])); ?>',
       type:'POST',
       data:{'id':customid},
       success:function(data) {
@@ -2669,7 +2677,7 @@ $("#txtsubgl_popup").click(function(event)
 {
     var CODE = ''; 
     var NAME = ''; 
-    var FORMID = "{{$FormId}}";
+    var FORMID = "<?php echo e($FormId); ?>";
     loadCustomer(CODE,NAME,FORMID);
     $("#customer_popus").show();
     event.preventDefault();
@@ -2738,7 +2746,7 @@ function bindSubLedgerEvents(){
                 }
             });
             $.ajax({
-                url:'{{route("transaction",[38,"getcreditdays"])}}',
+                url:'<?php echo e(route("transaction",[38,"getcreditdays"])); ?>',
                 type:'POST',
                 data:{'id':customid},
                 success:function(data) {
@@ -2759,7 +2767,7 @@ function bindSubLedgerEvents(){
                 }
             });
             $.ajax({
-                url:'{{route("transaction",[38,"getBillTo"])}}',
+                url:'<?php echo e(route("transaction",[38,"getBillTo"])); ?>',
                 type:'POST',
                 data:{'id':customid},
                 success:function(data) {
@@ -2783,7 +2791,7 @@ function bindSubLedgerEvents(){
                 }
             });
             $.ajax({
-                url:'{{route("transaction",[38,"getShipTo"])}}',
+                url:'<?php echo e(route("transaction",[38,"getShipTo"])); ?>',
                 type:'POST',
                 data:{'id':customid},
                 success:function(data) {
@@ -2862,7 +2870,7 @@ function bindSubLedgerEvents(){
                       }
                   })
                   $.ajax({
-                      url:'{{route("transaction",[38,"getBillAddress"])}}',
+                      url:'<?php echo e(route("transaction",[38,"getBillAddress"])); ?>',
                       type:'POST',
                       data:{'id':customid},
                       success:function(data) {
@@ -2990,7 +2998,7 @@ function bindSubLedgerEvents(){
                       }
                   })
                   $.ajax({
-                      url:'{{route("transaction",[38,"getShipAddress"])}}',
+                      url:'<?php echo e(route("transaction",[38,"getShipAddress"])); ?>',
                       type:'POST',
                       data:{'id':customid},
                       success:function(data) {
@@ -3276,7 +3284,7 @@ function bindSubLedgerEvents(){
                       }
                   })
                   $.ajax({
-                      url:'{{route("transaction",[38,"getsalesquotation"])}}',
+                      url:'<?php echo e(route("transaction",[38,"getsalesquotation"])); ?>',
                       type:'POST',
                       data:{'id':customid},
                       success:function(data) {
@@ -4209,7 +4217,7 @@ function loadItem(taxstate,CODE,NAME,MUOM,GROUP,CTGRY,BUNIT,APART,CPART,OPART,FO
                       }
                   });
                   $.ajax({
-                      url:'{{route("transaction",[38,"getItemDetailsQuotationwise"])}}',
+                      url:'<?php echo e(route("transaction",[38,"getItemDetailsQuotationwise"])); ?>',
                       type:'POST',
                       data:{'id':SalesQuotationID, 'taxstate':taxstate},
                       success:function(data) {
@@ -4238,7 +4246,7 @@ function loadItem(taxstate,CODE,NAME,MUOM,GROUP,CTGRY,BUNIT,APART,CPART,OPART,FO
             var APART = ''; 
             var CPART = ''; 
             var OPART = ''; 
-            var FORMID = "{{$FormId}}";
+            var FORMID = "<?php echo e($FormId); ?>";
             loadItem(taxstate,CODE,NAME,MUOM,GROUP,CTGRY,BUNIT,APART,CPART,OPART,FORMID);  
             $('.js-selectall').prop("disabled", true); 
                   $("#ITEMIDpopup").show();
@@ -5361,7 +5369,7 @@ $('[id*="chkId"]').change(function(){
                       }
                   });
                   $.ajax({
-                      url:'{{route("transaction",[38,"getAltUOM"])}}',
+                      url:'<?php echo e(route("transaction",[38,"getAltUOM"])); ?>',
                       type:'POST',
                       data:{'id':ItemID},
                       success:function(data) {
@@ -5433,7 +5441,7 @@ $('[id*="chkId"]').change(function(){
                       }
                   });
                   $.ajax({
-                      url:'{{route("transaction",[38,"getaltuomqty"])}}',
+                      url:'<?php echo e(route("transaction",[38,"getaltuomqty"])); ?>',
                       type:'POST',
                       data:{'id':altuomid, 'itemid':itemid, 'mqty':mqty},
                       success:function(data) {
@@ -6181,7 +6189,7 @@ $('#GST_Reverse').on('change', function()
                       }
                   });
                   $.ajax({
-                      url:'{{route("transaction",[36,"getaltuomqty"])}}',
+                      url:'<?php echo e(route("transaction",[36,"getaltuomqty"])); ?>',
                       type:'POST',
                       data:{'id':altuomid, 'itemid':itemid, 'mqty':mqty},
                       success:function(data) {
@@ -6674,11 +6682,11 @@ $('#GST_Reverse').on('change', function()
 
 
     $('#btnAdd').on('click', function() {
-        var viewURL = '{{route("transaction",[38,"add"])}}';
+        var viewURL = '<?php echo e(route("transaction",[38,"add"])); ?>';
                   window.location.href=viewURL;
     });
     $('#btnExit').on('click', function() {
-      var viewURL = '{{route('home')}}';
+      var viewURL = '<?php echo e(route('home')); ?>';
                   window.location.href=viewURL;
     });
      
@@ -6905,9 +6913,9 @@ $('#PaymentSlabs').on('change','[id*="PAY_DAYS"]',function( event ) {
 });
 </script>
 
-@endpush
+<?php $__env->stopPush(); ?>
 
-@push('bottom-scripts')
+<?php $__env->startPush('bottom-scripts'); ?>
 <script>
 
 $(document).ready(function() {
@@ -7915,7 +7923,7 @@ $("#btnSaveSO").hide();
 $(".buttonload").show(); 
 $("#btnApprove").prop("disabled", true);
 $.ajax({
-    url:'{{ route("transactionmodify",[38,"update"])}}',
+    url:'<?php echo e(route("transactionmodify",[38,"update"])); ?>',
     type:'POST',
     data:formData,
     success:function(data) {
@@ -8027,7 +8035,7 @@ $("#btnApprove").hide();
 $(".buttonload_approve").show();  
 $("#btnSaveSO").prop("disabled", true);
 $.ajax({
-    url:'{{ route("transactionmodify",[38,"Approve"])}}',
+    url:'<?php echo e(route("transactionmodify",[38,"Approve"])); ?>',
     type:'POST',
     data:formData,
     success:function(data) {
@@ -8136,7 +8144,7 @@ $("#OkBtn").click(function(){
     $("#NoBtn").show();
     $("#OkBtn").hide();
     $(".text-danger").hide();
-    window.location.href = '{{route("transaction",[38,"index"]) }}';
+    window.location.href = '<?php echo e(route("transaction",[38,"index"])); ?>';
 });
 
 $("#OkBtn1").click(function(){
@@ -8215,7 +8223,7 @@ function CalculationOnloadTime(){
                       }
                   });
                   $.ajax({
-                      url:'{{route("transaction",[36,"getaltuomqty"])}}',
+                      url:'<?php echo e(route("transaction",[36,"getaltuomqty"])); ?>',
                       type:'POST',
                       data:{'id':altuomid, 'itemid':itemid, 'mqty':mqty},
                       success:function(data) {
@@ -9018,7 +9026,7 @@ function getTotalRowValue(){
 
 function getTaxStatus(customid){
 
-  var TaxStatus = $.ajax({type: 'POST',url:'{{route("transaction",[38,"getTaxStatus"])}}',async: false,dataType: 'json',data: {id:customid},done: function(response) {return response;}}).responseText;
+  var TaxStatus = $.ajax({type: 'POST',url:'<?php echo e(route("transaction",[38,"getTaxStatus"])); ?>',async: false,dataType: 'json',data: {id:customid},done: function(response) {return response;}}).responseText;
     
   if(TaxStatus =="1"){
     $(".ExceptionalGST").show();
@@ -9353,7 +9361,7 @@ if(altuomid !='' && id === "SO_QTY_"+index){
   });
 
   $.ajax({
-    url:'{{route("transaction",[38,"getaltuomqty"])}}',
+    url:'<?php echo e(route("transaction",[38,"getaltuomqty"])); ?>',
     type:'POST',
     data:{'id':altuomid, 'itemid':itemid, 'mqty':quantity},
       success:function(data) {
@@ -9380,7 +9388,7 @@ if(altuomid !='' && id === "ALT_UOMID_QTY_"+index){
             });
         
             $.ajax({
-              url:'{{route("transaction",[38,"getmainuomqty"])}}',
+              url:'<?php echo e(route("transaction",[38,"getmainuomqty"])); ?>',
               type:'POST',
               data:{'id':altuomid, 'itemid':itemid, 'aqty':altquantity},
                 success:function(data) {
@@ -9635,7 +9643,7 @@ let Dealer = "#DealerOrderTable2";
                   });
                   $("#Data_seach_dealer").show();
                   $.ajax({
-                      url:'{{route("transaction",[$FormId,"get_Dealer"])}}',
+                      url:'<?php echo e(route("transaction",[$FormId,"get_Dealer"])); ?>',
                       type:'POST',
                       data:{},
                       success:function(data) {                                
@@ -9742,7 +9750,7 @@ let Project = "#ProjectOrderTable2";
                   });
                   $("#Data_seach_project").show();
                   $.ajax({
-                      url:'{{route("transaction",[$FormId,"get_Project"])}}',
+                      url:'<?php echo e(route("transaction",[$FormId,"get_Project"])); ?>',
                       type:'POST',
                       data:{},
                       success:function(data) {                                
@@ -9843,7 +9851,7 @@ let Scheme = "#SchemeOrderTable2";
                   });
                   $("#Data_seach_scheme").show();
                   $.ajax({
-                      url:'{{route("transaction",[$FormId,"get_Scheme"])}}',
+                      url:'<?php echo e(route("transaction",[$FormId,"get_Scheme"])); ?>',
                       type:'POST',
                       data:{'SCHEMEID_REF':SCHEMEID_REF,'SODT':SODT},
                       success:function(data) {                                
@@ -9886,7 +9894,7 @@ function GetSchemeMaterial(){
       }
   });
   $.ajax({
-      url:'{{route("transaction",[$FormId,"GetSchemeMaterialItems"])}}',
+      url:'<?php echo e(route("transaction",[$FormId,"GetSchemeMaterialItems"])); ?>',
       type:'POST',
       data:$('#frm_trn_so').serialize(),
         
@@ -9912,7 +9920,7 @@ function GetSchemeMaterial(){
 </script>
 
 
-@endpush
+<?php $__env->stopPush(); ?>
 
 
 <script>
@@ -9942,7 +9950,7 @@ function getTechnicalSpecification(id){
     });
 
     $.ajax({
-      url:'{{route("transaction",[38,"getTechnicalSpecification"])}}',
+      url:'<?php echo e(route("transaction",[38,"getTechnicalSpecification"])); ?>',
       type:'POST',
       data:{ITEMID_REF:ITEMID_REF,TSID_REF:TSID_REF},
       success:function(data) {
@@ -10032,7 +10040,7 @@ $.ajaxSetup({
 });
 
 $.ajax({
-    url:'{{route("transaction",[38,"get_delear_customer_price"])}}',
+    url:'<?php echo e(route("transaction",[38,"get_delear_customer_price"])); ?>',
     type:'POST',
     data:{
       action_type:action_type,
@@ -10074,7 +10082,7 @@ function check_pancard(){
 
   if(TotalValue > 200000){
     var posts     = $.ajax({
-                    url:'{{route("transaction",[38,"check_pancard"])}}',
+                    url:'<?php echo e(route("transaction",[38,"check_pancard"])); ?>',
                     type:'POST',
                     async: false,
                     dataType: 'json',
@@ -10089,3 +10097,4 @@ function check_pancard(){
   return posts;
 }
 </script>
+<?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\UNICORN_DEV\resources\views/transactions/sales/SalesOrder/trnfrm38view.blade.php ENDPATH**/ ?>
