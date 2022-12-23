@@ -1238,10 +1238,11 @@ class TrnFrm439Controller extends Controller{
                                 ->where('TBL_MST_CUSTOMER.STATUS','=','A')
                                 ->select('TBL_MST_CUSTOMER.SLID_REF AS CID','TBL_MST_CUSTOMER.CCODE','TBL_MST_CUSTOMER.NAME','TBL_MST_CUSTOMER.REGADDL1','TBL_MST_CUSTOMER.REGADDL2',
 								'TBL_MST_CUSTOMER.REGPIN','TBL_MST_COUNTRY.NAME AS CNTRY_NAME','TBL_MST_STATE.NAME AS STATE_NAME','TBL_MST_CITY.NAME AS CITY_NAME',
-								'TBL_MST_COUNTRY.CTRYID','TBL_MST_STATE.STID','TBL_MST_CITY.CITYID')
+								'TBL_MST_COUNTRY.CTRYID','TBL_MST_STATE.STID','TBL_MST_CITY.CITYID','TBL_MST_CUSTOMER.EMAILID AS EMAIL_ID','TBL_MST_CUSTOMER.MONO AS MOBILENO')
                                 ->get();
-            }
-            else{
+
+                }else{
+
                 $ObjData    =   DB::table('TBL_MST_PROSPECT')
                                 ->leftJoin('TBL_MST_COUNTRY', 'TBL_MST_PROSPECT.REGCTRYID_REF','=','TBL_MST_COUNTRY.CTRYID')
                                 ->leftJoin('TBL_MST_STATE', 'TBL_MST_PROSPECT.REGSTID_REF','=','TBL_MST_STATE.STID')
@@ -1249,7 +1250,18 @@ class TrnFrm439Controller extends Controller{
                                 ->where('TBL_MST_PROSPECT.CYID_REF','=',Auth::user()->CYID_REF)
                                 ->whereRaw('(TBL_MST_PROSPECT.DEACTIVATED IS NULL  OR TBL_MST_PROSPECT.DEACTIVATED = 0)')
                                 ->where('TBL_MST_PROSPECT.STATUS','=','A')
-                                ->select('TBL_MST_PROSPECT.PID AS CID','TBL_MST_PROSPECT.PCODE AS CCODE','TBL_MST_PROSPECT.NAME','TBL_MST_PROSPECT.REGADDL1','TBL_MST_PROSPECT.REGADDL2','TBL_MST_PROSPECT.REGPIN','TBL_MST_COUNTRY.NAME AS CNTRY_NAME','TBL_MST_STATE.NAME AS STATE_NAME','TBL_MST_CITY.NAME AS CITY_NAME','TBL_MST_COUNTRY.CTRYID','TBL_MST_STATE.STID','TBL_MST_CITY.CITYID')
+                                ->select('TBL_MST_PROSPECT.PID AS CID',
+                                'TBL_MST_PROSPECT.PCODE AS CCODE',
+                                'TBL_MST_PROSPECT.NAME',
+                                'TBL_MST_PROSPECT.REGADDL1',
+                                'TBL_MST_PROSPECT.REGADDL2',
+                                'TBL_MST_PROSPECT.REGPIN',
+                                'TBL_MST_COUNTRY.NAME AS CNTRY_NAME',
+                                'TBL_MST_STATE.NAME AS STATE_NAME',
+                                'TBL_MST_CITY.NAME AS CITY_NAME',
+                                'TBL_MST_COUNTRY.CTRYID',
+                                'TBL_MST_STATE.STID',
+                                'TBL_MST_CITY.CITYID','TBL_MST_PROSPECT.EMAILID AS EMAIL_ID','TBL_MST_PROSPECT.MONO AS MOBILENO')
                                 ->get();
             }
 
@@ -1272,6 +1284,9 @@ class TrnFrm439Controller extends Controller{
                     data-ccntry="'.$dataRow->CNTRY_NAME.'"                    
                     data-ccstate="'.$dataRow->STATE_NAME.'"
                     data-ccity="'.$dataRow->CITY_NAME.'"
+
+                    data-emailid="'.$dataRow->EMAIL_ID.'"
+                    data-mobileno="'.$dataRow->MOBILENO.'"
                     
                     data-ccntryid="'.$dataRow->CTRYID.'"
                     data-ccstateid="'.$dataRow->STID.'"

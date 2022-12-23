@@ -838,6 +838,8 @@ function getCustomer(value){
   $("#CITYID_REF_POPUP").val('');
   $("#CITYID_REF").val('');
   $("#PINCODE").val('');
+  $("#MOBILENUMBER").val('');
+  $("#EMAIL").val('');
 }
 
 function getCustProspect(){
@@ -969,6 +971,9 @@ function bindCustPostEvents(type){
           var texstate =   $("#txt"+id+"").data("ccstate");
           var texcity =   $("#txt"+id+"").data("ccity");
 
+          var texemailid =   $("#txt"+id+"").data("emailid");
+          var texmobileno =   $("#txt"+id+"").data("mobileno");
+
           var texcontryid =   $("#txt"+id+"").data("ccntryid");
           var texstateid =   $("#txt"+id+"").data("ccstateid");
           var texcityid =   $("#txt"+id+"").data("cccityid");
@@ -981,6 +986,10 @@ function bindCustPostEvents(type){
           $("#COUNTRY").val(texcontry);
           $("#STATE").val(texstate);
           $("#CITYID_REF_POPUP").val(texcity);
+
+          $("#EMAIL").val(texemailid);
+          $("#MOBILENUMBER").val(texmobileno);
+
 
           $("#COUNTRYID_REF").val(texcontryid);
           $("#STATEID_REF").val(texstateid);
