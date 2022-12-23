@@ -101,6 +101,7 @@
                   <option value="Meeting">Meeting</option>
                   <option value="Mail">Mail</option>
                   <option value="Call">Call</option>
+                  <option value="Demo">Demo</option>
                   </select>                             
               </div>
       
