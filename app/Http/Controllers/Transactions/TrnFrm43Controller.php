@@ -41,6 +41,9 @@ class TrnFrm43Controller extends Controller
         $BRID_REF   	=   Session::get('BRID_REF');
         $FYID_REF   	=   Session::get('FYID_REF');     
         
+
+
+       
                 
         $objFinalAppr = DB::select("select dbo.FN_APRL('$this->vtid_ref','$CYID_REF','$BRID_REF','$FYID_REF') as FA_NO");
         $FANO = "APPROVAL".$objFinalAppr[0]->FA_NO;
@@ -248,6 +251,7 @@ class TrnFrm43Controller extends Controller
             'HDR_DOC_NO'=>'SCNO',
             'HDR_DOC_DT'=>'SCDT'
         );
+        
         $docarray   =   $this->getManualAutoDocNo(date('Y-m-d'),$doc_req);
 
         $ObjUnionUDF = DB::table("TBL_MST_UDF_SCHALLAN")->select('*')
@@ -2407,6 +2411,39 @@ class TrnFrm43Controller extends Controller
             WHERE SOID_REF=$SOID");
             $result =    !empty($data) ? $data[0]->SCHEMEID_REF : ''; 
        return $result;
+    }
+
+
+
+    public function Get_Barcode_Status(Request $request) { 
+        $CYID_REF       =   Auth::user()->CYID_REF;
+        $BRID_REF       =   Session::get('BRID_REF');
+        $FYID_REF       =   Session::get('FYID_REF');
+        $DOCID_REF      =   $request['DOCID_REF'];  
+
+        $ITEM_STATUS    =DB::select("SELECT TOP 1 COUNT(M.ITEMID_REF) AS RECORD FROM TBL_TRN_SLSC01_MAT M
+        LEFT JOIN TBL_TRN_SLSC01_HDR H ON M.SCID_REF=H.SCID
+        LEFT JOIN TBL_MST_ITEMCHECKFLAG IC ON M.ITEMID_REF=IC.ITEMID_REF
+        WHERE M.SCID_REF=$DOCID_REF AND IC.SERIALNO_MODE='AUTOMATIC' AND H.BRID_REF=$BRID_REF AND H.CYID_REF=$CYID_REF
+        ");
+        if(isset($ITEM_STATUS[0]->RECORD) && $ITEM_STATUS[0]->RECORD > 0){
+
+            $ITEM_STATUS_BARCODE_OUT    =DB::select("SELECT COUNT(BRC_OUT_NO) AS EXIST FROM  TBL_TRN_BARCODE_OUT_HDR  
+            WHERE SOURCE_TYPE='SALES_CHALLAN' AND DOCID_REF=$DOCID_REF AND STATUS='A' AND BRID_REF=$BRID_REF AND CYID_REF=$CYID_REF
+            ");
+
+        if(isset($ITEM_STATUS_BARCODE_OUT[0]->EXIST) && $ITEM_STATUS_BARCODE_OUT[0]->EXIST > 0){
+
+            echo    1; 
+
+        }else{
+            echo    0; 
+        }
+
+        }else{
+            echo    0; 
+        }
+        
     }
 
     
