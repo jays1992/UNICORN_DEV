@@ -27,7 +27,6 @@
             <tr>
                 <th id="all-check" style="width:50px;"><input type="checkbox" class="js-selectall" data-target=".js-selectall1"  />Select</th>
                 <th>Hierarchy Code</th>
-                <th>Team Name</th>
                 <th>Creation Date</th>
                 <th>Modification Date</th>
                 <th>De-Activated</th>  
@@ -55,10 +54,9 @@
             }
             @endphp
             <tr>
-                <td><input type="checkbox" id="chkId{{$val->EMPHIERCHYID}}" value="{{$val->EMPHIERCHYID}}" class="js-selectall1" data-rcdstatus="{{$app_status}}"></td>
-                <td>{{isset($val->EMPHIERCHY_NO) && $val->EMPHIERCHY_NO !=''?$val->EMPHIERCHY_NO:''}}</td>
-                <td>{{isset($val->FNAME) && $val->FNAME !=''?$val->FNAME:''}}</td> 
-                <td>{{isset($val->EMPHIERCHY_DATE) && $val->EMPHIERCHY_DATE !=''?$val->EMPHIERCHY_DATE:''}}</td>             
+                <td><input type="checkbox" id="chkId{{$val->TERCMID}}" value="{{$val->TERCMID}}" class="js-selectall1" data-rcdstatus="{{$app_status}}"></td>
+                <td>{{isset($val->TEDOC_NO) && $val->TEDOC_NO !=''?$val->TEDOC_NO:''}}</td>
+                <td>{{isset($val->TEDOC_DT) && $val->TEDOC_DT !=''?$val->TEDOC_DT:''}}</td>             
                 <td>{{isset($val->INDATE) && $val->INDATE !='' && $val->INDATE !='1900-01-01' ? date('d-m-Y',strtotime($val->INDATE)):''}}</td>
                 <td>{{ $val->DEACTIVATED == 1 ? 'Yes':'No'}}</td>
                 <td>{{isset($val->DODEACTIVATED) && $val->DODEACTIVATED !='' && $val->DODEACTIVATED !='1900-01-01' ? date('d-m-Y',strtotime($val->DODEACTIVATED)):''}}</td>

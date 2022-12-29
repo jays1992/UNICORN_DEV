@@ -33,8 +33,8 @@
 			
 			<div class="col-lg-1 pl"><p>Document No</p></div>
 			  <div class="col-lg-2 pl">
-         <label> {{$objResponse->EMPHIERCHY_NO}} </label>
-        <input type="hidden" name="ATTACH_DOCNO" id="ATTACH_DOCNO" value="{{$objResponse->EMPHIERCHYID}}" class="form-control" maxlength="50" >
+         <label> {{$objResponse->TEDOC_NO}} </label>
+        <input type="hidden" name="ATTACH_DOCNO" id="ATTACH_DOCNO" value="{{$objResponse->TERCMID}}" class="form-control" maxlength="50" >
 			</div>
 			
 			<div class="col-lg-1 pl"><p>Document Date</p></div>

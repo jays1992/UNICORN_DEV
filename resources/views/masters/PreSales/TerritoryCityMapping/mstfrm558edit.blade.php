@@ -23,26 +23,39 @@
 <div class="container-fluid purchase-order-view filter">     
   <form id="frm_mst_edit" method="POST"> 
     @CSRF
-    {{isset($objResponse->EMPHIERCHYID) ? method_field('PUT') : '' }}
+    {{isset($objResponse->TERCMID) ? method_field('PUT') : '' }}
    <div class="inner-form">
          <div class="row">
            <div class="col-lg-2 pl"><p>Doc No*</p></div>
            <div class="col-lg-2 pl">
-              <input {{$ActionStatus}} type="text" name="DOC_NO" id="DOC_NO" value="{{isset($objResponse->EMPHIERCHY_NO) && $objResponse->EMPHIERCHY_NO !=''?$objResponse->EMPHIERCHY_NO:''}}"  class="form-control mandatory"  autocomplete="off" readonly >
+              <input {{$ActionStatus}} type="text" name="DOC_NO" id="DOC_NO" value="{{isset($objResponse->TEDOC_NO) && $objResponse->TEDOC_NO !=''?$objResponse->TEDOC_NO:''}}"  class="form-control mandatory"  autocomplete="off" readonly >
              <span class="text-danger" id="ERROR_DOC_NO"></span>
            </div>
 
            <div class="col-lg-2 pl"><p>Date*</p></div>
            <div class="col-lg-2 pl">
-           <input {{$ActionStatus}} type="date" name="DOC_DT" id="DOC_DT" value="{{isset($objResponse->EMPHIERCHY_DATE) && $objResponse->EMPHIERCHY_DATE !=''?$objResponse->EMPHIERCHY_DATE:''}}" class="form-control mandatory" autocomplete="off" placeholder="dd/mm/yyyy" >
+           <input {{$ActionStatus}} type="date" name="DOC_DT" id="DOC_DT" value="{{isset($objResponse->TEDOC_DT) && $objResponse->TEDOC_DT !=''?$objResponse->TEDOC_DT:''}}" class="form-control mandatory" autocomplete="off" placeholder="dd/mm/yyyy" >
            </div>
 
            <div class="col-lg-2 pl"><p>Territory Name*</p></div>
             <div class="col-lg-2 pl">
-              <input type="text" name="TERRITORY_NAME" id="TERRITORY_NAME" value="{{isset($objResponse->EMPHIERCHY_DATE) && $objResponse->EMPHIERCHY_DATE !=''?$objResponse->EMPHIERCHY_DATE:''}}" onclick="getTerritoryName(this.id,'{{route('master',[$FormId,'getTerritory'])}}','Territory Name Details')" class="form-control mandatory" readonly />
-              <input type="hidden" name="TERRITORY_ID_REF" id="TERRITORY_ID_REF" value="{{isset($row->EMPID) && $row->EMPID !=''?$row->EMPID:''}}" class="form-control" autocomplete="off" />
+              <input type="text" name="TERRITORY_NAME" id="TERRITORY_NAME" value="{{isset($objResponse->TRY_CODE) && $objResponse->TRY_CODE !=''?$objResponse->TRY_CODE:''}} {{isset($objResponse->TRY_NAME) && $objResponse->TRY_NAME !=''?'-'.$objResponse->TRY_NAME:''}}" onclick="getTerritoryName(this.id,'{{route('master',[$FormId,'getTerritory'])}}','Territory Name Details')" class="form-control mandatory" readonly />
+              <input type="hidden" name="TERRITORY_ID_REF" id="TERRITORY_ID_REF" value="{{isset($objResponse->TERID_REF) && $objResponse->TERID_REF !=''?$objResponse->TERID_REF:''}}" class="form-control" autocomplete="off" />
             </div>
-         </div>   
+         </div> 
+         
+         <div class="row">
+          <div class="col-lg-2 pl"><p>De-Activated</p></div>
+          <div class="col-lg-1 pl pr">
+          <input {{$ActionStatus}} type="checkbox"   name="DEACTIVATED"  id="deactive-checkbox_0" {{$objResponse->DEACTIVATED == 1 ? "checked" : ""}}
+           value='{{$objResponse->DEACTIVATED == 1 ? 1 : 0}}' tabindex="2"  >
+          </div>
+          
+          <div class="col-lg-2 pl"><p>Date of De-Activated</p></div>
+          <div class="col-lg-2 pl">
+            <input {{$ActionStatus}} type="date" name="DODEACTIVATED" class="form-control" id="DODEACTIVATED" {{$objResponse->DEACTIVATED == 1 ? "" : "disabled"}} value="{{isset($objResponse->DODEACTIVATED) && $objResponse->DODEACTIVATED !="" && $objResponse->DODEACTIVATED !="1900-01-01" ? $objResponse->DODEACTIVATED:''}}" tabindex="3" placeholder="dd/mm/yyyy"  />
+          </div>
+       </div>
 
          <div class="row">
            <ul class="nav nav-tabs">
@@ -66,12 +79,12 @@
                       @if(isset($MAT) && !empty($MAT))
                       @foreach($MAT as $key => $row)
                        <tr  class="participantRow">
-                         <td><input {{$ActionStatus}} class="form-control dynamic" type="text"  name="SRNo[]"  id ="SRNo_{{$row->SR_NO}}"              value="{{isset($row->SR_NO) && $row->SR_NO !=''?$row->SR_NO:''}}"  autocomplete="off" readonly></td>
-                          <td><input {{$ActionStatus}} class="form-control" type="text"    name="CITYCODE[]"   id ="CITYCODE_{{$key}}"             value="{{isset($row->EMPCODE_NAME) && $row->EMPCODE_NAME !=''?$row->EMPCODE_NAME:''}}" onclick="getTerritoryName(this.id,'{{route('master',[$FormId,'getCityCode'])}}','City Code Details')" autocomplete="off" readonly></td>
-                          <td hidden><input            class="form-control" type="hidden"  name="CITYID_REF[]" id ="HIDDEN_CITYID_REF_{{$key}}"    value="{{isset($row->EMPID) && $row->EMPID !=''?$row->EMPID:''}}" autocomplete="off" readonly></td>
-                          <td><input {{$ActionStatus}} class="form-control" type="text" name="CITYNAME[]" id ="CITYNAME_{{$key}}"                  value="{{isset($row->EMPCODE_NAME) && $row->EMPCODE_NAME !=''?$row->EMPCODE_NAME:''}}"autocomplete="off" readonly></td>
+                         <td><input {{$ActionStatus}} class="form-control dynamic" type="text"  name="SRNo[]"  id ="SRNo_{{$row->SERIAL_NO}}"      value="{{isset($row->SERIAL_NO) && $row->SERIAL_NO !=''?$row->SERIAL_NO:''}}"  autocomplete="off" readonly></td>
+                          <td><input {{$ActionStatus}} class="form-control" type="text"    name="CITYCODE[]"   id ="CITYCODE_{{$key}}"             value="{{isset($row->CITYCODE) && $row->CITYCODE !=''?$row->CITYCODE:''}}" onclick="getTerritoryName(this.id,'{{route('master',[$FormId,'getCityCode'])}}','City Code Details')" autocomplete="off" readonly></td>
+                          <td hidden><input            class="form-control" type="hidden"  name="CITYID_REF[]" id ="HIDDEN_CITYID_REF_{{$key}}"    value="{{isset($row->CITYID) && $row->CITYID !=''?$row->CITYID:''}}" autocomplete="off" readonly></td>
+                          <td><input {{$ActionStatus}} class="form-control" type="text" name="CITYNAME[]" id ="CITYNAME_{{$key}}"                  value="{{isset($row->CITY_NAME) && $row->CITY_NAME !=''?$row->CITY_NAME:''}}"autocomplete="off" readonly></td>
                           <td align="center">
-                            <button {{$ActionStatus}} class="btn add" title="add" data-toggle="tooltip" id ="SRLNo_{{$row->SR_NO+1}}" onclick="SrNo(this.id)"><i class="fa fa-plus"></i></button>
+                            <button {{$ActionStatus}} class="btn add" title="add" data-toggle="tooltip" id ="SRLNo_{{$row->SERIAL_NO+1}}" onclick="SrNo(this.id)"><i class="fa fa-plus"></i></button>
                             <button {{$ActionStatus}} class="btn remove" title="Delete" data-toggle="tooltip"><i class="fa fa-trash" ></i></button>
                           </td>
                        </tr>
@@ -317,23 +330,20 @@ function setfocus(){
     return false;
   }
   
+  
   function validateForm(actionType){
       var DOC_NO                =   $.trim($("#DOC_NO").val());
       var DOC_DT                =   $.trim($("#DOC_DT").val());
-      var TEAM_MSTID_REF        =   $.trim($("#TEAM_MSTID_REF").val());
-      var TERRITORY_ID_REF    =   $.trim($("#TERRITORY_ID_REF").val());
+      var TERRITORY_ID_REF      =   $.trim($("#TERRITORY_ID_REF").val());
 
       if(DOC_NO ===""){
-        alertMsg('DOC_NO','Please enter Hierarchy Code.');
+        alertMsg('DOC_NO','Please enter Doc No.');
       }
       else if(DOC_DT ===""){
         alertMsg('DOC_DT','Please enter Document Date.');
       }
-      else if(TEAM_MSTID_REF ===""){
-        alertMsg('TEAM_NAME','Please enter Team Name.');
-      }
       else if(TERRITORY_ID_REF ===""){
-        alertMsg('REPORTING_TO','Please Select Reporting To.');
+        alertMsg('TERRITORY_NAME','Please enter Territory Name.');
       }
       else{
         event.preventDefault();
@@ -350,13 +360,8 @@ function setfocus(){
           else if($.trim($(this).find("[id*=HIDDEN_CITYID_REF]").val()) ==""){
             allblank1.push('false');
             focustext1 = $(this).find("[id*=CITYCODE]").attr('id');
-            textmsg = 'Please enter Employee Name';
-          }
-          else if($.trim($(this).find("[id*=EMPACTIVE]").val()) ==""){
-            allblank1.push('false');
-            focustext1 = $(this).find("[id*=EMPACTIVE]").attr('id');
-            textmsg = 'Please enter Active';
-          }
+            textmsg = 'Please enter City Code';
+          }          
 
           });
 
@@ -373,7 +378,13 @@ function setfocus(){
             return false;
           } 
           else{
-            checkDuplicateCode();
+            $("#alert").modal('show');
+            $("#AlertMessage").text('Do you want to save to record.');
+            $("#YesBtn").data("funcname",actionType);
+            $("#YesBtn").focus();
+            $("#OkBtn").hide();
+            highlighFocusBtn('activeYes'); 
+            //checkDuplicateCode();
           }
 
     }

@@ -27,7 +27,6 @@
             <tr>
                 <th id="all-check" style="width:50px;"><input type="checkbox" class="js-selectall" data-target=".js-selectall1"  />Select</th>
                 <th>Hierarchy Code</th>
-                <th>Team Name</th>
                 <th>Creation Date</th>
                 <th>Modification Date</th>
                 <th>De-Activated</th>  
@@ -55,10 +54,9 @@
             }
             ?>
             <tr>
-                <td><input type="checkbox" id="chkId<?php echo e($val->EMPHIERCHYID); ?>" value="<?php echo e($val->EMPHIERCHYID); ?>" class="js-selectall1" data-rcdstatus="<?php echo e($app_status); ?>"></td>
-                <td><?php echo e(isset($val->EMPHIERCHY_NO) && $val->EMPHIERCHY_NO !=''?$val->EMPHIERCHY_NO:''); ?></td>
-                <td><?php echo e(isset($val->FNAME) && $val->FNAME !=''?$val->FNAME:''); ?></td> 
-                <td><?php echo e(isset($val->EMPHIERCHY_DATE) && $val->EMPHIERCHY_DATE !=''?$val->EMPHIERCHY_DATE:''); ?></td>             
+                <td><input type="checkbox" id="chkId<?php echo e($val->TERCMID); ?>" value="<?php echo e($val->TERCMID); ?>" class="js-selectall1" data-rcdstatus="<?php echo e($app_status); ?>"></td>
+                <td><?php echo e(isset($val->TEDOC_NO) && $val->TEDOC_NO !=''?$val->TEDOC_NO:''); ?></td>
+                <td><?php echo e(isset($val->TEDOC_DT) && $val->TEDOC_DT !=''?$val->TEDOC_DT:''); ?></td>             
                 <td><?php echo e(isset($val->INDATE) && $val->INDATE !='' && $val->INDATE !='1900-01-01' ? date('d-m-Y',strtotime($val->INDATE)):''); ?></td>
                 <td><?php echo e($val->DEACTIVATED == 1 ? 'Yes':'No'); ?></td>
                 <td><?php echo e(isset($val->DODEACTIVATED) && $val->DODEACTIVATED !='' && $val->DODEACTIVATED !='1900-01-01' ? date('d-m-Y',strtotime($val->DODEACTIVATED)):''); ?></td>
