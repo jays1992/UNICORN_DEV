@@ -209,6 +209,19 @@
                           </select>
                           </div>
                         </div>
+
+                        <div class="row">
+                          <div class="col-lg-2 pl"><p>Shipping Instruction</p></div>
+                          <div class="col-lg-4 pl">
+                            <textarea {{$ActionStatus}} name="SHIPPING_INSTRUCTION" id="SHIPPING_INSTRUCTION" autocomplete="off" class="form-control" style="height:60px;" >{{ isset($objSO->SHIPPING_INSTRUCTION)?$objSO->SHIPPING_INSTRUCTION:'' }}</textarea>
+                          </div> 
+                          
+                          <div class="col-lg-2 pl"><p>Delivery Address</p></div>
+                          <div class="col-lg-4 pl">
+                            <textarea {{$ActionStatus}} name="DELIVERY_ADDRESS" id="DELIVERY_ADDRESS" autocomplete="off" class="form-control" style="height:60px;" >{{ isset($objSO->DELIVERY_ADDRESS)?$objSO->DELIVERY_ADDRESS:'' }}</textarea>
+                          </div>
+                        </div>
+                        
                     </div>
                    
                     <div class="container-fluid">
@@ -6992,6 +7005,17 @@ $( "#btnSaveSO" ).click(function() {
      $("#OkBtn1").focus();
      return false;
  }
+ else if(check_pancard(SLID_REF) == 0){
+     $("#FocusId").val('txtsubgl_popup');
+     $("#ProceedBtn").focus();
+     $("#YesBtn").hide();
+     $("#NoBtn").hide();
+     $("#OkBtn1").show();
+     $("#AlertMessage").text('Please update pancard no for this customer.');
+     $("#alert").modal('show');
+     $("#OkBtn1").focus();
+     return false;
+ }
  else if(CUSTOMERPONO ===""){
      $("#FocusId").val('CUSTOMERPONO');
      $("#ProceedBtn").focus();
@@ -7458,6 +7482,17 @@ $( "#btnApprove" ).click(function() {
      $("#NoBtn").hide();
      $("#OkBtn1").show();
      $("#AlertMessage").text('Please select Customer.');
+     $("#alert").modal('show');
+     $("#OkBtn1").focus();
+     return false;
+ }
+ else if(check_pancard(SLID_REF) == 0){
+     $("#FocusId").val('txtsubgl_popup');
+     $("#ProceedBtn").focus();
+     $("#YesBtn").hide();
+     $("#NoBtn").hide();
+     $("#OkBtn1").show();
+     $("#AlertMessage").text('Please update pancard no for this customer.');
      $("#alert").modal('show');
      $("#OkBtn1").focus();
      return false;
@@ -10030,5 +10065,27 @@ $.ajax({
 });
 
 
+}
+
+function check_pancard(){
+
+  var SLID_REF    = $("#SLID_REF").val();
+  var TotalValue  = $("#TotalValue").val() !=''?parseFloat($("#TotalValue").val()):0;
+
+  if(TotalValue > 200000){
+    var posts     = $.ajax({
+                    url:'{{route("transaction",[38,"check_pancard"])}}',
+                    type:'POST',
+                    async: false,
+                    dataType: 'json',
+                    data: {SLID_REF:SLID_REF},
+                    done: function(response) {return response;}
+                    }).responseText;
+  }
+  else{
+    var posts=1;
+  }
+
+  return posts;
 }
 </script>
