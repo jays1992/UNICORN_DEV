@@ -324,6 +324,13 @@
                              {{ ($objItemCheckFlag->INCA==1)?'Yes':'No' }}
                           </label>
                         </div>
+
+                        <div class="col-lg-2 pl"><p>AERB Declaration</p></div>
+                        <div class="col-lg-1 pl">
+                          <label name="AERB_DECLARATION" id="AERB_DECLARATION" class="form-control mandatory">
+                             {{ ($objItemCheckFlag->AERB_DECLARATION==1)?'Yes':'No' }}
+                          </label>
+                        </div>                        
                       </div>
                       
                       <div class="row">

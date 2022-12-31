@@ -327,10 +327,13 @@
                           </select>
                         </div>
 
-                        
-
-                        
-
+                        <div class="col-lg-2 pl"><p>AERB Declaration</p></div>
+                        <div class="col-lg-1 pl">
+                          <select name="AERB_DECLARATION" id="AERB_DECLARATION" class="form-control mandatory"  >
+                            <option  value="1">Yes</option>
+                            <option  value="0" selected>No</option>
+                          </select>
+                        </div>            
                       </div>
                       
                       <div class="row">

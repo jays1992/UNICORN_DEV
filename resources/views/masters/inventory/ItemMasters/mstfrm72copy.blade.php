@@ -344,6 +344,14 @@
                           </select>
                         </div>
 
+                        <div class="col-lg-2 pl"><p>AERB Declaration</p></div>
+                        <div class="col-lg-1 pl">
+                          <select name="AERB_DECLARATION" id="AERB_DECLARATION" class="form-control mandatory"  >
+                            <option {{isset($objItemCheckFlag->AERB_DECLARATION) && $objItemCheckFlag->AERB_DECLARATION =='1'?'selected="selected"':''}} value="1">Yes</option>
+                            <option {{isset($objItemCheckFlag->AERB_DECLARATION) && $objItemCheckFlag->AERB_DECLARATION=='0'?'selected="selected"':''}}  value="0">No</option>
+                          </select>
+                        </div>
+
                       </div>
                       
                       <div class="row">
