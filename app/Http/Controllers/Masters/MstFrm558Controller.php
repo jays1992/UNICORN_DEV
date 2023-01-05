@@ -39,11 +39,10 @@ class MstFrm558Controller extends Controller{
         
         $FormId         =   $this->form_id;
 
-        $objDataList = DB::table('TBL_MST_EMPLOYEE_HIERARCHY_HDR')
-                        ->where('TBL_MST_EMPLOYEE_HIERARCHY_HDR.CYID_REF','=',Auth::user()->CYID_REF)
-                        ->leftJoin('TBL_MST_EMPLOYEE', 'TBL_MST_EMPLOYEE_HIERARCHY_HDR.EMPHIERCHY_TEAMID_REF','=','TBL_MST_EMPLOYEE.EMPID')   
-                        ->select('TBL_MST_EMPLOYEE_HIERARCHY_HDR.*','TBL_MST_EMPLOYEE.EMPID','TBL_MST_EMPLOYEE.EMPCODE','TBL_MST_EMPLOYEE.FNAME')
-                        ->orderBy('TBL_MST_EMPLOYEE_HIERARCHY_HDR.EMPHIERCHYID','DESC')
+        $objDataList = DB::table('TBL_MST_TERRITORYCITYMAP_HDR')
+                        ->where('CYID_REF','=',Auth::user()->CYID_REF)
+                        ->select('TBL_MST_TERRITORYCITYMAP_HDR.*')
+                        ->orderBy('TERCMID','DESC')
                         ->get();
                             
         return view($this->view.$FormId,compact(['objRights','objDataList','FormId']));
@@ -78,7 +77,7 @@ class MstFrm558Controller extends Controller{
 
                 $MatDetails[] = array(
                 'SERIAL_NO'              => trim($request['SRNo'][$key])?trim($request['SRNo'][$key]):NULL,
-                'CITYID_REF'         => trim($request['CITYID_REF'][$key])?trim($request['CITYID_REF'][$key]):NULL,
+                'TRY_CODE'         => trim($request['CITYID_REF'][$key])?trim($request['CITYID_REF'][$key]):NULL,
                 );
             }
         }
@@ -153,26 +152,22 @@ class MstFrm558Controller extends Controller{
             $USERID     =   Auth::user()->USERID;
             $VTID       =   $this->vtid_ref;
             $CYID_REF   =   Auth::user()->CYID_REF;
-            $BRID_REF   =   Session::get('BRID_REF'); 
+            $BRID_REF   =   Session::get('BRID_REF');
+            
+            $objResponse    =   DB::table('TBL_MST_TERRITORYCITYMAP_HDR')
+                                ->where('TBL_MST_TERRITORYCITYMAP_HDR.CYID_REF','=',Auth::user()->CYID_REF)
+                                ->leftJoin('TBL_MST_TERRITORY_MAT', 'TBL_MST_TERRITORYCITYMAP_HDR.TERID_REF','=','TBL_MST_TERRITORY_MAT.TRY_MATID')   
+                                ->where('TBL_MST_TERRITORYCITYMAP_HDR.TERCMID','=',$id)
+                                ->select('TBL_MST_TERRITORYCITYMAP_HDR.*','TBL_MST_TERRITORY_MAT.TRY_MATID','TBL_MST_TERRITORY_MAT.TRY_CODE','TBL_MST_TERRITORY_MAT.TRY_NAME')
+                                ->first();
 
-            $objResponse =   DB::select("SELECT T1.*,
-                                CONCAT(T2.EMPCODE,'-',T2.FNAME) AS EMPCODE_NAME,    T2.EMPID,
-                                CONCAT(T3.EMPCODE,'-',T3.FNAME) AS REPORTTOCODE_NAME, T3.EMPID AS REPORTTO_EMPID
-                            
-                                FROM TBL_MST_EMPLOYEE_HIERARCHY_HDR T1
-                                LEFT JOIN TBL_MST_EMPLOYEE T2 ON T1.EMPHIERCHY_TEAMID_REF=T2.EMPID
-                                LEFT JOIN TBL_MST_EMPLOYEE T3 ON T1.REPORTING_TOID_REF=T3.EMPID
-                                WHERE T1.EMPHIERCHYID='$id' ")[0];
+            $MAT    =   DB::table('TBL_MST_TERRITORYCITYMAP_MAT')
+                        ->where('TBL_MST_TERRITORYCITYMAP_MAT.TERCMID_REF','=',$id)
+                        ->leftJoin('TBL_MST_CITY', 'TBL_MST_TERRITORYCITYMAP_MAT.CITYID_REF','=','TBL_MST_CITY.CITYID')   
+                        ->select('TBL_MST_TERRITORYCITYMAP_MAT.*','TBL_MST_CITY.CITYID','TBL_MST_CITY.CITYCODE','TBL_MST_CITY.NAME AS CITY_NAME')
+                        ->get();
 
-            $MAT            =   DB::select("SELECT T1.*,
-                                CONCAT(T2.EMPCODE,'-',T2.FNAME) AS EMPCODE_NAME,    T2.EMPID,
-                                CONCAT(T3.EMPCODE,'-',T3.FNAME) AS REPORTCODE_NAME, T3.EMPID AS REPORT_EMPID
-                            
-                                FROM TBL_MST_EMPLOYEE_HIERARCHY_MAT T1
-                                LEFT JOIN TBL_MST_EMPLOYEE T2 ON T1.EMPID_REF=T2.EMPID
-                                LEFT JOIN TBL_MST_EMPLOYEE T3 ON T1.REPORTTOID_REF=T3.EMPID
-                                WHERE T1.EMPHIERCHYID_REF='$id' ");
-                                $MAT    = count($MAT) > 0 ?$MAT:[0];
+            $MAT    = count($MAT) > 0 ?$MAT:[0];            
 
             $objRights = $this->getUserRights(['VTID_REF'=>$this->vtid_ref]);
             
@@ -208,21 +203,18 @@ class MstFrm558Controller extends Controller{
         $requestType    = $request->requestType;
         $Approvallevel  =   $requestType =='update'?'EDIT':$Approvallevel;
         $msgTxt         =   $requestType =='update'?'updated':'approved';
-         
-        $EMPHIERCHY_NO           =   trim($request['DOC_NO'])?trim($request['DOC_NO']):NULL;
-        $EMPHIERCHY_DATE         =   trim($request['DOC_DT'])?trim($request['DOC_DT']):NULL;
-        $EMPHIERCHY_TEAMID_REF   =   trim($request['TEAM_MSTID_REF'])?trim($request['TEAM_MSTID_REF']):NULL;
-        $REPORTING_TOID_REF      =   trim($request['REPORTING_TOID_REF'])?trim($request['REPORTING_TOID_REF']):NULL;
+
+        $TEDOC_NO    =   trim($request['DOC_NO'])?trim($request['DOC_NO']):NULL;
+        $TEDOC_DT    =   trim($request['DOC_DT'])?trim($request['DOC_DT']):NULL;
+        $TERID_REF   =   trim($request['TERRITORY_ID_REF'])?trim($request['TERRITORY_ID_REF']):NULL;
 
         $MatDetails  = array();
         if(isset($request['SRNo']) && !empty($_REQUEST['SRNo'])){
             foreach($request['SRNo'] as $key=>$val){
 
                 $MatDetails[] = array(
-                'SR_NO'              => trim($request['SRNo'][$key])?trim($request['SRNo'][$key]):NULL,
-                'EMPID_REF'         => trim($request['EMPID_REF'][$key])?trim($request['EMPID_REF'][$key]):NULL,
-                'REPORTTOID_REF'    => trim($request['REPORTTOID_REF'][$key])?trim($request['REPORTTOID_REF'][$key]):NULL,
-                'EMPACTIVE'         => trim($request['EMPACTIVE'][$key])?trim($request['EMPACTIVE'][$key]):NULL,
+                'SERIAL_NO'              => trim($request['SRNo'][$key])?trim($request['SRNo'][$key]):NULL,
+                'CITYID_REF'         => trim($request['CITYID_REF'][$key])?trim($request['CITYID_REF'][$key]):NULL,
                 );
             }
         }
@@ -230,11 +222,11 @@ class MstFrm558Controller extends Controller{
 
         if(!empty($MatDetails)){
             $wrapped_links["MAT"] = $MatDetails; 
-            $MAT = ArrayToXml::convert($wrapped_links);
+            $MATXML = ArrayToXml::convert($wrapped_links);
         }
         else{
-            $MAT = NULL; 
-        }
+            $MATXML = NULL; 
+        } 
 
         $DEACTIVATED = (isset($request['DEACTIVATED']) )? 1 : 0 ;
        
@@ -255,20 +247,20 @@ class MstFrm558Controller extends Controller{
         $BRID_REF   =   Session::get('BRID_REF');
         $FYID_REF   =   Session::get('FYID_REF');       
         $VTID_REF   =   $this->vtid_ref;
-        $USERID_REF =   Auth::user()->USERID;
+        $USERID     =   Auth::user()->USERID;
         $UPDATE     =   Date('Y-m-d');
         
         $UPTIME     =   Date('h:i:s.u');
         $ACTION     =   $Approvallevel;
         $IPADDRESS  =   $request->getClientIp();
 
-        $array_data = [$EMPHIERCHY_NO, $EMPHIERCHY_DATE, $EMPHIERCHY_TEAMID_REF, $CYID_REF, $BRID_REF, $FYID_REF, $VTID_REF, $MAT, $USERID_REF, $UPDATE,$UPTIME, $ACTION, $IPADDRESS,$DEACTIVATED,  $DODEACTIVATED,$REPORTING_TOID_REF ];   
-
-       //DD($array_data);
+        $array_data     = [$TEDOC_NO, $TEDOC_DT, $TERID_REF, $DEACTIVATED, $DODEACTIVATED, $CYID_REF, 
+                           $BRID_REF, $FYID_REF, $VTID_REF,  $USERID, $UPDATE,$UPTIME, 
+                           $ACTION, $IPADDRESS,$MATXML];
 
         try {
 
-            $sp_result = DB::select('EXEC SP_EMPLOYEE_HIERARCHY_UP ?,?,?,?,?,   ?,?,?,?,?,  ?,?,?,?,?,?', $array_data);
+           $sp_result = DB::select('EXEC SP_TERRITORYCITYMAP_UP ?,?,?,?,?,?,  ?,?,?,?,?,?, ?,?,?', $array_data);
 
             } catch (\Throwable $th) {
 
@@ -298,24 +290,16 @@ class MstFrm558Controller extends Controller{
             $CYID_REF        = Auth::user()->CYID_REF;
             $BRID_REF        = Session::get('BRID_REF');
             $DOC_NO          = $request['DOC_NO'];
-            $TEAM_MSTID_REF  = $request['TEAM_MSTID_REF'];
     
-            $objLabel = DB::table('TBL_MST_EMPLOYEE_HIERARCHY_HDR')
-            ->where('EMPHIERCHY_NO','=',$DOC_NO)
+            $objLabel = DB::table('TBL_MST_TERRITORYCITYMAP_HDR')
+            ->where('TERCMID','=',$DOC_NO)
             ->first();
 
-            $objLabel1 = DB::table('TBL_MST_EMPLOYEE_HIERARCHY_HDR')
-            ->where('EMPHIERCHY_TEAMID_REF','=',$TEAM_MSTID_REF)
-            ->first();
             if($objLabel){  
     
                 return Response::json(['exists' =>true,'msg' => 'Duplicate record']);
             
-            }elseif($objLabel1){
-                
-                return Response::json(['exists' =>true,'msg' => 'Duplicate record']);
-            }           
-            
+            }          
             else{
     
                 return Response::json(['not exists'=>true,'msg' => 'Ok']);
@@ -333,15 +317,15 @@ class MstFrm558Controller extends Controller{
         $CYID_REF   =   Auth::user()->CYID_REF;
         $BRID_REF   =   Session::get('BRID_REF');
         $FYID_REF   =   Session::get('FYID_REF');      
-        $TABLE      =   "TBL_MST_EMPLOYEE_HIERARCHY_HDR";
-        $FIELD      =   "EMPHIERCHYID";
+        $TABLE      =   "TBL_MST_TERRITORYCITYMAP_HDR";
+        $FIELD      =   "TERCMID";
         $ID         =   $id;
         $UPDATE     =   Date('Y-m-d');
         $UPTIME     =   Date('h:i:s.u');
         $IPADDRESS  =   $request->getClientIp();
 
         $req_data[0]=[
-            'NT'  => 'TBL_MST_EMPLOYEE_HIERARCHY_MAT',
+            'NT'  => 'TBL_MST_TERRITORYCITYMAP_MAT',
         ];
     
         $wrapped_links["TABLES"] = $req_data; 
@@ -373,17 +357,13 @@ class MstFrm558Controller extends Controller{
 
    }
 
-
-
-
-
     public function attachment($id){
 
         if(!is_null($id))
         {
             $FormId      =   $this->form_id;
-            $objResponse = DB::table('TBL_MST_EMPLOYEE_HIERARCHY_HDR')
-                            ->where('EMPHIERCHYID','=',$id)
+            $objResponse = DB::table('TBL_MST_TERRITORYCITYMAP_HDR')
+                            ->where('TERCMID','=',$id)
                             ->first();
 
             $objMstVoucherType = DB::table("TBL_MST_VOUCHERTYPE")
@@ -426,7 +406,7 @@ class MstFrm558Controller extends Controller{
     $ACTION         =   "ADD";
     $IPADDRESS      =   $request->getClientIp();
     
-    $destinationPath = storage_path()."/docs/company".$CYID_REF."/EmployeeHierarchyMaster";
+    $destinationPath = storage_path()."/docs/company".$CYID_REF."/TerritoryCityMapping";
 
     if ( !is_dir($destinationPath) ) {
         mkdir($destinationPath, 0777, true);

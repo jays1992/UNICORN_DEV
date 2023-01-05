@@ -3269,7 +3269,8 @@ class MstFrm72Controller extends Controller
        $SRNO =      trim($request['SRNOA']); 
        $BATCHNO =   trim($request['BATCHNOA']); 
        $INV =       trim($request['INVMANTAIN']);   
-       $EXPIRY_APPLICABLE =       trim($request['EXPIRY_APPLICABLE']);   
+       $EXPIRY_APPLICABLE =   trim($request['EXPIRY_APPLICABLE']);
+       $AERB_DECLARATION  =   trim($request['AERB_DECLARATION']);   
       // $TCS =       trim($request['TCS']); 
 
       $LEAD_DAYS   =   $request['LEAD_DAYS'];
@@ -3466,6 +3467,7 @@ class MstFrm72Controller extends Controller
        $BATCHNO,
        $INV,
        $EXPIRY_APPLICABLE,
+       $AERB_DECLARATION,
        $TCS,
 
        $ITEM_TYPE,
@@ -3516,7 +3518,7 @@ class MstFrm72Controller extends Controller
                                             ?,?,?,?,?,?,
                                             ?,?,?,?,?,?,
                                             ?,?,?,?,?,?,?,?,?,?, ?,?,?,?,?,?,
-                                            ?,?,?,?,?,?,?', $save_data);
+                                            ?,?,?,?,?,?,?, ?', $save_data);
 
                                     
         } catch (\Throwable $th) {
@@ -3888,6 +3890,7 @@ class MstFrm72Controller extends Controller
     $BIN         =   trim($request['BIN']); 
     $WARA        =   trim($request['WARA']); 
     $WARA_MONTH  =   trim($request['WARA_MONTH']);
+    $AERB_DECLARATION  =   trim($request['AERB_DECLARATION']);
 
     $TCS =       0;   
     
@@ -4048,11 +4051,11 @@ class MstFrm72Controller extends Controller
             $INV,                   $TCS,               $ITEM_TYPE,         $MATERIAL_TYPE,         $GLID_REF,              $SAP_CUSTOMER_CODE,         $SAP_CUSTOMER_NAME,         $SAP_PART_NO,               $SAP_PART_DESC,         $SAP_CUST_PARTNO,   
             $SAP_MARKET_SETCODE,    $ROUNDING_VALUE,    $ATTRIBUTEXML,      $TECHNICALXML,          $XMLUOM,                $XMLUDF,                    $VTID,                      $USERID,                    $UPDATE,                $UPTIME,                
             $ACTION,                $IPADDRESS,         $ALPS_PART_NO,      $CUSTOMER_PART_NO,      $OEM_PART_NO,           $BARCODE_APPLICABLE,        $SERIALNO_MODE,             $SERIALNO_PREFIX,           $SERIALNO_STARTS_FROM,  $SERIALNO_SUFFIX,
-            $SERIALNO_MAX_LENGTH,   $INCA,              $BIN,               $WARA,                  $LEAD_DAYS,             $SHELF_LIFE,                $WARA_MONTH   ];
+            $SERIALNO_MAX_LENGTH,   $INCA,              $BIN,               $WARA,                  $LEAD_DAYS,             $SHELF_LIFE,                $WARA_MONTH,                $AERB_DECLARATION   ];
 
        // dd($save_data);
 
-        $sp_result = DB::select('EXEC SP_ITEM_UP   ?,?,?,?,?,?,?,?,?,?,  ?,?,?,?,?,?,?,?,?,?,   ?,?,?,?,?,?,?,?,?,?,    ?,?,?,?,?,?,?,?,?,?,    ?,?,?,?,?,?,?,?,?,?,    ?,?,?,?,?,?,?,?,?,?,    ?,?,?,?,?,?,?', $save_data);
+        $sp_result = DB::select('EXEC SP_ITEM_UP   ?,?,?,?,?,?,?,?,?,?,  ?,?,?,?,?,?,?,?,?,?,   ?,?,?,?,?,?,?,?,?,?,    ?,?,?,?,?,?,?,?,?,?,    ?,?,?,?,?,?,?,?,?,?,    ?,?,?,?,?,?,?,?,?,?,    ?,?,?,?,?,?,?,  ?', $save_data);
   
      //dd($sp_result);
 
@@ -4145,6 +4148,7 @@ class MstFrm72Controller extends Controller
       $BIN         =   trim($request['BIN']); 
       $WARA        =   trim($request['WARA']); 
       $WARA_MONTH  =   trim($request['WARA_MONTH']);
+      $AERB_DECLARATION        =   trim($request['AERB_DECLARATION']);
 
      $TCS =       0;
 
@@ -4322,11 +4326,11 @@ class MstFrm72Controller extends Controller
         $INV,                   $TCS,               $ITEM_TYPE,         $MATERIAL_TYPE,         $GLID_REF,              $SAP_CUSTOMER_CODE,         $SAP_CUSTOMER_NAME,         $SAP_PART_NO,               $SAP_PART_DESC,         $SAP_CUST_PARTNO,   
         $SAP_MARKET_SETCODE,    $ROUNDING_VALUE,    $ATTRIBUTEXML,      $TECHNICALXML,          $XMLUOM,                $XMLUDF,                    $VTID,                      $USERID,                    $UPDATE,                $UPTIME,                
         $ACTION,                $IPADDRESS,         $ALPS_PART_NO,      $CUSTOMER_PART_NO,      $OEM_PART_NO,           $BARCODE_APPLICABLE,        $SERIALNO_MODE,             $SERIALNO_PREFIX,           $SERIALNO_STARTS_FROM,  $SERIALNO_SUFFIX,
-        $SERIALNO_MAX_LENGTH,   $INCA,              $BIN,               $WARA,                  $LEAD_DAYS,             $SHELF_LIFE,                $WARA_MONTH   ];
+        $SERIALNO_MAX_LENGTH,   $INCA,              $BIN,               $WARA,                  $LEAD_DAYS,             $SHELF_LIFE,                $WARA_MONTH,                $AERB_DECLARATION   ];
 
     // dd($save_data);
 
-    $sp_result = DB::select('EXEC SP_ITEM_UP   ?,?,?,?,?,?,?,?,?,?,  ?,?,?,?,?,?,?,?,?,?,   ?,?,?,?,?,?,?,?,?,?,    ?,?,?,?,?,?,?,?,?,?,    ?,?,?,?,?,?,?,?,?,?,    ?,?,?,?,?,?,?,?,?,?,    ?,?,?,?,?,?,?', $save_data);
+    $sp_result = DB::select('EXEC SP_ITEM_UP   ?,?,?,?,?,?,?,?,?,?,  ?,?,?,?,?,?,?,?,?,?,   ?,?,?,?,?,?,?,?,?,?,    ?,?,?,?,?,?,?,?,?,?,    ?,?,?,?,?,?,?,?,?,?,    ?,?,?,?,?,?,?,?,?,?,    ?,?,?,?,?,?,?,?', $save_data);
 
        
        
@@ -4931,6 +4935,7 @@ class MstFrm72Controller extends Controller
         $BIN         =   trim($request['BIN']); 
         $WARA        =   trim($request['WARA']); 
         $WARA_MONTH  =   trim($request['WARA_MONTH']);
+        $AERB_DECLARATION        =   trim($request['AERB_DECLARATION']);
 
         $TCS                =   0;   
     
@@ -5141,7 +5146,7 @@ class MstFrm72Controller extends Controller
             $CUSTOMER_PART_NO,  
             $OEM_PART_NO,
             $BARCODE_APPLICABLE,$SERIALNO_MODE,$SERIALNO_PREFIX,$SERIALNO_STARTS_FROM,$SERIALNO_SUFFIX,$SERIALNO_MAX_LENGTH,
-            $INCA,$BIN,$WARA,$LEAD_DAYS,$SHELF_LIFE,$WARA_MONTH
+            $INCA,$BIN,$WARA,$LEAD_DAYS,$SHELF_LIFE,$WARA_MONTH,$AERB_DECLARATION
         ];
 
         
@@ -5156,7 +5161,7 @@ class MstFrm72Controller extends Controller
                                         ?,?,?,?,?,?,
                                         ?,?,?,?,?,?,
                                         ?,?,?,?,?,?,?,?,?,?, ?,?,?,?,?,?,
-                                        ?,?,?,?,?,?,?', $save_data);
+                                        ?,?,?,?,?,?,?,?', $save_data);
 										
 										//dd($sp_result);
    

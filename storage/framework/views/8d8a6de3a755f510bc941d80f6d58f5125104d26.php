@@ -1,9 +1,9 @@
-@extends('layouts.app')
-@section('content')
+
+<?php $__env->startSection('content'); ?>
 <div class="container-fluid topnav">        
   <div class="row">
       <div class="col-lg-2">
-      <a href="{{route('master',[$FormId,'index'])}}" class="btn singlebt">Territory City Mapping</a>
+      <a href="<?php echo e(route('master',[$FormId,'index'])); ?>" class="btn singlebt">Territory City Mapping</a>
       </div>
       <div class="col-lg-10 topnav-pd">
       <a href="#" id="btnSelectedRows" class="btn topnavbt" disabled="disabled"><i class="fa fa-plus"></i> Add</a>
@@ -15,39 +15,39 @@
       <a href="#" class="btn topnavbt" disabled="disabled"><i class="fa fa-times"></i> Cancel</a>
       <button   class="btn topnavbt" id="btnApproved" disabled="disabled" ><i class="fa fa-lock"></i> Approved</button>
       <a href="#" class="btn topnavbt"  disabled="disabled"><i class="fa fa-link" ></i> Attachment</a>
-      <a href="{{route('home')}}" class="btn topnavbt"><i class="fa fa-power-off"></i> Exit</a>
+      <a href="<?php echo e(route('home')); ?>" class="btn topnavbt"><i class="fa fa-power-off"></i> Exit</a>
       </div>
   </div>
 </div>
    
     <div class="container-fluid purchase-order-view filter">
-      <form id="frm_data_attachment" method="post" enctype="multipart/form-data" action='{{route("mastermodify",[$FormId,"docuploads"])}}' > 
-        @CSRF
+      <form id="frm_data_attachment" method="post" enctype="multipart/form-data" action='<?php echo e(route("mastermodify",[$FormId,"docuploads"])); ?>' > 
+        <?php echo csrf_field(); ?>
         <div class="inner-form">
         <div class="row">
 			    <div class="col-lg-1 pl"><p>Voucher Type</p></div>
 			    <div class="col-lg-2 pl">
-          <label> {{$objMstVoucherType[0]->VCODE}} </label>
-          <input type="hidden" name="VTID_REF" class="form-control" value='{{$objMstVoucherType[0]->VTID}}' />
+          <label> <?php echo e($objMstVoucherType[0]->VCODE); ?> </label>
+          <input type="hidden" name="VTID_REF" class="form-control" value='<?php echo e($objMstVoucherType[0]->VTID); ?>' />
        </div>
 			
 			<div class="col-lg-1 pl"><p>Document No</p></div>
 			  <div class="col-lg-2 pl">
-         <label> {{$objResponse->TEDOC_NO}} </label>
-        <input type="hidden" name="ATTACH_DOCNO" id="ATTACH_DOCNO" value="{{$objResponse->TERCMID}}" class="form-control" maxlength="50" >
+         <label> <?php echo e($objResponse->TEDOC_NO); ?> </label>
+        <input type="hidden" name="ATTACH_DOCNO" id="ATTACH_DOCNO" value="<?php echo e($objResponse->TERCMID); ?>" class="form-control" maxlength="50" >
 			</div>
 			
 			<div class="col-lg-1 pl"><p>Document Date</p></div>
 			  <div class="col-lg-2 pl">
-        <label> {{ date("d/m/Y", strtotime($objResponse->INDATE) )}} </label> 
-        <input type="hidden" name="ATTACH_DOCDT" id="ATTACH_DOCDT" value='{{date("Y-m-d", strtotime($objResponse->INDATE))}}'   />
+        <label> <?php echo e(date("d/m/Y", strtotime($objResponse->INDATE) )); ?> </label> 
+        <input type="hidden" name="ATTACH_DOCDT" id="ATTACH_DOCDT" value='<?php echo e(date("Y-m-d", strtotime($objResponse->INDATE))); ?>'   />
 			</div>
 		</div>
 		
 		<div class="row">
 			<div class="col-lg-6 pl">
         <div class=" table-responsive table-wrapper-scroll-y my-custom-scrollbar2" style="height:350px;" >
-          @if(!empty($objAttachments))    
+          <?php if(!empty($objAttachments)): ?>    
           <table class="display table table-striped table-bordered itemlist" width="100%" style="height:auto !important;">
 					<thead id="thead1"  style="position: sticky;top: 0">
 					  <tr>
@@ -57,8 +57,8 @@
 						  </tr>
 						</thead>
 						<tbody>
-              @foreach($objAttachments as $row)
-              @php
+              <?php $__currentLoopData = $objAttachments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+              <?php
                 $docpath="";
                 $custFileName="";
                 $viewfile = false;
@@ -76,24 +76,24 @@
                     $docpath = str_replace('//', '/', $row->LOCATION);
                     $docpath = $docpath.$row->FILESNAME;                                  
                 }
-              @endphp
+              ?>
               <tr  class="participantRow">
-                <td>{{isset($custFileName)?$custFileName:''}}</td>
-                <td >{{$row->REMARKS}}</td>
-                @if($viewfile==true)
-                <td align="center" ><a class="btn" title="view" data-toggle="tooltip" data-docpath="{{asset($docpath)}}" onclick="showfile( $(this).data('docpath') )"><i class="fa fa-eye"></i></a></td>
-                @else     
-                <td align="center" ><a class="btn" title="download" data-toggle="tooltip" data-docpath="{{asset($docpath)}}" onclick="downloadfile($(this).data('docpath'))"><i class="fa fa-download"></i></a></td>
-                @endif
+                <td><?php echo e(isset($custFileName)?$custFileName:''); ?></td>
+                <td ><?php echo e($row->REMARKS); ?></td>
+                <?php if($viewfile==true): ?>
+                <td align="center" ><a class="btn" title="view" data-toggle="tooltip" data-docpath="<?php echo e(asset($docpath)); ?>" onclick="showfile( $(this).data('docpath') )"><i class="fa fa-eye"></i></a></td>
+                <?php else: ?>     
+                <td align="center" ><a class="btn" title="download" data-toggle="tooltip" data-docpath="<?php echo e(asset($docpath)); ?>" onclick="downloadfile($(this).data('docpath'))"><i class="fa fa-download"></i></a></td>
+                <?php endif; ?>
               </tr>
-              @endforeach
+              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
           </tbody>    
         </table>
-       @endif              
+       <?php endif; ?>              
                             
     <div style="font-weight:bold;margin-top:10px;">Note: Max size of the loaded file is 2 MB</div>           
-      <input type="hidden" name="allow_max_size" id="allow_filesize" value='{{Config("erpconst.attachments.max_size")}}'   />
-      <input type="hidden" name="allow_extensions" id="allow_extensions" value='{{Config("erpconst.attachments.allow_extensions")}}' />
+      <input type="hidden" name="allow_max_size" id="allow_filesize" value='<?php echo e(Config("erpconst.attachments.max_size")); ?>'   />
+      <input type="hidden" name="allow_extensions" id="allow_extensions" value='<?php echo e(Config("erpconst.attachments.allow_extensions")); ?>' />
 					<table id="example2" class="display nowrap table table-striped table-bordered itemlist" width="100%" style="height:auto !important;">
 						<thead id="thead1"  style="position: sticky;top: 0">
 						  <tr>
@@ -122,8 +122,8 @@
   </form>
 </div>
 
-@endsection
-@section('alert')
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('alert'); ?>
 <!-- Alert -->
 <div id="alert" class="modal"  role="dialog"  data-backdrop="static" >
   <div class="modal-dialog"  >
@@ -150,7 +150,7 @@
   </div>
 </div>
 <!-- Alert -->
-{{-- file popup begin --}}
+
 <div id="filePopup" class="modal"  role="dialog"  data-backdrop="static" >
   <div class="modal-dialog modal-md"  style="width:850px;height:550px;">
     <div class="modal-content">
@@ -166,11 +166,11 @@
     </div>
   </div>
 </div>
-{{-- file popup end --}}
-@endsection
+
+<?php $__env->stopSection(); ?>
 <!-- btnSaveAttachment -->
 
-@push('bottom-scripts')
+<?php $__env->startPush('bottom-scripts'); ?>
 <script> 
     function showfile(path){
       $("#fileloader").attr('src','');
@@ -382,7 +382,7 @@
         //alert();
         $(".text-danger").hide();
 
-        //window.location.href = '{{route("master",[$FormId,"index"]) }}';
+        //window.location.href = '<?php echo e(route("master",[$FormId,"index"])); ?>';
 
     }); ///ok button
 
@@ -438,42 +438,43 @@
 
 
 $( document ).ready(function() {
-@if (session('success'))
+<?php if(session('success')): ?>
     
         $("#YesBtn").hide();
         $("#NoBtn").hide();
         $("#OkBtn").show();
 
-        $("#AlertMessage").text('{{session("success")}}');
+        $("#AlertMessage").text('<?php echo e(session("success")); ?>');
 
         $("#alert").modal('show');
         $("#OkBtn").focus();
     
-@endif
-@if (session('error'))
+<?php endif; ?>
+<?php if(session('error')): ?>
     
         $("#YesBtn").hide();
         $("#NoBtn").hide();
         $("#OkBtn").show();
 
-        $("#AlertMessage").text('{{session("error")}}');
+        $("#AlertMessage").text('<?php echo e(session("error")); ?>');
 
         $("#alert").modal('show');
         $("#OkBtn").focus();
     
-@endif
-@if (session('duplicate'))
+<?php endif; ?>
+<?php if(session('duplicate')): ?>
     
         $("#YesBtn").hide();
         $("#NoBtn").hide();
         $("#OkBtn").show();
 
-        $("#AlertMessage").text('{{session("duplicate")}}');
+        $("#AlertMessage").text('<?php echo e(session("duplicate")); ?>');
 
         $("#alert").modal('show');
         $("#OkBtn").focus();
     
-@endif
+<?php endif; ?>
  });
 </script> 
-@endpush
+<?php $__env->stopPush(); ?>
+<?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp3\htdocs\PROJECTS\UNICORN_DEV\resources\views/masters/PreSales/TerritoryCityMapping/mstfrm558attachment.blade.php ENDPATH**/ ?>

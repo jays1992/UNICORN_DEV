@@ -1,59 +1,62 @@
-@extends('layouts.app')
-@section('content')
+
+<?php $__env->startSection('content'); ?>
 <div class="container-fluid topnav">
-<div class="row">
+  <div class="row">
     <div class="col-lg-2">
-    <a href="{{route('master',[$FormId,'index'])}}" class="btn singlebt">Territory City Mapping</a>
-    </div>
-      <div class="col-lg-10 topnav-pd">
-        <button href="#" id="btnSelectedRows" class="btn topnavbt" disabled="disabled"><i class="fa fa-plus"></i> Add</button>
-        <button class="btn topnavbt"  disabled="disabled"><i class="fa fa-edit"></i> Edit</button>
-        <button id="btnSave" onclick="submitData('fnSaveData')" class="btn topnavbt" tabindex="4"><i class="fa fa-save"></i> Save</button>
-        <button class="btn topnavbt" id="btnView"  disabled="disabled"><i class="fa fa-eye"></i> View</button>
-        <button class="btn topnavbt" disabled="disabled"><i class="fa fa-print"></i> Print</button>
-        <button class="btn topnavbt"  id="btnUndo" ><i class="fa fa-undo"></i> Undo</button>
-        <button class="btn topnavbt" id="btnCancel" disabled="disabled" ><i class="fa fa-times"></i> Cancel</button>
-        <button class="btn topnavbt" id="btnApprove" onclick="submitDataAp('fnApproveData')" {{ (isset($objRights->APPROVAL1) || isset($objRights->APPROVAL2) || isset($objRights->APPROVAL3) || isset($objRights->APPROVAL4) || isset($objRights->APPROVAL5)) &&  ($objRights->APPROVAL1||$objRights->APPROVAL2||$objRights->APPROVAL3||$objRights->APPROVAL4||$objRights->APPROVAL5) == 1 ? '' : 'disabled'}} ><i class="fa fa-lock"></i> Approved</button>
-        <a href="#" class="btn topnavbt"  disabled="disabled"><i class="fa fa-link" ></i> Attachment</a>
-        <button class="btn topnavbt" id="btnExit"><i class="fa fa-power-off"></i> Exit</button>
+      <a href="<?php echo e(route('master',[$FormId,'index'])); ?>" class="btn singlebt">Territory City Mapping</a>
       </div>
-  </div>
-</div>
-   
+      <div class="col-lg-10 topnav-pd">
+        <button class="btn topnavbt" id="btnAdd" disabled="disabled"><i class="fa fa-plus"></i> Add</button>
+        <button class="btn topnavbt" id="btnEdit" disabled="disabled"><i class="fa fa-edit"></i> Edit</button>
+        <button class="btn topnavbt" id="btnSaveSE" disabled="disabled"><i class="fa fa-save"></i> Save</button>
+        <button class="btn topnavbt" id="btnView" disabled="disabled"><i class="fa fa-eye"></i> View</button>
+        <button class="btn topnavbt" id="btnPrint" disabled="disabled"><i class="fa fa-print"></i> Print</button>
+        <button class="btn topnavbt" id="btnUndo"  disabled="disabled"><i class="fa fa-undo"></i> Undo</button>
+        <button class="btn topnavbt" id="btnCancel" disabled="disabled"><i class="fa fa-times"></i> Cancel</button>
+        <button class="btn topnavbt" id="btnApprove" disabled="disabled"><i class="fa fa-lock"></i> Approved</button>
+        <button class="btn topnavbt" id="btnAttach" disabled="disabled"><i class="fa fa-link"></i> Attachment</button>
+        <button class="btn topnavbt" id="btnExit" ><i class="fa fa-power-off"></i> Exit</button>
+      </div>
+      </div>
+    </div>
+    
+  
 <div class="container-fluid purchase-order-view filter">     
   <form id="frm_mst_edit" method="POST"> 
-    @CSRF
-    {{isset($objResponse->TERCMID) ? method_field('PUT') : '' }}
+    <?php echo csrf_field(); ?>
+    <?php echo e(isset($objResponse->TERCMID) ? method_field('PUT') : ''); ?>
+
    <div class="inner-form">
          <div class="row">
            <div class="col-lg-2 pl"><p>Doc No*</p></div>
            <div class="col-lg-2 pl">
-              <input {{$ActionStatus}} type="text" name="DOC_NO" id="DOC_NO" value="{{isset($objResponse->TEDOC_NO) && $objResponse->TEDOC_NO !=''?$objResponse->TEDOC_NO:''}}"  class="form-control mandatory"  autocomplete="off" readonly >
+              <input <?php echo e($ActionStatus); ?> type="text" name="DOC_NO" id="DOC_NO" value="<?php echo e(isset($objResponse->TEDOC_NO) && $objResponse->TEDOC_NO !=''?$objResponse->TEDOC_NO:''); ?>"  class="form-control mandatory"  autocomplete="off" readonly >
              <span class="text-danger" id="ERROR_DOC_NO"></span>
            </div>
 
            <div class="col-lg-2 pl"><p>Date*</p></div>
            <div class="col-lg-2 pl">
-           <input {{$ActionStatus}} type="date" name="DOC_DT" id="DOC_DT" value="{{isset($objResponse->TEDOC_DT) && $objResponse->TEDOC_DT !=''?$objResponse->TEDOC_DT:''}}" class="form-control mandatory" autocomplete="off" placeholder="dd/mm/yyyy" >
+           <input <?php echo e($ActionStatus); ?> type="date" name="DOC_DT" id="DOC_DT" value="<?php echo e(isset($objResponse->TEDOC_DT) && $objResponse->TEDOC_DT !=''?$objResponse->TEDOC_DT:''); ?>" class="form-control mandatory" autocomplete="off" placeholder="dd/mm/yyyy" >
            </div>
 
            <div class="col-lg-2 pl"><p>Territory Name*</p></div>
             <div class="col-lg-2 pl">
-              <input type="text" name="TERRITORY_NAME" id="TERRITORY_NAME" value="{{isset($objResponse->TRY_CODE) && $objResponse->TRY_CODE !=''?$objResponse->TRY_CODE:''}} {{isset($objResponse->TRY_NAME) && $objResponse->TRY_NAME !=''?'-'.$objResponse->TRY_NAME:''}}" onclick="getTerritoryName(this.id,'{{route('master',[$FormId,'getTerritory'])}}','Territory Name Details')" class="form-control mandatory" readonly />
-              <input type="hidden" name="TERRITORY_ID_REF" id="TERRITORY_ID_REF" value="{{isset($objResponse->TERID_REF) && $objResponse->TERID_REF !=''?$objResponse->TERID_REF:''}}" class="form-control" autocomplete="off" />
+              <input <?php echo e($ActionStatus); ?> type="text" name="TERRITORY_NAME" id="TERRITORY_NAME" value="<?php echo e(isset($objResponse->TRY_CODE) && $objResponse->TRY_CODE !=''?$objResponse->TRY_CODE:''); ?> <?php echo e(isset($objResponse->TRY_NAME) && $objResponse->TRY_NAME !=''?'-'.$objResponse->TRY_NAME:''); ?>" onclick="getTerritoryName(this.id,'<?php echo e(route('master',[$FormId,'getTerritory'])); ?>','Territory Name Details')" class="form-control mandatory" readonly />
+              <input type="hidden" name="TERRITORY_ID_REF" id="TERRITORY_ID_REF" value="<?php echo e(isset($objResponse->TERID_REF) && $objResponse->TERID_REF !=''?$objResponse->TERID_REF:''); ?>" class="form-control" autocomplete="off" />
             </div>
          </div> 
          
          <div class="row">
           <div class="col-lg-2 pl"><p>De-Activated</p></div>
           <div class="col-lg-1 pl pr">
-          <input {{$ActionStatus}} type="checkbox"   name="DEACTIVATED"  id="deactive-checkbox_0" {{$objResponse->DEACTIVATED == 1 ? "checked" : ""}}
-           value='{{$objResponse->DEACTIVATED == 1 ? 1 : 0}}' tabindex="2"  >
+          <input <?php echo e($ActionStatus); ?> type="checkbox"   name="DEACTIVATED"  id="deactive-checkbox_0" <?php echo e($objResponse->DEACTIVATED == 1 ? "checked" : ""); ?>
+
+           value='<?php echo e($objResponse->DEACTIVATED == 1 ? 1 : 0); ?>' tabindex="2"  >
           </div>
           
           <div class="col-lg-2 pl"><p>Date of De-Activated</p></div>
           <div class="col-lg-2 pl">
-            <input {{$ActionStatus}} type="date" name="DODEACTIVATED" class="form-control" id="DODEACTIVATED" {{$objResponse->DEACTIVATED == 1 ? "" : "disabled"}} value="{{isset($objResponse->DODEACTIVATED) && $objResponse->DODEACTIVATED !="" && $objResponse->DODEACTIVATED !="1900-01-01" ? $objResponse->DODEACTIVATED:''}}" tabindex="3" placeholder="dd/mm/yyyy"  />
+            <input <?php echo e($ActionStatus); ?> type="date" name="DODEACTIVATED" class="form-control" id="DODEACTIVATED" <?php echo e($objResponse->DEACTIVATED == 1 ? "" : "disabled"); ?> value="<?php echo e(isset($objResponse->DODEACTIVATED) && $objResponse->DODEACTIVATED !="" && $objResponse->DODEACTIVATED !="1900-01-01" ? $objResponse->DODEACTIVATED:''); ?>" tabindex="3" placeholder="dd/mm/yyyy"  />
           </div>
        </div>
 
@@ -76,20 +79,20 @@
                        
                    </thead>
                      <tbody>
-                      @if(isset($MAT) && !empty($MAT))
-                      @foreach($MAT as $key => $row)
+                      <?php if(isset($MAT) && !empty($MAT)): ?>
+                      <?php $__currentLoopData = $MAT; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                        <tr  class="participantRow">
-                         <td><input {{$ActionStatus}} class="form-control dynamic" type="text"  name="SRNo[]"  id ="SRNo_{{$row->SERIAL_NO}}"      value="{{isset($row->SERIAL_NO) && $row->SERIAL_NO !=''?$row->SERIAL_NO:''}}"  autocomplete="off" readonly></td>
-                          <td><input {{$ActionStatus}} class="form-control" type="text"    name="CITYCODE[]"   id ="CITYCODE_{{$key}}"             value="{{isset($row->CITYCODE) && $row->CITYCODE !=''?$row->CITYCODE:''}}" onclick="getTerritoryName(this.id,'{{route('master',[$FormId,'getCityCode'])}}','City Code Details')" autocomplete="off" readonly></td>
-                          <td hidden><input            class="form-control" type="hidden"  name="CITYID_REF[]" id ="HIDDEN_CITYID_REF_{{$key}}"    value="{{isset($row->CITYID) && $row->CITYID !=''?$row->CITYID:''}}" autocomplete="off" readonly></td>
-                          <td><input {{$ActionStatus}} class="form-control" type="text" name="CITYNAME[]" id ="CITYNAME_{{$key}}"                  value="{{isset($row->CITY_NAME) && $row->CITY_NAME !=''?$row->CITY_NAME:''}}"autocomplete="off" readonly></td>
+                         <td><input <?php echo e($ActionStatus); ?> class="form-control dynamic" type="text"  name="SRNo[]"  id ="SRNo_<?php echo e($row->SERIAL_NO); ?>"      value="<?php echo e(isset($row->SERIAL_NO) && $row->SERIAL_NO !=''?$row->SERIAL_NO:''); ?>"  autocomplete="off" readonly></td>
+                          <td><input <?php echo e($ActionStatus); ?> class="form-control" type="text"    name="CITYCODE[]"   id ="CITYCODE_<?php echo e($key); ?>"             value="<?php echo e(isset($row->CITYCODE) && $row->CITYCODE !=''?$row->CITYCODE:''); ?>" onclick="getTerritoryName(this.id,'<?php echo e(route('master',[$FormId,'getCityCode'])); ?>','City Code Details')" autocomplete="off" readonly></td>
+                          <td hidden><input            class="form-control" type="hidden"  name="CITYID_REF[]" id ="HIDDEN_CITYID_REF_<?php echo e($key); ?>"    value="<?php echo e(isset($row->CITYID) && $row->CITYID !=''?$row->CITYID:''); ?>" autocomplete="off" readonly></td>
+                          <td><input <?php echo e($ActionStatus); ?> class="form-control" type="text" name="CITYNAME[]" id ="CITYNAME_<?php echo e($key); ?>"                  value="<?php echo e(isset($row->CITY_NAME) && $row->CITY_NAME !=''?$row->CITY_NAME:''); ?>"autocomplete="off" readonly></td>
                           <td align="center">
-                            <button {{$ActionStatus}} class="btn add" title="add" data-toggle="tooltip" id ="SRLNo_{{$row->SERIAL_NO+1}}" onclick="SrNo(this.id)"><i class="fa fa-plus"></i></button>
-                            <button {{$ActionStatus}} class="btn remove" title="Delete" data-toggle="tooltip"><i class="fa fa-trash" ></i></button>
+                            <button <?php echo e($ActionStatus); ?> class="btn add" title="add" data-toggle="tooltip" id ="SRLNo_<?php echo e($row->SERIAL_NO+1); ?>" onclick="SrNo(this.id)"><i class="fa fa-plus"></i></button>
+                            <button <?php echo e($ActionStatus); ?> class="btn remove" title="Delete" data-toggle="tooltip"><i class="fa fa-trash" ></i></button>
                           </td>
                        </tr>
-                       @endforeach
-                      @endif
+                       <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                      <?php endif; ?>
                      </tbody>
                    </table>
                  </div>	
@@ -100,8 +103,8 @@
 </form>
 </div>
 
-@endsection
-@section('alert')
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('alert'); ?>
 <!-- Alert -->
 <div id="alert" class="modal"  role="dialog"  data-backdrop="static">
 <div class="modal-dialog" >
@@ -176,8 +179,8 @@
 </div>
 
 
-@endsection
-@push('bottom-scripts')
+<?php $__env->stopSection(); ?>
+<?php $__env->startPush('bottom-scripts'); ?>
 <script>
 
 $("#modalclosePopup").on("click",function(event){ 
@@ -391,12 +394,12 @@ function setfocus(){
   }
 
     $('#btnAdd').on('click', function() {
-        var viewURL = '{{route("master",[$FormId,"add"])}}';
+        var viewURL = '<?php echo e(route("master",[$FormId,"add"])); ?>';
         window.location.href=viewURL;
     });
   
     $('#btnExit').on('click', function() {
-      var viewURL = '{{route('home')}}';
+      var viewURL = '<?php echo e(route('home')); ?>';
       window.location.href=viewURL;
     });  
 
@@ -410,7 +413,7 @@ function setfocus(){
         });
 
         $.ajax({
-            url:'{{route("master",[$FormId,"codeduplicate"])}}',
+            url:'<?php echo e(route("master",[$FormId,"codeduplicate"])); ?>',
             type:'POST',
             data:formData,
             success:function(data) {
@@ -485,7 +488,7 @@ function setfocus(){
             }
         });
         $.ajax({
-            url:'{{route("mastermodify",[$FormId,"update"])}}',
+            url:'<?php echo e(route("mastermodify",[$FormId,"update"])); ?>',
             type:'POST',
             data:formData,
             success:function(data) {
@@ -597,7 +600,7 @@ $("#OkBtn").click(function(){
    $("#OkBtn").hide();
    $("#OkBtn1").hide();
    $(".text-danger").hide();
-   window.location.href = "{{route('master',[$FormId,'index'])}}"; 
+   window.location.href = "<?php echo e(route('master',[$FormId,'index'])); ?>"; 
 });
 
 $("#btnUndo").click(function(){
@@ -620,7 +623,7 @@ $("#btnUndo").click(function(){
    $("#OkBtn").hide();
    $("#OkBtn1").hide();
    $(".text-danger").hide();
-   //window.location.href = "{{route('master',[$FormId,'index'])}}";
+   //window.location.href = "<?php echo e(route('master',[$FormId,'index'])); ?>";
    });
 
    $("#OkBtn").click(function(){
@@ -628,7 +631,7 @@ $("#btnUndo").click(function(){
    });
 
   window.fnUndoYes = function (){
-  window.location.href = "{{route('master',[$FormId,'add'])}}";
+  window.location.href = "<?php echo e(route('master',[$FormId,'add'])); ?>";
 }
 
 function showError(pId,pVal){
@@ -676,4 +679,6 @@ $(function () {
 
 </script>
 
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp3\htdocs\PROJECTS\UNICORN_DEV\resources\views/masters/PreSales/TerritoryCityMapping/mstfrm558view.blade.php ENDPATH**/ ?>
